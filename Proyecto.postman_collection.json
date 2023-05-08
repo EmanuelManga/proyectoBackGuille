@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "40084085-c408-4d67-bc02-a8c1f6d1562e",
+		"name": "Proyecto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25080144"
+	},
+	"item": [
+		{
+			"name": "Get All Products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Limit Products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products?limit=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products By Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/1ccac07e-7707-4f01-ade8-afd52ac8c50b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"1ccac07e-7707-4f01-ade8-afd52ac8c50b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Add Products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"title\": \"Sony PlayStation 5\",\r\n        \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\",\r\n        \"price\": 500,\r\n        \"thumbnail\": \"https://cdn.vox-cdn.com/thumbor/twZ3qKjI-mJIlYzHuk1vutKpPlM=/0x0:1500x1000/920x613/filters:focal(630x380:870x620):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/68860216/sony_playstation_5_review_01.0.jpg\",\r\n        \"code\": \"PS5\",\r\n        \"stock\": 5,\r\n        \"producId\": 14,\r\n        \"status\": true,\r\n        \"category\": \"videojuegos\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Products By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products/c484813e-499b-4695-b874-aeb2ea915e8a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"c484813e-499b-4695-b874-aeb2ea915e8a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Products",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"c484813e-499b-4695-b874-aeb2ea915e8a\",\r\n    \"product\":{\r\n        \"title\": \"Sony PlayStation 5\",\r\n    \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\"\r\n\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post New Cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/carts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"carts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Cart Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"c484813e-499b-4695-b874-aeb2ea915e8a\",\r\n    \"product\":{\r\n        \"title\": \"Sony PlayStation 5\",\r\n    \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\"\r\n\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/carts/ff3158dd-039a-4b1c-b635-95d432116acb/product/e29dbb05-5ab6-4044-a8a4-d666448b2246/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"carts",
+						"ff3158dd-039a-4b1c-b635-95d432116acb",
+						"product",
+						"e29dbb05-5ab6-4044-a8a4-d666448b2246",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Productos de Cart by cid",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"c484813e-499b-4695-b874-aeb2ea915e8a\",\r\n    \"product\":{\r\n        \"title\": \"Sony PlayStation 5\",\r\n    \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\"\r\n\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/carts/66aff818-c470-4e7b-a189-f3bcfe8bfc92",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"carts",
+						"66aff818-c470-4e7b-a189-f3bcfe8bfc92"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
