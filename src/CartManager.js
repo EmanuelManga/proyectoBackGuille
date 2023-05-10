@@ -31,9 +31,9 @@ export class CartManager {
         return cart;
     }
 
-    async addProductToCart(cartId, productId, productQuant) {
+    async addProductToCart(cartId, productId) {
         let isValid = false;
-
+        let productQuant = 1;
         let cart = await this.#leerArchivo(this.path);
         let existeCart = cart.find((x) => x.cartId == cartId);
 
@@ -41,9 +41,9 @@ export class CartManager {
             if (existeCart.products.length == 0) {
                 existeCart.products.push({ productId, quantity: productQuant });
             } else {
-                console.log("existeCart.products", existeCart.products);
+                // console.log("existeCart.products", existeCart.products);
                 let existeProd = existeCart.products.find((x) => x.productId == productId);
-                console.log("existeProd", existeProd);
+                // console.log("existeProd", existeProd);
                 if (existeProd == undefined) {
                     existeCart.products.push({ productId, quantity: productQuant });
                 } else if (existeProd.length == 0) {

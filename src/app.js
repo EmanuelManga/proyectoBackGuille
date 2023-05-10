@@ -11,8 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.use("/products", productRouter);
-app.use("/carts", cartRouter);
+app.use("/api/products", productRouter);
+app.use("/api/carts", cartRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`);
