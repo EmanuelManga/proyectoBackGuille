@@ -21,7 +21,7 @@ export class ProductManager {
         status = true;
 
         let products = await this.#leerArchivo();
-        console.log("products", products);
+        // console.log("products", products);
         products.forEach((p) => {
             // p.producId >= producId ? (producId = p.producId + 1) : producId;
             p.code == code || isValid == false ? ((isValid = false), (error = `Error el codigo: ${code} ya existe.`)) : (isValid = true);

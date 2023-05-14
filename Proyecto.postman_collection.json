@@ -24,13 +24,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products",
+					"raw": "http://localhost:8080/api/products",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"products"
 					]
 				}
@@ -55,13 +56,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products?limit=3",
+					"raw": "http://localhost:8080/api/products?limit=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"products"
 					],
 					"query": [
@@ -92,13 +94,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products/1ccac07e-7707-4f01-ade8-afd52ac8c50b",
+					"raw": "http://localhost:8080/api/products/1ccac07e-7707-4f01-ade8-afd52ac8c50b",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"products",
 						"1ccac07e-7707-4f01-ade8-afd52ac8c50b"
 					]
@@ -121,13 +124,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products",
+					"raw": "http://localhost:8080/api/products",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"products"
 					]
 				}
@@ -149,13 +153,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products/c484813e-499b-4695-b874-aeb2ea915e8a",
+					"raw": "http://localhost:8080/api/products/c484813e-499b-4695-b874-aeb2ea915e8a",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"products",
 						"c484813e-499b-4695-b874-aeb2ea915e8a"
 					]
@@ -170,7 +175,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\":\"c484813e-499b-4695-b874-aeb2ea915e8a\",\r\n    \"product\":{\r\n        \"title\": \"Sony PlayStation 5\",\r\n    \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\"\r\n\r\n    }\r\n}",
+					"raw": "{\r\n    \"product\":{\r\n        \"title\": \"Sony PlayStation 55\",\r\n    \"description\": \"es una consola de videojuegos de última generación desarrollada por Sony Interactive Entertainment\"\r\n\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -178,14 +183,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/products",
+					"raw": "http://localhost:8080/api/products/c484813e-499b-4695-b874-aeb2ea915e8a",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"products"
+						"api",
+						"products",
+						"c484813e-499b-4695-b874-aeb2ea915e8a"
 					]
 				}
 			},
@@ -206,13 +213,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/carts",
+					"raw": "http://localhost:8080/api/carts",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"carts"
 					]
 				}
@@ -234,18 +242,18 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/carts/ff3158dd-039a-4b1c-b635-95d432116acb/product/e29dbb05-5ab6-4044-a8a4-d666448b2246/1",
+					"raw": "http://localhost:8080/api/carts/ff3158dd-039a-4b1c-b635-95d432116acb/product/e29dbb05-5ab6-4044-a8a4-d666448b2246",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"carts",
 						"ff3158dd-039a-4b1c-b635-95d432116acb",
 						"product",
-						"e29dbb05-5ab6-4044-a8a4-d666448b2246",
-						"1"
+						"e29dbb05-5ab6-4044-a8a4-d666448b2246"
 					]
 				}
 			},
@@ -269,17 +277,26 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/carts/66aff818-c470-4e7b-a189-f3bcfe8bfc92",
+					"raw": "http://localhost:8080/api/carts/66aff818-c470-4e7b-a189-f3bcfe8bfc92",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"carts",
 						"66aff818-c470-4e7b-a189-f3bcfe8bfc92"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Scket-test",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

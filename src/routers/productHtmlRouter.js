@@ -2,17 +2,17 @@ import express from "express";
 import { producto } from "../ProductManager.js";
 // const { ProductManager, producto } = await import("../utils/products.json");
 
-export const productRouter = express.Router();
+export const productHtmlRouter = express.Router();
 
-productRouter.get("/", async (req, res) => {
+productHtmlRouter.get("/", async (req, res) => {
     let limit = req.query.limit;
     let productos = await producto.getProducts();
-    console.log(productos);
+    // console.log(productos);
     limit ? (productos = productos.slice(0, limit)) : productos;
-    return res.status(200).json({ status: "success", msg: "listado de productos", data: productos });
+    return res.status(200).render("home", { productos });
 });
 
-productRouter.get("/:pid", async (req, res) => {
+productHtmlRouter.get("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let productos = await producto.getProducts();
     productos = productos.filter((x) => x.producId == pid);
@@ -25,9 +25,8 @@ productRouter.get("/:pid", async (req, res) => {
     }
 });
 
-productRouter.post("/", async (req, res) => {
+productHtmlRouter.post("/", async (req, res) => {
     let obj = req.body;
-    console.log("obj", obj);
     let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
     if (respuesta.state) {
         // let productos = await producto.getProducts();
@@ -38,7 +37,7 @@ productRouter.post("/", async (req, res) => {
     }
 });
 
-productRouter.delete("/:pid", async (req, res) => {
+productHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let respuesta = await producto.deleteProduct(pid);
     if (respuesta.state) {
@@ -48,7 +47,7 @@ productRouter.delete("/:pid", async (req, res) => {
     }
 });
 
-productRouter.put("/:pid", async (req, res) => {
+productHtmlRouter.put("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let obj = req.body;
     let respuesta = await producto.updateProduct(pid, obj.product);

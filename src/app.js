@@ -1,11 +1,14 @@
 import express from "express";
 import { productRouter } from "./routers/produts.router.js";
 import { cartRouter } from "./routers/carts.router.js";
-import { testSocketRouter } from "./routers/socket.liveRouter.js";
+import { SocketRouter } from "./routers/socket.liveRouter.js";
+import { productHtmlRouter } from "./routers/productHtmlRouter.js";
 import handlebars from "express-handlebars";
 import path from "path";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
+
+import { producto } from "./ProductManager.js";
 
 const app = express();
 const port = 8080;
@@ -18,20 +21,46 @@ const socketServer = new Server(httpServer);
 
 socketServer.on("connection", (socket) => {
     console.log("se abrio un canal de soket" + socket.id);
-    setInterval(() => {
-        socket.emit("msg_back_to_front", {
-            msg: Date.now() + " hola desde el back al socket",
-        });
 
-        socket.broadcast.emit("msg_back_to_todos_menos_socket", {
-            msg: "hola desde el back a todos menos el socket",
-        });
+    socket.emit("msg_back_to_front", {
+        msg: "Cliente conectado",
+    });
 
-        socketServer.emit("msg_back_todos", { msg: "hola desde el back a todos" });
-    }, 2000);
+    socket.on("POST", async (data) => {
+        // console.log(JSON.stringify(data));
+        // console.log("obj", data);
+        let option = data.metodo;
+        let obj = data.producto;
+        // console.log("obj", obj);
+        // console.log("option", option);
+        let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
+        console.log("respuesta", respuesta);
+        // let productos = await producto.getProducts();
+        if (respuesta.state) {
+            let productoNew = await producto.getProductById(respuesta.id);
+            socket.emit("response-post", {
+                msg: productoNew,
+            });
+        } else {
+            socket.emit("response-post-error", {
+                msg: { status: "error", msg: `el producto no se pudo crear`, data: {} },
+            });
+        }
+    });
 
-    socket.on("msg_front_to_back", (data) => {
-        console.log(JSON.stringify(data));
+    socket.on("DELETE", async (data) => {
+        let id = data.producto;
+        console.log("delete id ", id);
+        let respuesta = await producto.deleteProduct(id);
+        if (respuesta.state) {
+            socket.emit("response-delete", {
+                msg: id,
+            });
+        } else {
+            socket.emit("response-delete-error", {
+                msg: { status: "error", msg: `No Existe un producto con ID: ${id}`, data: {} },
+            });
+        }
     });
 });
 
@@ -49,8 +78,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 
+//Rutas: HTML RENDER SERVER SIDE
+app.use("/products", productHtmlRouter);
+
 //Rutas: SOCKETS
-app.use("/test-socket", testSocketRouter);
+app.use("/realtimeproducts", SocketRouter);
 
 app.get("/*", async (req, res) => {
     return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });
