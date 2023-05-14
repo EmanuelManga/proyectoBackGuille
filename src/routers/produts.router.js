@@ -47,13 +47,14 @@ productRouter.delete("/:pid", async (req, res) => {
     }
 });
 
-productRouter.put("/", async (req, res) => {
+productRouter.put("/:pid", async (req, res) => {
+    let pid = req.params.pid;
     let obj = req.body;
-    let respuesta = await producto.updateProduct(obj.id, obj.product);
-    let productos = await producto.getProductById(respuesta.id);
+    let respuesta = await producto.updateProduct(pid, obj.product);
+    let productos = await producto.getProductById(pid);
     if (respuesta.state) {
         return res.status(200).json({ status: "success", msg: `El producto fue actualizado con exito`, data: productos });
     } else {
-        return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${respuesta.id}`, data: {} });
+        return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} });
     }
 });
