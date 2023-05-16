@@ -7,9 +7,13 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, "public"));
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+        cb(null, quitarEspacios(file.originalname));
     },
 });
+
+function quitarEspacios(string) {
+    return string.replace(/\s/g, "");
+}
 
 export const uploader = multer({ storage });
 export const __filename = fileURLToPath(import.meta.url);

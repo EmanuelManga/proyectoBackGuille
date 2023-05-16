@@ -7,6 +7,7 @@ import handlebars from "express-handlebars";
 import path from "path";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
+import { uploader } from "./utils.js";
 
 import { producto } from "./ProductManager.js";
 
@@ -27,12 +28,8 @@ socketServer.on("connection", (socket) => {
     });
 
     socket.on("POST", async (data) => {
-        // console.log(JSON.stringify(data));
-        // console.log("obj", data);
-        let option = data.metodo;
         let obj = data.producto;
-        // console.log("obj", obj);
-        // console.log("option", option);
+
         let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
         console.log("respuesta", respuesta);
         // let productos = await producto.getProducts();
@@ -51,7 +48,9 @@ socketServer.on("connection", (socket) => {
     socket.on("DELETE", async (data) => {
         let id = data.producto;
         console.log("delete id ", id);
+
         let respuesta = await producto.deleteProduct(id);
+
         if (respuesta.state) {
             socket.emit("response-delete", {
                 msg: id,
@@ -83,6 +82,18 @@ app.use("/products", productHtmlRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);
+
+app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
+    const file = req.file;
+    if (!file) {
+        return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
+    } else {
+        return res.status(200).json({ status: "success", msg: "Se ha cargado la imagen", file: file.filename });
+    }
+    // Aquí puedes acceder al archivo cargado utilizando req.file
+    // Realiza las operaciones necesarias con el archivo
+    // Puedes enviar una respuesta al cliente con el resultado de la carga
+});
 
 app.get("/*", async (req, res) => {
     return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });

@@ -21,6 +21,7 @@ const socket = io();
 // });
 
 socket.on("response-post", (data) => {
+    toast("El producto se a cargado con exito!!", "success", "bottom-right");
     let producto = data.msg.producto;
     let lista = document.getElementById("table-product-body");
     lista.innerHTML += `<tr id="product-${producto.producId}" >
@@ -37,13 +38,16 @@ socket.on("response-post", (data) => {
 
 socket.on("response-post-error", (data) => {
     console.log(data);
+    toast("Ha ocurrido un error!!", "error", "bottom-right");
 });
 
 socket.on("response-delete-error", (data) => {
     console.log(data);
+    toast("Ha ocurrido un error!!", "error", "bottom-right");
 });
 
 socket.on("response-delete", (data) => {
+    toast("El producto se a eliminado con exito!!", "success", "bottom-right");
     let id = data.msg;
     let elemento = document.getElementById(`product-${id}`);
     elemento.remove();

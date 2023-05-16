@@ -1,5 +1,6 @@
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { __dirname, __filename } from "./utils.js";
 
 export class ProductManager {
     constructor(path) {
@@ -88,6 +89,7 @@ export class ProductManager {
         const products = await this.#leerArchivo();
         let existe = products.find((x) => x.producId == id);
         if (existe) {
+            await this.#borrarImg("./src/public/" + existe.thumbnail);
             let newArray = products.filter((x) => x.producId != id);
             await this.#write(newArray);
             // return `Se elemino de la lista de productos: ${existe.title} ID ${existe.producId}`;
@@ -118,6 +120,24 @@ export class ProductManager {
 
     #write = async (array) => {
         await fs.promises.writeFile(this.path, JSON.stringify(array));
+    };
+
+    #borrarImg = async (filePath) => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                console.error("El archivo no existe:", err);
+                return;
+            }
+
+            // Eliminar el archivo
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error("Error al eliminar el archivo:", err);
+                } else {
+                    console.log("Archivo eliminado:", filePath);
+                }
+            });
+        });
     };
 }
 

@@ -7,30 +7,38 @@ const borrarProductoHtml = (id) => {
         url: urlActual,
         // data: formData,
         success: function (response) {
-            alert("¡Producto eliminadoo con exito!");
+            toast("El producto se a eliminadoo con exito!!", "success", "bottom-right");
         },
         error: function (xhr, status, error) {
             console.log(error);
+            toast("Ha ocurrido un error!!", "error", "bottom-right");
         },
     });
 };
 
 $(document).ready(function () {
     $("#product-form").submit(function (event) {
-        event.preventDefault(); // Evita la recarga de la página
+        event.preventDefault();
 
-        let formData = $(this).serialize();
+        let formData = new FormData(this);
         const urlActual = window.location.href;
 
         $.ajax({
-            type: "POST",
             url: urlActual,
+            type: "POST",
             data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
-                alert("¡Formulario enviado con éxito!");
+                console.log(response);
+                // alert("¡Formulario enviado con éxito!");
+                toast("El producto se a cargado con exito!!", "success", "bottom-right");
+                // Manejar la respuesta del servidor
             },
-            error: function (xhr, status, error) {
+            error: function (error) {
                 console.log(error);
+                toast("Ha ocurrido un error!!", "error", "bottom-right");
+                // Manejar errores de la solicitud
             },
         });
     });

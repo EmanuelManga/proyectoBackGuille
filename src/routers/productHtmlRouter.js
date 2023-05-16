@@ -1,5 +1,6 @@
 import express from "express";
 import { producto } from "../ProductManager.js";
+import { uploader } from "../utils.js";
 // const { ProductManager, producto } = await import("../utils/products.json");
 
 export const productHtmlRouter = express.Router();
@@ -26,17 +27,23 @@ productHtmlRouter.get("/:pid", async (req, res) => {
     }
 });
 
-productHtmlRouter.post("/", async (req, res) => {
+productHtmlRouter.post("/", uploader.single("thumbnail"), async (req, res) => {
     let obj = req.body;
     console.log("obj", obj);
-    let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
+
+    // Obtén la información del archivo cargado
+    const file = req.file;
+    if (!file) {
+        return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
+    }
+
+    let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, file.filename, obj.code, obj.stock, obj.status, obj.category);
+
     if (respuesta.state) {
-        let allProductos = await producto.getProducts();
-        // let productos = await producto.getProductById(respuesta.id);
-        // return res.status(200).json({ status: "success", msg: `El producto fue creado con exito`, data: productos.producto });
-        return res.status(200).render("home", { productos: allProductos });
+        let productos = await producto.getProductById(respuesta.id);
+        return res.status(200).json({ status: "success", msg: "El producto fue creado con éxito", data: productos.producto });
     } else {
-        return res.status(404).json({ status: "error", msg: `el producto no se pudo crear`, data: {} });
+        return res.status(404).json({ status: "error", msg: "El producto no se pudo crear", data: {} });
     }
 });
 
