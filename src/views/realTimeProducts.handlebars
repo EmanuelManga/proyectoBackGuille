@@ -1,22 +1,38 @@
 <style>
-    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }
+    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; } img{width: 5rem;height: 3rem;} td{vertical-align: middle; }
 </style>
 
 <div id="product-conteiner" style="width: 80%;margin: auto;padding: 3rem 0">
-    <ul id="lista-product" style="display: flex;flex-direction: row;flex-wrap: wrap;gap: 1rem;">
-        {{#each productos}}
-            <div id="product-{{this.producId}}" class="card" style="width: 18rem;">
-                <img class="card-img-top" src="{{this.thumbnail}}" alt="Card image cap" />
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    <p class="card-text">{{this.description}}</p>
-                    <p class="card-text">Precio:{{this.price}}</p>
-                    <p class="card-text">Stock:{{this.stock}}</p>
-                </div>
-                <button type="button" class="btn btn-danger" onclick="borrarProducto('{{this.producId}}')">Delete</button>
-            </div>
-        {{/each}}
-    </ul>
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Titulo</th>
+                <th scope="col">Codigo</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Borrar</th>
+            </tr>
+        </thead>
+        <tbody id="table-product-body">
+            {{#each productos}}
+                <tr id="product-{{this.producId}}">
+                    <td>{{this.producId}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.code}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.stock}}</td>
+                    <td><img class="" src="{{this.thumbnail}}" /></td>
+                    <td><button type="button" class="btn btn-danger" onclick="borrarProducto('{{this.producId}}')"><i class="bi bi-trash3-fill"></i></button></td>
+                </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
 
 </div>
 <div id="form-conteiner" style="width: 80%;margin: auto; padding-bottom: 3rem;">
