@@ -1,9 +1,9 @@
 //FRONT
 const socket = io();
 
-socket.on("msg_back_to_front", (data) => {
-    console.log(data);
-});
+// socket.on("msg_back_to_front", (data) => {
+//     console.log(data);
+// });
 
 socket.on("response-post", (data) => {
     let producto = data.msg.producto;

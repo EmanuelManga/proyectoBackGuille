@@ -21,17 +21,20 @@ productHtmlRouter.get("/:pid", async (req, res) => {
     if (productos.length == 0) {
         return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${pid}`, data: productos });
     } else {
-        return res.status(200).json({ status: "success", msg: `Producto con el id: ${pid}`, data: productos });
+        // return res.status(200).json({ status: "success", msg: `Producto con el id: ${pid}`, data: productos });
+        return res.status(200).render("home", { productos });
     }
 });
 
 productHtmlRouter.post("/", async (req, res) => {
     let obj = req.body;
+    console.log("obj", obj);
     let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
     if (respuesta.state) {
-        // let productos = await producto.getProducts();
-        let productos = await producto.getProductById(respuesta.id);
-        return res.status(200).json({ status: "success", msg: `El producto fue creado con exito`, data: productos.producto });
+        let allProductos = await producto.getProducts();
+        // let productos = await producto.getProductById(respuesta.id);
+        // return res.status(200).json({ status: "success", msg: `El producto fue creado con exito`, data: productos.producto });
+        return res.status(200).render("home", { productos: allProductos });
     } else {
         return res.status(404).json({ status: "error", msg: `el producto no se pudo crear`, data: {} });
     }
@@ -41,7 +44,10 @@ productHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let respuesta = await producto.deleteProduct(pid);
     if (respuesta.state) {
-        return res.status(200).json({ status: "success", msg: `El producto fue eliminado con exito`, data: respuesta.product });
+        let allProductos = await producto.getProducts();
+        console.log("allProductos", allProductos);
+        // return res.status(200).json({ status: "success", msg: `El producto fue eliminado con exito`, data: respuesta.product });
+        return res.status(200).render("home", { productos: allProductos });
     } else {
         return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${respuesta.product.id}`, data: {} });
     }
@@ -53,7 +59,9 @@ productHtmlRouter.put("/:pid", async (req, res) => {
     let respuesta = await producto.updateProduct(pid, obj.product);
     let productos = await producto.getProductById(pid);
     if (respuesta.state) {
-        return res.status(200).json({ status: "success", msg: `El producto fue actualizado con exito`, data: productos });
+        // return res.status(200).json({ status: "success", msg: `El producto fue actualizado con exito`, data: productos });
+        let allProductos = await producto.getProducts();
+        return res.status(200).render("home", { productos: allProductos });
     } else {
         return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} });
     }
