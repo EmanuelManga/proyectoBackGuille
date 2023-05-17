@@ -35,7 +35,7 @@ socketServer.on("connection", (socket) => {
         // let productos = await producto.getProducts();
         if (respuesta.state) {
             let productoNew = await producto.getProductById(respuesta.id);
-            socket.emit("response-post", {
+            socketServer.emit("response-post", {
                 msg: productoNew,
             });
         } else {
@@ -52,7 +52,7 @@ socketServer.on("connection", (socket) => {
         let respuesta = await producto.deleteProduct(id);
 
         if (respuesta.state) {
-            socket.emit("response-delete", {
+            socketServer.emit("response-delete", {
                 msg: id,
             });
         } else {
