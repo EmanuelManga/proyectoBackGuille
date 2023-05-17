@@ -38,6 +38,9 @@ socketServer.on("connection", (socket) => {
             socketServer.emit("response-post", {
                 msg: productoNew,
             });
+            socket.emit("response-post-toast", {
+                msg: { msg: "success" },
+            });
         } else {
             socket.emit("response-post-error", {
                 msg: { status: "error", msg: `el producto no se pudo crear`, data: {} },
@@ -54,6 +57,9 @@ socketServer.on("connection", (socket) => {
         if (respuesta.state) {
             socketServer.emit("response-delete", {
                 msg: id,
+            });
+            socket.emit("response-delete-toast", {
+                msg: { msg: "success" },
             });
         } else {
             socket.emit("response-delete-error", {
