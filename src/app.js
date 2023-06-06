@@ -9,7 +9,9 @@ import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
 import { uploader } from "./utils.js";
 
-import { producto } from "./ProductManager.js";
+import webSocket from "./routers/webSocket.js";
+
+// import { producto } from "./ProductManager.js";
 
 const app = express();
 const port = 8080;
@@ -19,55 +21,7 @@ const httpServer = app.listen(port, () => {
 });
 
 const socketServer = new Server(httpServer);
-
-socketServer.on("connection", (socket) => {
-    console.log("se abrio un canal de soket" + socket.id);
-
-    socket.emit("msg_back_to_front", {
-        msg: "Cliente conectado",
-    });
-
-    socket.on("POST", async (data) => {
-        let obj = data.producto;
-
-        let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
-        console.log("respuesta", respuesta);
-        // let productos = await producto.getProducts();
-        if (respuesta.state) {
-            let productoNew = await producto.getProductById(respuesta.id);
-            socketServer.emit("response-post", {
-                msg: productoNew,
-            });
-            socket.emit("response-post-toast", {
-                msg: { msg: "success" },
-            });
-        } else {
-            socket.emit("response-post-error", {
-                msg: { status: "error", msg: `el producto no se pudo crear`, data: {} },
-            });
-        }
-    });
-
-    socket.on("DELETE", async (data) => {
-        let id = data.producto;
-        console.log("delete id ", id);
-
-        let respuesta = await producto.deleteProduct(id);
-
-        if (respuesta.state) {
-            socketServer.emit("response-delete", {
-                msg: id,
-            });
-            socket.emit("response-delete-toast", {
-                msg: { msg: "success" },
-            });
-        } else {
-            socket.emit("response-delete-error", {
-                msg: { status: "error", msg: `No Existe un producto con ID: ${id}`, data: {} },
-            });
-        }
-    });
-});
+webSocket(socketServer);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
