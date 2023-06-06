@@ -5,7 +5,7 @@ import { SocketRouter } from "./routers/socket.liveRouter.js";
 import { productHtmlRouter } from "./routers/productHtmlRouter.js";
 import handlebars from "express-handlebars";
 import path from "path";
-import { __dirname } from "./utils.js";
+import { __dirname, connectMongo } from "./utils.js";
 import { Server } from "socket.io";
 import { uploader } from "./utils.js";
 
@@ -19,6 +19,8 @@ const port = 8080;
 const httpServer = app.listen(port, () => {
     console.log(`Example app listening on http://localhost:${port}`);
 });
+
+connectMongo();
 
 const socketServer = new Server(httpServer);
 webSocket(socketServer);
