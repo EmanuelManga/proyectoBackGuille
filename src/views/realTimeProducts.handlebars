@@ -15,21 +15,30 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Imagen</th>
                 <th scope="col">Borrar</th>
+                <th scope="col">Agrear Carrito</th>
             </tr>
         </thead>
         <tbody id="table-product-body">
             {{#each productos}}
-                <tr id="product-{{this.producId}}">
-                    <td>{{this.producId}}</td>
+                <tr id="product-{{this._id}}">
+                    <td>{{this._id}}</td>
                     <td>{{this.title}}</td>
                     <td>{{this.code}}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.price}}</td>
                     <td>{{this.stock}}</td>
-                    <td><img class="" src="{{this.thumbnail}}" /></td>
-                    <td><button type="button" class="btn btn-danger" onclick="borrarProducto('{{this.producId}}')"><i class="bi bi-trash3-fill"></i></button></td>
+                    <td><img class="" src="../pictures/{{this.thumbnail}}" /></td>
+                    <td><button type="button" class="btn btn-danger" onclick="borrarProducto('{{this._id}}')"><i class="bi bi-trash3-fill"></i></button></td>
+                    <td><button type="button" class="btn btn-success" onclick="addCarritoLive('{{this._id}}')"><i class="fa-solid fa-cart-plus">+</i></button></td>
                 </tr>
             {{/each}}
+            <ul class="pagination">
+                <li class="page-item"><a id="btnPrev" class="page-link aDisable" href="#">Previous</a></li>
+                {{#each links}}
+                    <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
+                {{/each}}
+                <li class="page-item"><a id="btnNext" class="page-link" href="#">Next</a></li>
+            </ul>
 
         </tbody>
     </table>
@@ -79,3 +88,4 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>
 <script src="/js/funcionesLiveProduct.js"></script>
+<script>btnNextPrev({{pagination.totalPages}})</script>

@@ -45,3 +45,55 @@ const borrarProducto = (id) => {
         producto: id,
     });
 };
+
+const addCarritoLive = (pid) => {
+    const session = recuperarDatosDelSessionStorage();
+    if (session.cartId) {
+        socket.emit("PUT", {
+            cid: session.cartId,
+            pid,
+        });
+    }
+};
+
+const btnNextPrev = (pagination) => {
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    console.log(pagination);
+    const url = window.location.href;
+    let pagina = obtenerNumeroPagina(url);
+    // let newUrl = quitarNumeroPagina(url);
+    console.log("pagina", pagina);
+    let nextP = pagina.position + 1;
+    let prevP = pagina.position - 1;
+    console.log(nextP, prevP);
+    pagina.position == 1 ? (btnPrev.classList.add("aDisable"), btnPrev.setAttribute("href", "#")) : (btnPrev.classList.remove("aDisable"), btnPrev.setAttribute("href", pagina.url + prevP));
+    pagina.position == pagination ? (btnNext.classList.add("aDisable"), btnNext.setAttribute("href", "#")) : (btnNext.classList.remove("aDisable"), btnNext.setAttribute("href", pagina.url + nextP));
+};
+
+const obtenerNumeroPagina = (url) => {
+    const urlObj = new URL(url);
+    const params = new URLSearchParams(urlObj.search);
+    const page = params.get("page");
+    console.log("casa", page);
+    let respuesta = { position: null, url: null };
+    if (page) {
+        respuesta.position = parseInt(page);
+        respuesta.url = quitarNumeroPagina(url) + "?page=";
+    } else {
+        respuesta.position = 1;
+        respuesta.url = url + "?page=";
+    }
+
+    return respuesta;
+};
+
+const quitarNumeroPagina = (url) => {
+    const urlObj = new URL(url);
+    const params = new URLSearchParams(urlObj.search);
+    params.delete("page");
+    urlObj.search = params.toString();
+    console.log("quitar n", urlObj.toString());
+
+    return urlObj.toString();
+};

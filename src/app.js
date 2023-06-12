@@ -3,6 +3,7 @@ import { productRouter } from "./routers/produts.router.js";
 import { cartRouter } from "./routers/carts.router.js";
 import { SocketRouter } from "./routers/socket.liveRouter.js";
 import { productHtmlRouter } from "./routers/productHtmlRouter.js";
+import { cartsHtmlRouter } from "./routers/cartsHtmlRouter.js";
 import handlebars from "express-handlebars";
 import path from "path";
 import { __dirname, connectMongo } from "./utils.js";
@@ -11,7 +12,7 @@ import { uploader } from "./utils.js";
 
 import webSocket from "./routers/webSocket.js";
 
-// import { producto } from "./ProductManager.js";
+// import { producto } from "./../DAO/ProductManager.js";
 
 const app = express();
 const port = 8080;
@@ -41,6 +42,7 @@ app.use("/api/carts", cartRouter);
 
 //Rutas: HTML RENDER SERVER SIDE
 app.use("/products", productHtmlRouter);
+app.use("/carts", cartsHtmlRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);

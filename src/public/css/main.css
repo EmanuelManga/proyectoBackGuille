@@ -9,3 +9,10 @@ img {
 td {
     vertical-align: middle;
 }
+
+.aDisable {
+    pointer-events: none !important;
+    color: gray !important;
+    text-decoration: none !important;
+    cursor: default !important;
+}

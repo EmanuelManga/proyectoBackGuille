@@ -1,6 +1,6 @@
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
-import { __dirname, __filename } from "./utils.js";
+import { __dirname, __filename } from "../utils.js";
 
 export class ProductManager {
     constructor(path) {
