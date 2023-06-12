@@ -12,8 +12,18 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body id="body-main">
-        <div>
+        <div class="contenedor-botonera">
             <button id="btnLogIn" class="btn btn-info" onclick="login()">LogIn</button>
+            <div id="contenedor-usuario" class="dropdown" style="display: none;">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                    <li><button class="dropdown-item" onclick="logOutStyling()">LogOut</button></li>
+                    
+                </ul>
+            </div>
+            <button class="btn btn-success"><a id="a-carrito" href=""  style="color: black;;"><i class="bi bi-cart"></i></i></a></button>
+            
         </div>
         {{{body}}}
         <script src="/js/main.js"></script>

@@ -32,16 +32,16 @@
                     <td><button type="button" class="btn btn-success" onclick="addCarritoLive('{{this._id}}')"><i class="fa-solid fa-cart-plus">+</i></button></td>
                 </tr>
             {{/each}}
-            <ul class="pagination">
-                <li class="page-item"><a id="btnPrev" class="page-link aDisable" href="#">Previous</a></li>
-                {{#each links}}
-                    <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
-                {{/each}}
-                <li class="page-item"><a id="btnNext" class="page-link" href="#">Next</a></li>
-            </ul>
 
         </tbody>
     </table>
+    <ul class="pagination">
+        <li class="page-item"><a id="btnPrev" class="page-link aDisable" href="#">Previous</a></li>
+        {{#each links}}
+            <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
+        {{/each}}
+        <li class="page-item"><a id="btnNext" class="page-link" href="#">Next</a></li>
+    </ul>
 
 </div>
 <div id="form-conteiner" style="width: 80%;margin: auto; padding-bottom: 3rem;">

@@ -16,3 +16,12 @@ td {
     text-decoration: none !important;
     cursor: default !important;
 }
+
+.contenedor-botonera {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: stretch;
+    gap: 1rem;
+    margin: 1rem;
+}
