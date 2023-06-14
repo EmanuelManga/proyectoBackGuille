@@ -1,0 +1,21 @@
+{{! <style>
+    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
+</style> }}
+<div style="width: 80%;margin: auto;padding: 3rem 0">
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="../../pictures/{{productos.thumbnail}}" alt="Card image cap" />
+        <div class="card-body">
+            <h5 class="card-title">{{productos.title}}</h5>
+            <p class="card-text">{{productos.description}}</p>
+            <h6 class="card-subtitle mb-2 text-muted">{{productos.price}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{productos.stock}}</h6>
+            <td><button type="button" class="btn btn-success" onclick="agregarCarrito('{{productos._id}}')"><i class="fa-solid fa-cart-plus">+</i></button></td>
+            {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../../js/funcionesHtmlProduct.js"></script>
+<script src="../../js/index.js"></script>
+{{! <script></script> }}

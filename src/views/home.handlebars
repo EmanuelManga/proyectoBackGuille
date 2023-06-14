@@ -12,6 +12,7 @@
                 <th scope="col">Precio</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Imagen</th>
+                <th scope="col">Detalle</th>
                 <th scope="col">Borrar</th>
                 <th scope="col">Agrear Carrito</th>
             </tr>
@@ -26,6 +27,7 @@
                     <td>{{this.price}}</td>
                     <td>{{this.stock}}</td>
                     <td><img class="" src="../pictures/{{this.thumbnail}}" /></td>
+                    <td><a type="button" class="btn btn-danger" id="detalle-btn-{{this._id}}" href="http://localhost:8080/products/detalle/{{this._id}}">Detalle</i></a></td>
                     <td><button type="button" class="btn btn-danger" onclick="borrarProductoHtml('{{this._id}}')"><i class="bi bi-trash3-fill"></i></button></td>
                     <td><button type="button" class="btn btn-success" onclick="agregarCarrito('{{this._id}}')"><i class="fa-solid fa-cart-plus">+</i></button></td>
                 </tr>
@@ -82,5 +84,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="../js/funcionesHtmlProduct.js"></script>
+<script src="/js/index.js"></script>
 <script>btnNextPrev({{pagination.totalPages}})</script>
 {{! <script></script> }}

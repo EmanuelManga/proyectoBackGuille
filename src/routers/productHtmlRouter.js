@@ -285,3 +285,17 @@ productHtmlRouter.put("/:pid", async (req, res) => {
 //         return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} });
 //     }
 // });
+
+productHtmlRouter.get("/detalle/:pid", async (req, res) => {
+    let pid = req.params.pid;
+    let product = await Service.getById(pid);
+    // let product = await Service.getAll();
+    // product = product.filter((x) => x._id == pid);
+    product = JSON.parse(JSON.stringify(product));
+    if (product.length == 0) {
+        return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${pid}`, data: product });
+    } else {
+        console.log(product);
+        return res.status(200).render("detalle", { productos: product[0] });
+    }
+});
