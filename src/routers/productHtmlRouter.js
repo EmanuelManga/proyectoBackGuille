@@ -5,29 +5,20 @@ import { __dirname, __filename } from "../utils.js";
 
 import { ProductService } from "../services/product.services.js";
 import { ProductModel } from "../DAO/models/product.model.js";
+import { UserService } from "../services/users.service.js";
 
 export const productHtmlRouter = express.Router();
 
 const Service = new ProductService();
+const UService = new UserService();
 
 productHtmlRouter.get("/", async (req, res) => {
-    // try {
-    //     let limit = req.query.limit;
-    //     let product = await Service.getAll();
-    //     limit ? (product = product.slice(0, limit)) : product;
-    //     product = JSON.parse(JSON.stringify(product));
-    //     console.log("pre", product);
-    //     return res.status(200).render("home", { productos: product });
-    // } catch (e) {
-    //     console.log(e);
-    //     return res.status(500).json({
-    //         status: "error",
-    //         msg: "something went wrong :(",
-    //         data: {},
-    //     });
-    // }
-
     const { page, limit, sort, query, querySerch } = req.query;
+    const email = req.session.email;
+    let name = null;
+    let isLoged = false;
+    const user = await UService.getByEmail(email);
+    email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
     // console.log("req.query", req.query);
     // console.log(page);
     let busqueda = {};
@@ -44,7 +35,7 @@ productHtmlRouter.get("/", async (req, res) => {
     }
     // console.log("links", links);
     // console.log("rest", rest);
-    return res.status(200).render("home", { productos: products, pagination: rest, links });
+    return res.status(200).render("home", { productos: products, pagination: rest, links, name, isLoged });
 });
 
 productHtmlRouter.get("/:pid", async (req, res) => {

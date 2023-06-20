@@ -2,12 +2,16 @@ import express from "express";
 import { producto } from "../DAO/ProductManager.js";
 import { CartsService } from "../services/carts.service.js";
 import mongoose from "mongoose";
+import session from "express-session";
+import { UserService } from "../services/users.service.js";
+import { isUser } from "../middlewares/auth.js";
 
 // const { ProductManager, producto } = await import("../utils/products.json");
 
 export const cartRouter = express.Router();
 
 const Service = new CartsService();
+const UService = new UserService();
 
 cartRouter.post("/", async (req, res) => {
     try {
@@ -38,9 +42,12 @@ cartRouter.post("/", async (req, res) => {
     }
 });
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
+cartRouter.post("/product/:pid", isUser, async (req, res) => {
     try {
-        const { cid, pid } = req.params;
+        const email = req.session.email;
+        const user = await UService.getByEmail(email);
+        const cid = user._id;
+        const { pid } = req.params;
         const productAdd = await Service.updateOne(cid, { productId: pid });
         return res.status(201).json({
             status: "success",
@@ -106,5 +113,24 @@ cartRouter.get("/:cid", async (req, res) => {
 //         }
 //     } else {
 //         return res.status(404).json({ status: "error", msg: `No se encuentra ningun carrito con el ID: ${cartId}`, data: {} });
+//     }
+// });
+
+// cartRouter.post("/:cid/product/:pid", async (req, res) => {
+//     try {
+//         const { cid, pid } = req.params;
+//         const productAdd = await Service.updateOne(cid, { productId: pid });
+//         return res.status(201).json({
+//             status: "success",
+//             msg: "product created",
+//             data: productAdd,
+//         });
+//     } catch (e) {
+//         console.log(e);
+//         return res.status(500).json({
+//             status: "error",
+//             msg: "something went wrong :(",
+//             data: {},
+//         });
 //     }
 // });

@@ -91,23 +91,23 @@ const quitarNumeroPagina = (url) => {
 };
 
 const agregarCarrito = (productId) => {
-    const session = recuperarDatosDelSessionStorage();
-    if (session.cartId) {
-        console.log(`http://localhost:8080/api/carts/${session.cartId}/product/${productId}`);
-        $.ajax({
-            url: `http://localhost:8080/api/carts/${session.cartId}/product/${productId}`,
-            type: "POST",
-            success: function (response) {
-                console.log(response);
-                // alert("¡Formulario enviado con éxito!");
-                toast("El producto se agrego al carrito con exito!!", "success", "bottom-right");
-                // Manejar la respuesta del servidor
-            },
-            error: function (error) {
-                console.log(error);
-                toast("Ha ocurrido un error!!", "error", "bottom-right");
-                // Manejar errores de la solicitud
-            },
-        });
-    }
+    // const session = recuperarDatosDelSessionStorage();
+    // if (session.cartId) {
+    // console.log(`http://localhost:8080/api/carts/${session.cartId}/product/${productId}`);
+    $.ajax({
+        url: `/api/carts/product/${productId}`,
+        type: "POST",
+        success: function (response) {
+            console.log(response);
+            // alert("¡Formulario enviado con éxito!");
+            toast("El producto se agrego al carrito con exito!!", "success", "bottom-right");
+            // Manejar la respuesta del servidor
+        },
+        error: function (error) {
+            console.log(error);
+            toast("Ha ocurrido un error!!", "error", "bottom-right");
+            // Manejar errores de la solicitud
+        },
+    });
+    // }
 };
