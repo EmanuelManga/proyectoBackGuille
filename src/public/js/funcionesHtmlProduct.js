@@ -105,7 +105,11 @@ const agregarCarrito = (productId) => {
         },
         error: function (error) {
             console.log(error);
-            toast("Ha ocurrido un error!!", "error", "bottom-right");
+            if (error.responseJSON.msg) {
+                toast(error.responseJSON.msg, "error", "bottom-right");
+            } else {
+                toast("Ha ocurrido un error!!", "error", "bottom-right");
+            }
             // Manejar errores de la solicitud
         },
     });

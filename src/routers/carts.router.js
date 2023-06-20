@@ -4,7 +4,7 @@ import { CartsService } from "../services/carts.service.js";
 import mongoose from "mongoose";
 import session from "express-session";
 import { UserService } from "../services/users.service.js";
-import { isUser } from "../middlewares/auth.js";
+import { isUser, isUserAjax } from "../middlewares/auth.js";
 
 // const { ProductManager, producto } = await import("../utils/products.json");
 
@@ -42,7 +42,7 @@ cartRouter.post("/", async (req, res) => {
     }
 });
 
-cartRouter.post("/product/:pid", isUser, async (req, res) => {
+cartRouter.post("/product/:pid", isUserAjax, async (req, res) => {
     try {
         const email = req.session.email;
         const user = await UService.getByEmail(email);
