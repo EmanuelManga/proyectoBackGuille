@@ -47,13 +47,9 @@ const borrarProducto = (id) => {
 };
 
 const addCarritoLive = (pid) => {
-    const session = recuperarDatosDelSessionStorage();
-    if (session.cartId) {
-        socket.emit("PUT", {
-            cid: session.cartId,
-            pid,
-        });
-    }
+    socket.emit("PUT", {
+        pid,
+    });
 };
 
 const btnNextPrev = (pagination) => {

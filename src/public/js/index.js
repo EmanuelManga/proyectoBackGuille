@@ -51,6 +51,10 @@ socket.on("response-addCart-toast", (data) => {
     console.log(data);
     toast("El producto se agregado el producto al carrito con exito!!", "success", "bottom-right");
 });
+socket.on("response-addCart-error", (data) => {
+    console.log(data);
+    toast(data.msg.msg, "error", "bottom-right");
+});
 
 socket.on("response-delete-error", (data) => {
     console.log(data);

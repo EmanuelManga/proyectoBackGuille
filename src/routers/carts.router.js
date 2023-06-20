@@ -1,6 +1,7 @@
 import express from "express";
 import { producto } from "../DAO/ProductManager.js";
 import { CartsService } from "../services/carts.service.js";
+import mongoose from "mongoose";
 
 // const { ProductManager, producto } = await import("../utils/products.json");
 
@@ -10,7 +11,18 @@ const Service = new CartsService();
 
 cartRouter.post("/", async (req, res) => {
     try {
-        const productCreated = await Service.createOne();
+        const { id } = req.body;
+        const _id = new mongoose.Types.ObjectId(id);
+        const productCreated = await Service.createOne(_id);
+        console.log("productCreated", productCreated);
+        console.log("req.session.email", req.session.email);
+        if (!productCreated.status) {
+            return res.status(401).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
         return res.status(201).json({
             status: "success",
             msg: "product created",

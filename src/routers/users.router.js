@@ -27,7 +27,8 @@ usersRouter.get("/", async (req, res) => {
 
 usersRouter.post("/", async (req, res) => {
     try {
-        const { firstName, lastName, email, pass, isAdmin } = req.body;
+        const { firstName, lastName, email, pass } = req.body;
+        const isAdmin = false;
         const userCreated = await Service.createOne(firstName, lastName, email, pass, isAdmin);
         return res.status(201).json({
             status: "success",

@@ -3,11 +3,31 @@ import { ProductService } from "../services/product.services.js";
 import fs from "fs";
 import { __dirname, __filename } from "../utils.js";
 import { CartsService } from "../services/carts.service.js";
+import { UserService } from "../services/users.service.js";
+
+import MongoStore from "connect-mongo";
+import session from "express-session";
 
 const Service = new ProductService();
 const CService = new CartsService();
+const UService = new UserService();
 
-export default (socketServer) => {
+export default function webSocket(socketServer) {
+    const sessionMiddleware = session({
+        store: MongoStore.create({
+            mongoUrl: "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority",
+            ttl: 7200,
+        }),
+        secret: "un-re-secreto",
+        resave: true,
+        saveUninitialized: true,
+    });
+
+    socketServer.use((socket, next) => {
+        sessionMiddleware(socket.request, socket.request.res, next);
+    });
+
+    // export default (socketServer) => {
     socketServer.on("connection", (socket) => {
         console.log("se abrio un canal de soket" + socket.id);
 
@@ -70,23 +90,34 @@ export default (socketServer) => {
         });
         socket.on("PUT", async (data) => {
             console.log("PUT SOCKET", data);
-
+            const { pid } = data;
             try {
-                const { cid, pid } = data;
-                console.log("cid, pid", cid, pid);
-                const productAdd = await CService.updateOne(cid, { productId: pid });
+                const email = socket.request.session.email;
+                const user = await UService.getByEmail(email);
+                const cid = user._id;
+                try {
+                    console.log("email", email);
+                    console.log("user", user);
+                    console.log(" pid", pid);
+                    console.log("cid", cid);
+                    const productAdd = await CService.updateOne(cid, { productId: pid });
 
-                socket.emit("response-addCart-toast", {
-                    msg: { msg: "success" },
-                });
-            } catch (e) {
-                socket.emit("response-delete-error", {
-                    msg: { status: "error", msg: `No Existe un producto con ID: ${id}`, data: {} },
+                    socket.emit("response-addCart-toast", {
+                        msg: { msg: "success" },
+                    });
+                } catch (e) {
+                    socket.emit("response-delete-error", {
+                        msg: { status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} },
+                    });
+                }
+            } catch (error) {
+                socket.emit("response-addCart-error", {
+                    msg: { status: "error", msg: `No se encuentra logeado`, data: {} },
                 });
             }
         });
     });
-};
+}
 
 // socket.on("POST", async (data) => {
 //     let obj = data.producto;

@@ -1,8 +1,10 @@
+import session from "express-session";
 export function isUser(req, res, next) {
     if (req.session?.email) {
         return next();
     }
-    return res.status(401).render("error", { error: "error de autenticacion!" });
+    // return res.status(401).render("login", { error: "error de autenticacion!" });
+    return res.redirect("/auth/login");
 }
 
 export function isAdmin(req, res, next) {

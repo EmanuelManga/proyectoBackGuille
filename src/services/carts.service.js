@@ -1,5 +1,6 @@
 import { CartModel } from "../DAO/models/carts.model.js";
 import { ProductModel } from "../DAO/models/product.model.js";
+import { UserModel } from "../DAO/models/users.model.js";
 import mongoose from "mongoose";
 
 export class CartsService {
@@ -27,27 +28,43 @@ export class CartsService {
         }
     }
 
-    async createOne() {
-        try {
-            const products = await CartModel.find({ products: { $size: 0 } });
-            console.log(products);
-            if (products.length !== 0) {
-                try {
-                    let productsParsed = JSON.parse(JSON.stringify(products));
+    // async createOne() {
+    //     try {
+    //         const products = await CartModel.find({ products: { $size: 0 } });
+    //         console.log(products);
+    //         if (products.length !== 0) {
+    //             try {
+    //                 let productsParsed = JSON.parse(JSON.stringify(products));
 
-                    for (let i = 0; i < productsParsed.length; i++) {
-                        const element = productsParsed[i];
-                        const deleted = await CartModel.deleteOne({ _id: element._id });
-                        console.log(`Documento eliminado: ${deleted}`);
-                    }
-                } catch (error) {
-                    console.error("Error al eliminar los documentos:", error);
-                }
+    //                 for (let i = 0; i < productsParsed.length; i++) {
+    //                     const element = productsParsed[i];
+    //                     const deleted = await CartModel.deleteOne({ _id: element._id });
+    //                     console.log(`Documento eliminado: ${deleted}`);
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error al eliminar los documentos:", error);
+    //             }
+    //         }
+    //         const cartsCreated = await CartModel.create({});
+    //         return cartsCreated;
+    //     } catch (error) {
+    //         console.error("Error al crear el nuevo elemento:", error);
+    //     }
+    // }
+    async createOne(_id) {
+        try {
+            if (!_id) throw new Error("invalid _id");
+            const user = await UserModel.findById(_id);
+            if (!user) throw new Error("user not found");
+            const cart = await CartModel.findById(_id);
+            if (!cart) {
+                const cartsCreated = await CartModel.create({ _id });
+                return { cartsCreated, status: true };
             }
-            const cartsCreated = await CartModel.create({});
-            return cartsCreated;
+            return { cart, status: true };
         } catch (error) {
             console.error("Error al crear el nuevo elemento:", error);
+            return { status: false };
         }
     }
 
@@ -71,21 +88,9 @@ export class CartsService {
         if (!cart) throw new Error("cart not found");
         const realProduct = await ProductModel.findOne({ _id: products.productId });
         if (!realProduct) throw new Error("product not found");
-        // Verificar si ya existe un producto con el mismo ID en el array
-        // console.log("cart.products", cart.products);
-        // const parsedCart = JSON.parse(JSON.stringify(cart));
-        // console.log("cart.products", cart);
-        // console.log("cart.products",JSON.parse(JSON.stringify(cart)) );
-        console.log("realProduct", realProduct);
+
+        // console.log("realProduct", realProduct);
         let id = new mongoose.Types.ObjectId(products.productId);
-        console.log("    ");
-        console.log("    ");
-        console.log("cart", cart);
-        console.log("    ");
-        console.log("    ");
-        console.log("new ID", id);
-        // const existingProduct = cart.products.find((p) => p.productId === id);
-        // const existingProduct = await CartModel.findOne({ _id: _id, "products.productId": products.productId });
         const existingProduct = await CartModel.findOneAndUpdate(
             {
                 _id: _id,

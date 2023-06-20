@@ -1,25 +1,25 @@
 import express from "express";
 import { UserModel } from "../DAO/models/users.model.js";
 import { isAdmin, isUser } from "../middlewares/auth.js";
+import { CartsService } from "../services/carts.service.js";
 
 export const authRouter = express.Router();
+
+const CartService = new CartsService();
 
 authRouter.get("/logout", (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).render("error", { error: "no se pudo cerrar su session" });
         }
-        return res.redirect("/auth/login");
+        // return res.redirect("/auth/login");
+        return res.status(201).json({});
     });
 });
 
 authRouter.get("/perfil", isUser, (req, res) => {
     const user = { email: req.session.email, isAdmin: req.session.isAdmin };
     return res.render("perfil", { user: user });
-});
-
-authRouter.get("/administracion", isUser, isAdmin, (req, res) => {
-    return res.send("datos super secretos clasificados sobre los nuevos ingresos a boca juniors");
 });
 
 authRouter.get("/login", (req, res) => {
@@ -38,9 +38,19 @@ authRouter.post("/login", async (req, res) => {
         req.session.email = usarioEncontrado.email;
         req.session.isAdmin = usarioEncontrado.isAdmin;
 
-        return res.redirect("/auth/perfil");
+        const cart = await CartService.createOne(usarioEncontrado._id);
+        return res.redirect("/realtimeproducts");
+        // return res.status(201).json({
+        //     status: "success",
+        //     msg: "logeado con exito",
+        //     data: { firstName: usarioEncontrado.firstName, lastName: usarioEncontrado.lastName },
+        // });
     } else {
-        return res.status(401).render("error", { error: "email o pass estan mal" });
+        // return res.status(401).render("error", { error: "email o pass estan mal" });
+        return res.status(401).json({
+            status: "error",
+            msg: "error en el usuario o password",
+        });
     }
 });
 
@@ -54,11 +64,12 @@ authRouter.post("/register", async (req, res) => {
         return res.status(400).render("error", { error: "ponga bien toooodoo cheee!!" });
     }
     try {
-        await UserModel.create({ email: email, pass: pass, firstName: firstName, lastName: lastName, isAdmin: false });
+        const user = await UserModel.create({ email: email, pass: pass, firstName: firstName, lastName: lastName, isAdmin: false });
         req.session.email = email;
         req.session.isAdmin = false;
+        // req.session.id = user.;
 
-        return res.redirect("/auth/perfil");
+        return res.redirect("/realtimeproducts");
     } catch (e) {
         console.log(e);
         return res.status(400).render("error", { error: "no se pudo crear el usuario. Intente con otro mail." });

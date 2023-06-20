@@ -5,14 +5,20 @@ import { __dirname, __filename } from "../utils.js";
 
 import { CartsService } from "../services/carts.service.js";
 import { ProductService } from "../services/product.services.js";
+import { UserService } from "../services/users.service.js";
+import { isUser } from "../middlewares/auth.js";
 
 export const cartsHtmlRouter = express.Router();
 
 const Service = new CartsService();
 const PtService = new ProductService();
+const UService = new UserService();
 
-cartsHtmlRouter.get("/:cid", async (req, res) => {
-    const cid = req.params.cid;
+cartsHtmlRouter.get("/", isUser, async (req, res) => {
+    const email = req.session.email;
+    const user = await UService.getByEmail(email);
+    const cid = user._id;
+    const name = user.firstName;
     let product = await Service.getById(cid);
     // let product = await Service.getAll();
     // product = product.filter((x) => x._id == pid);
@@ -26,7 +32,7 @@ cartsHtmlRouter.get("/:cid", async (req, res) => {
     if (product.length == 0) {
         return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${cid}`, data: product });
     } else {
-        return res.status(200).render("cart", { productos: response });
+        return res.status(200).render("cart", { productos: response, name: name, isLoged: true });
         // return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${cid}`, data: product });
     }
 });

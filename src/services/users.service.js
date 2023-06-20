@@ -1,4 +1,5 @@
 import { UserModel } from "../DAO/models/users.model.js";
+import { CartModel } from "../DAO/models/carts.model.js";
 
 export class UserService {
     validateUser(firstName, lastName, email, pass, isAdmin) {
@@ -10,6 +11,17 @@ export class UserService {
     async getAll() {
         const users = await UserModel.find({});
         return users;
+    }
+
+    async getByEmail(email) {
+        try {
+            const user = await UserModel.findOne({ email });
+            return user;
+        } catch (error) {
+            // Manejo de errores
+            console.error("Error al obtener el usuario por correo electrónico:", error);
+            throw error;
+        }
     }
 
     async createOne(firstName, lastName, email, pass, isAdmin) {
