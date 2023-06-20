@@ -1,9 +1,13 @@
+import MongoStore from "connect-mongo";
 import express from "express";
+import session from "express-session";
 import { productRouter } from "./routers/produts.router.js";
 import { cartRouter } from "./routers/carts.router.js";
 import { SocketRouter } from "./routers/socket.liveRouter.js";
 import { productHtmlRouter } from "./routers/productHtmlRouter.js";
 import { cartsHtmlRouter } from "./routers/cartsHtmlRouter.js";
+import { usersRouter } from "./routers/users.router.js";
+import { authRouter } from "./routers/auth.router.js";
 import handlebars from "express-handlebars";
 import path from "path";
 import { __dirname, connectMongo } from "./utils.js";
@@ -36,13 +40,24 @@ app.set("view engine", "handlebars");
 // app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+    session({
+        store: MongoStore.create({ mongoUrl: "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority", ttl: 7200 }),
+        secret: "un-re-secreto",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+
 //Rutas: API REST CON JSON
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
+app.use("/api/users", usersRouter);
 
 //Rutas: HTML RENDER SERVER SIDE
 app.use("/products", productHtmlRouter);
 app.use("/carts", cartsHtmlRouter);
+app.use("/auth", authRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);

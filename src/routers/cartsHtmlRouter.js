@@ -17,8 +17,9 @@ cartsHtmlRouter.get("/:cid", async (req, res) => {
     // let product = await Service.getAll();
     // product = product.filter((x) => x._id == pid);
     product = JSON.parse(JSON.stringify(product));
-    product = quitarPrefijoId(product);
+    // product = quitarPrefijoId(product);
 
+    console.log("product", product);
     let response = await getProductInfo(product);
     // console.log("response", response);
     response = JSON.parse(JSON.stringify(response));

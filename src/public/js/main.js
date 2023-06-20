@@ -29,14 +29,15 @@ const login = () => {
             return { login: login, password: password };
         },
     }).then((result) => {
+        const dato = { email: result.value.login, pass: result.value.password };
         $.ajax({
-            url: "http://localhost:8080/api/carts",
+            url: "http://localhost:8080/auth/login",
             type: "POST",
-            // data: formData,
+            data: dato,
             success: function (response) {
                 console.log(response);
-                guardarDatosEnSessionStorage(result.value.login, response.data._id);
-                loginStyling(result.value.login, response.data._id);
+                // guardarDatosEnSessionStorage(result.value.login, response.data._id);
+                // loginStyling(result.value.login, response.data._id);
                 // alert("¡Formulario enviado con éxito!");
                 // Manejar la respuesta del servidor
             },
@@ -46,6 +47,23 @@ const login = () => {
                 // Manejar errores de la solicitud
             },
         });
+        // $.ajax({
+        //     url: "http://localhost:8080/api/carts",
+        //     type: "POST",
+        //     // data: formData,
+        //     success: function (response) {
+        //         console.log(response);
+        //         guardarDatosEnSessionStorage(result.value.login, response.data._id);
+        //         loginStyling(result.value.login, response.data._id);
+        //         // alert("¡Formulario enviado con éxito!");
+        //         // Manejar la respuesta del servidor
+        //     },
+        //     error: function (error) {
+        //         console.log(error);
+
+        //         // Manejar errores de la solicitud
+        //     },
+        // });
     });
 };
 

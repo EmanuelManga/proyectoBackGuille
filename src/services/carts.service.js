@@ -1,5 +1,6 @@
 import { CartModel } from "../DAO/models/carts.model.js";
 import { ProductModel } from "../DAO/models/product.model.js";
+import mongoose from "mongoose";
 
 export class CartsService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -72,15 +73,30 @@ export class CartsService {
         if (!realProduct) throw new Error("product not found");
         // Verificar si ya existe un producto con el mismo ID en el array
         // console.log("cart.products", cart.products);
-        // console.log("realProduct", realProduct);
-        const existingProduct = cart.products.find((p) => p.productId === _id + "=" + products.productId);
-        // console.log("existingProduct", existingProduct);
-        if (existingProduct) {
-            // Si el producto ya existe, aumentar su cantidad en 1
-            existingProduct.quantity += 1;
-        } else {
-            // Si el producto no existe, agregarlo al array con cantidad inicial 1
-            let id = _id + "=" + products.productId;
+        // const parsedCart = JSON.parse(JSON.stringify(cart));
+        // console.log("cart.products", cart);
+        // console.log("cart.products",JSON.parse(JSON.stringify(cart)) );
+        console.log("realProduct", realProduct);
+        let id = new mongoose.Types.ObjectId(products.productId);
+        console.log("    ");
+        console.log("    ");
+        console.log("cart", cart);
+        console.log("    ");
+        console.log("    ");
+        console.log("new ID", id);
+        // const existingProduct = cart.products.find((p) => p.productId === id);
+        // const existingProduct = await CartModel.findOne({ _id: _id, "products.productId": products.productId });
+        const existingProduct = await CartModel.findOneAndUpdate(
+            {
+                _id: _id,
+                "products.productId": products.productId,
+            },
+            {
+                $inc: { "products.$.quantity": 1 },
+            }
+        );
+        console.log("existingProduct", existingProduct);
+        if (!existingProduct) {
             cart.products.push({ productId: id, quantity: 1 });
         }
         // Guardar los cambios en la base de datos
