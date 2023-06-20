@@ -6,7 +6,7 @@ export const usersRouter = express.Router();
 
 const Service = new UserService();
 
-usersRouter.get("/", isUser, async (req, res) => {
+usersRouter.get("/", async (req, res) => {
     try {
         const users = await Service.getAll();
         console.log(users);
