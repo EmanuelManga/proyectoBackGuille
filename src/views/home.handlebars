@@ -35,11 +35,20 @@
         </tbody>
     </table>
     <ul class="pagination">
-        <li class="page-item"><a id="btnPrev" class="page-link aDisable" href="#">Previous</a></li>
+        {{#if pagination.hasPrevPage}}
+            <li class="page-item"><a id="btnPrev" class="page-link" href="{{pagination.prevLink}}">Previous</a></li>
+        {{else}}
+            <li class="page-item"><a id="btnPrev" class="page-link aDisable" >Previous</a></li>
+        {{/if}}
         {{#each links}}
             <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
         {{/each}}
-        <li class="page-item"><a id="btnNext" class="page-link" href="#">Next</a></li>
+        {{#if pagination.hasNextPage}}
+            <li class="page-item"><a id="btnNext" class="page-link" href="{{pagination.nextLink}}">Next</a></li>
+        {{else}}
+            <li class="page-item"><a id="btnPrev" class="page-link aDisable" >Next</a></li>
+        {{/if}}
+        
     </ul>
 </div>
 <div id="form-conteiner" style="width: 80%;margin: auto; padding-bottom: 3rem;">
@@ -85,5 +94,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="../js/funcionesHtmlProduct.js"></script>
 <script src="/js/index.js"></script>
-<script>btnNextPrev({{pagination.totalPages}})</script>
+{{!-- <script>btnNextPrev({{pagination.totalPages}})</script> --}}
 {{! <script></script> }}

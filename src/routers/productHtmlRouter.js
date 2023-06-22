@@ -30,9 +30,14 @@ productHtmlRouter.get("/", async (req, res) => {
     // console.log("products", products);
     const { docs, ...rest } = queryRes;
     let links = [];
+    const endPoint = "/products?page=";
     for (let i = 1; i < rest.totalPages + 1; i++) {
-        links.push({ label: i, href: "http://localhost:8080/products?page=" + i });
+        links.push({ label: i, href: endPoint + i });
     }
+
+    rest.hasPrevPage ? (rest.prevLink = endPoint + rest.prevPage) : (rest.prevLink = null);
+    rest.hasNextPage ? (rest.nextLink = endPoint + rest.nextPage) : (rest.nextLink = null);
+
     // console.log("links", links);
     // console.log("rest", rest);
     return res.status(200).render("home", { productos: products, pagination: rest, links, name, isLoged });
