@@ -1,0 +1,49 @@
+<div class="contenedor-login">
+
+    <div id="login" class="container">
+        <h1>LogIn</h1>
+        <form id="form-login" class="form-login" method="post" action="/auth/login">
+            <div class="mb-3">
+                <label for="email2" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="email2" name="email" placeholder="Ingresa tu correo electrónico" />
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password2" name="pass" placeholder="Ingresa tu contraseña" />
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </div>
+        </form>
+        <button class="btn btn-info" onclick="toggleView(true)">Registrarce</button>
+    </div>
+
+    <div id="singin" class="container" style="display: none;">
+        <h1>SingIn</h1>
+        <form id="form-singin" class="form-login" method="post" action="/auth/register">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="firstName" placeholder="Ingresa tu nombre" />
+            </div>
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido" name="lastName" placeholder="Ingresa tu apellido" />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo electrónico" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="pass" placeholder="Ingresa tu contraseña" />
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Registrarce</button>
+            </div>
+        </form>
+        <button class="btn btn-info" onclick="toggleView(false)">Iniciar sesión</button>
+    </div>
+
+</div>
+<link rel="stylesheet" href="/css/login.css" />
+<script src="/js/login.html.js"></script>
