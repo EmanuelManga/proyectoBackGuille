@@ -31,16 +31,23 @@ export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
 // --------------------Mongo------------------------------
-const stringConect = "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority";
+// const stringConect = "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority";
 
 import { connect } from "mongoose";
+import { stringMongoConnect } from "../variables_globales.js";
 
 export const connectMongo = async () => {
     try {
-        await connect(stringConect);
+        await connect(stringMongoConnect);
+        // await connect(stringConect);
         console.log("Plug to Mongo");
     } catch (e) {
         console.log(e);
         throw "cant connect to the db ";
     }
 };
+
+//----------------bcrypt------------------------------
+import bcrypt from "bcrypt";
+export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+export const isValidPassword = (password, hashPassword) => bcrypt.compareSync(password, hashPassword);

@@ -96,7 +96,7 @@ const agregarCarrito = (productId) => {
     // console.log(`http://localhost:8080/api/carts/${session.cartId}/product/${productId}`);
     $.ajax({
         url: `/api/carts/product/${productId}`,
-        type: "POST",
+        type: "PUT",
         success: function (response) {
             console.log(response);
             // alert("¡Formulario enviado con éxito!");

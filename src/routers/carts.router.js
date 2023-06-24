@@ -42,7 +42,7 @@ cartRouter.post("/", async (req, res) => {
     }
 });
 
-cartRouter.post("/product/:pid", isUserAjax, async (req, res) => {
+cartRouter.put("/product/:pid", isUserAjax, async (req, res) => {
     try {
         const email = req.session.email;
         const user = await UService.getByEmail(email);
@@ -77,6 +77,25 @@ cartRouter.get("/:cid", async (req, res) => {
         }
     } else {
         return res.status(404).json({ status: "error", msg: `No se encuentra ningun carrito con el ID: ${cartId}`, data: {} });
+    }
+});
+
+cartRouter.delete("/:pid", async (req, res) => {
+    const email = req.session.email;
+    const user = await UService.getByEmail(email);
+    const cid = user._id;
+    const { pid } = req.params;
+
+    let productos = await Service.deleteProduct(cid, pid);
+
+    if (productos) {
+        if (productos.products.length == 0) {
+            return res.status(200).json({ status: "success", msg: `El carrito con ID:${cid} no posee ningun producto`, data: productos.products });
+        } else {
+            return res.status(200).json({ status: "success", msg: `Productos del carrito con ID:${cid}`, data: productos.products });
+        }
+    } else {
+        return res.status(404).json({ status: "error", msg: `No se encuentra ningun carrito con el ID: ${cid}`, data: {} });
     }
 });
 

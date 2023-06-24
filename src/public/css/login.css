@@ -35,3 +35,9 @@
     align-items: center;
     gap: 1rem;
 }
+
+.contenedir-btn-login {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

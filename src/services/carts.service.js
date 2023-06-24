@@ -108,4 +108,28 @@ export class CartsService {
         const updatedCart = await cart.save();
         return updatedCart;
     }
+
+    async deleteProduct(_id, productId) {
+        try {
+            // Convertir los valores a ObjectId
+            const docId = new mongoose.Types.ObjectId(_id);
+            const prodId = new mongoose.Types.ObjectId(productId);
+
+            // Encontrar y actualizar el documento
+            const result = await CartModel.updateOne({ _id: docId }, { $pull: { products: { productId: prodId } } });
+            console.log("resultado", result);
+            if (result.nModified === 0) {
+                console.log("No se encontró el producto en la lista.");
+                return null;
+            } else {
+                const cart = await CartModel.findById(_id);
+                console.log("cart", cart);
+                console.log("Producto eliminado exitosamente.");
+                return cart;
+            }
+        } catch (error) {
+            console.error("Error al eliminar el producto:", error);
+            return null;
+        }
+    }
 }

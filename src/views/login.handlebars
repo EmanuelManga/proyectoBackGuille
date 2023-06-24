@@ -15,7 +15,10 @@
                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>
             </div>
         </form>
-        <button class="btn btn-info" onclick="toggleView(true)">Registrarce</button>
+        <div class="contenedir-btn-login">
+            <button class="btn btn-info" onclick="toggleView(true)">Registrarce</button>
+            <a href="/api/sessions/github" class="btn btn-info">Entrar con github</a>
+        </div>
     </div>
 
     <div id="singin" class="container" style="display: none;">
@@ -41,7 +44,10 @@
                 <button type="submit" class="btn btn-primary">Registrarce</button>
             </div>
         </form>
-        <button class="btn btn-info" onclick="toggleView(false)">Iniciar sesión</button>
+        <div class="contenedir-btn-login">
+            <button class="btn btn-info" onclick="toggleView(false)">Iniciar sesión</button>
+            <a href="/api/sessions/github" class="btn btn-info">Entrar con github</a>
+        </div>
     </div>
 
 </div>

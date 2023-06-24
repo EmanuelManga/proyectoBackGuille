@@ -1,6 +1,7 @@
 import MongoStore from "connect-mongo";
 import express from "express";
 import session from "express-session";
+import passport from "passport";
 import { productRouter } from "./routers/produts.router.js";
 import { cartRouter } from "./routers/carts.router.js";
 import { SocketRouter } from "./routers/socket.liveRouter.js";
@@ -15,6 +16,10 @@ import { Server } from "socket.io";
 import { uploader } from "./utils.js";
 
 import webSocket from "./routers/webSocket.js";
+import { stringMongoConnect, secretKey } from "../variables_globales.js";
+import { iniPassport } from "./config/passport.config.js";
+import { viewsRouter } from "./routers/views.router.js";
+import { sessionsRouter } from "./routers/session.router.js";
 
 // import { producto } from "./../DAO/ProductManager.js";
 
@@ -42,19 +47,27 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
     session({
-        store: MongoStore.create({ mongoUrl: "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority", ttl: 7200 }),
-        secret: "un-re-secreto",
+        store: MongoStore.create({ mongoUrl: stringMongoConnect, ttl: 7200 }),
+        secret: secretKey,
         resave: true,
         saveUninitialized: true,
     })
 );
 
+//TODO LO DE PASSPORT
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+//FIN TODO LO DE PASSPORT
+
 //Rutas: API REST CON JSON
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/sessions", sessionsRouter);
 
 //Rutas: HTML RENDER SERVER SIDE
+app.use("/", viewsRouter);
 app.use("/products", productHtmlRouter);
 app.use("/carts", cartsHtmlRouter);
 app.use("/auth", authRouter);
