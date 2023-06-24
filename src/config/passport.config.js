@@ -3,6 +3,9 @@ import { UserModel } from "../DAO/models/users.model.js";
 import fetch from "node-fetch";
 import GitHubStrategy from "passport-github2";
 import { clientIdGithub, clientSecret } from "../../variables_globales.js";
+import { CartsService } from "../services/carts.service.js";
+
+const CartService = new CartsService();
 
 export function iniPassport() {
     passport.use(
@@ -42,6 +45,7 @@ export function iniPassport() {
                         };
                         let userCreated = await UserModel.create(newUser);
                         console.log("User Registration succesful");
+                        const cart = await CartService.createOne(userCreated._id);
                         return done(null, userCreated);
                     } else {
                         console.log("User already exists");
