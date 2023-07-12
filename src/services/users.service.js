@@ -2,8 +2,8 @@ import { UserModel } from "../DAO/models/users.model.js";
 import { CartModel } from "../DAO/models/carts.model.js";
 
 export class UserService {
-    validateUser(firstName, lastName, email, pass, isAdmin) {
-        if (!firstName || !lastName || !email || !pass || !isAdmin) {
+    validateUser(firstName, lastName, email, pass, isAdmin, role) {
+        if (!firstName || !lastName || !email || !pass || !isAdmin || !role) {
             console.log("validation error: please complete firstName, lastname and email.");
             throw new Error("validation error: please complete firstName, lastname and email.");
         }
@@ -24,9 +24,9 @@ export class UserService {
         }
     }
 
-    async createOne(firstName, lastName, email, pass, isAdmin) {
-        this.validateUser(firstName, lastName, email, pass, isAdmin);
-        const userCreated = await UserModel.create({ firstName, lastName, email, pass, isAdmin });
+    async createOne(firstName, lastName, email, pass, isAdmin, role) {
+        this.validateUser(firstName, lastName, email, pass, isAdmin, role);
+        const userCreated = await UserModel.create({ firstName, lastName, email, pass, isAdmin, role });
         return userCreated;
     }
 
@@ -35,10 +35,10 @@ export class UserService {
         return deleted;
     }
 
-    async updateOne(_id, firstName, lastName, email, pass, isAdmin) {
+    async updateOne(_id, firstName, lastName, email, pass, isAdmin, role) {
         if (!_id) throw new Error("invalid _id");
-        this.validateUser(firstName, lastName, email, pass, isAdmin);
-        const userUptaded = await UserModel.updateOne({ _id }, { firstName, lastName, email, pass, isAdmin });
+        this.validateUser(firstName, lastName, email, pass, isAdmin, role);
+        const userUptaded = await UserModel.updateOne({ _id }, { firstName, lastName, email, pass, isAdmin, role });
         return userUptaded;
     }
 }

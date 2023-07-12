@@ -68,7 +68,7 @@ authRouter.post("/register", async (req, res) => {
     }
     try {
         const hashPass = createHash(pass);
-        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false });
+        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false, role: "user" });
         req.session.email = email;
         req.session.isAdmin = false;
         // req.session.id = user.;
