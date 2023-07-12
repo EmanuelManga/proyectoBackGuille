@@ -2,7 +2,7 @@ import passport from "passport";
 import { UserModel } from "../DAO/models/users.model.js";
 import fetch from "node-fetch";
 import GitHubStrategy from "passport-github2";
-import { clientIdGithub, clientSecret } from "../../variables_globales.js";
+import { clientIdGithub, clientSecret, defaultRole } from "../../variables_globales.js";
 import { CartsService } from "../services/carts.service.js";
 
 const CartService = new CartsService();
@@ -42,7 +42,7 @@ export function iniPassport() {
                             lastName: "nolast",
                             isAdmin: false,
                             pass: "nopass",
-                            role: "user",
+                            role: defaultRole,
                         };
                         let userCreated = await UserModel.create(newUser);
                         console.log("User Registration succesful");

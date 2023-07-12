@@ -3,6 +3,7 @@ import { UserModel } from "../DAO/models/users.model.js";
 import { isAdmin, isUser } from "../middlewares/auth.js";
 import { CartsService } from "../services/carts.service.js";
 import { createHash, isValidPassword } from "../utils.js";
+import { defaultRole } from "../../variables_globales.js";
 
 export const authRouter = express.Router();
 
@@ -68,7 +69,7 @@ authRouter.post("/register", async (req, res) => {
     }
     try {
         const hashPass = createHash(pass);
-        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false, role: "user" });
+        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false, role: defaultRole });
         req.session.email = email;
         req.session.isAdmin = false;
         // req.session.id = user.;

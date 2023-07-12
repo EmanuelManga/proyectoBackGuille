@@ -1,6 +1,7 @@
 import express from "express";
 import { UserService } from "../services/users.service.js";
 import { isAdmin, isUser } from "../middlewares/auth.js";
+import { defaultRole } from "../../variables_globales.js";
 
 export const usersRouter = express.Router();
 
@@ -29,7 +30,7 @@ usersRouter.post("/", async (req, res) => {
     try {
         const { firstName, lastName, email, pass } = req.body;
         const isAdmin = false;
-        const role = "user";
+        const role = defaultRole;
         const userCreated = await Service.createOne(firstName, lastName, email, pass, isAdmin, role);
         return res.status(201).json({
             status: "success",
