@@ -42,6 +42,7 @@ export function iniPassport() {
                             lastName: "nolast",
                             isAdmin: false,
                             pass: "nopass",
+                            role: "user",
                         };
                         let userCreated = await UserModel.create(newUser);
                         console.log("User Registration succesful");

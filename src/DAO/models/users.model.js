@@ -29,6 +29,11 @@ const schema = new Schema({
         type: Boolean,
         required: true,
     },
+    role: {
+        type: String,
+        required: true,
+        max: 100,
+    },
 });
 schema.plugin(monsoosePaginate);
 export const UserModel = model("users", schema);

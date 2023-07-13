@@ -29,7 +29,8 @@ usersRouter.post("/", async (req, res) => {
     try {
         const { firstName, lastName, email, pass } = req.body;
         const isAdmin = false;
-        const userCreated = await Service.createOne(firstName, lastName, email, pass, isAdmin);
+        const role = "user";
+        const userCreated = await Service.createOne(firstName, lastName, email, pass, isAdmin, role);
         return res.status(201).json({
             status: "success",
             msg: "user created",
@@ -68,15 +69,15 @@ usersRouter.delete("/:id", async (req, res) => {
 usersRouter.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { firstName, lastName, email, pass, isAdmin } = req.body;
+        const { firstName, lastName, email, pass, isAdmin, role } = req.body;
 
-        const user = await Service.updateOne(id, firstName, lastName, email, pass, isAdmin);
+        const user = await Service.updateOne(id, firstName, lastName, email, pass, isAdmin, role);
 
         //TODO LLAMAR A OTRA FUNCION
         return res.status(201).json({
             status: "success",
             msg: "user uptaded",
-            data: { _id: id, firstName, lastName, email, pass, isAdmin },
+            data: { _id: id, firstName, lastName, email, pass, isAdmin, role },
         });
     } catch (e) {
         console.log(e);
