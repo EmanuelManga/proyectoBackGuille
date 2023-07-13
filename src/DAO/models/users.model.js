@@ -31,8 +31,8 @@ const schema = new Schema({
     },
     role: {
         type: String,
-        required: true,
         max: 100,
+        required: true,
     },
 });
 schema.plugin(monsoosePaginate);

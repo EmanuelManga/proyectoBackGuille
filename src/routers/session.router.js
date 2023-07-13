@@ -1,6 +1,9 @@
 import passport from "passport";
 import express from "express";
+import { UserService } from "../services/users.service.js";
 export const sessionsRouter = express.Router();
+
+const Service = new UserService();
 
 sessionsRouter.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
 
@@ -10,9 +13,5 @@ sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureR
 });
 
 sessionsRouter.get("/show", (req, res) => {
-    return res.send(JSON.stringify(req.session));
-});
-
-sessionsRouter.get("/current", (req, res) => {
     return res.send(JSON.stringify(req.session));
 });
