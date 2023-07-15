@@ -28,40 +28,10 @@ export class CartsService {
         }
     }
 
-    // async createOne() {
-    //     try {
-    //         const products = await CartModel.find({ products: { $size: 0 } });
-    //         console.log(products);
-    //         if (products.length !== 0) {
-    //             try {
-    //                 let productsParsed = JSON.parse(JSON.stringify(products));
-
-    //                 for (let i = 0; i < productsParsed.length; i++) {
-    //                     const element = productsParsed[i];
-    //                     const deleted = await CartModel.deleteOne({ _id: element._id });
-    //                     console.log(`Documento eliminado: ${deleted}`);
-    //                 }
-    //             } catch (error) {
-    //                 console.error("Error al eliminar los documentos:", error);
-    //             }
-    //         }
-    //         const cartsCreated = await CartModel.create({});
-    //         return cartsCreated;
-    //     } catch (error) {
-    //         console.error("Error al crear el nuevo elemento:", error);
-    //     }
-    // }
-    async createOne(_id) {
+    async createOne() {
         try {
-            if (!_id) throw new Error("invalid _id");
-            const user = await UserModel.findById(_id);
-            if (!user) throw new Error("user not found");
-            const cart = await CartModel.findById(_id);
-            if (!cart) {
-                const cartsCreated = await CartModel.create({ _id });
-                return { cartsCreated, status: true };
-            }
-            return { cart, status: true };
+            const cartsCreated = await CartModel.create({});
+            return cartsCreated;
         } catch (error) {
             console.error("Error al crear el nuevo elemento:", error);
             return { status: false };

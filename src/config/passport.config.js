@@ -2,8 +2,9 @@ import passport from "passport";
 import { UserModel } from "../DAO/models/users.model.js";
 import fetch from "node-fetch";
 import GitHubStrategy from "passport-github2";
-import { clientIdGithub, clientSecret, defaultRole } from "../../variables_globales.js";
+import { clientIdGithub, clientSecret, defaultRole, callbackURLGitHub } from "../../variables_globales.js";
 import { CartsService } from "../services/carts.service.js";
+import { __dirname } from "../utils.js";
 
 const CartService = new CartsService();
 
@@ -14,7 +15,7 @@ export function iniPassport() {
             {
                 clientID: clientIdGithub,
                 clientSecret: clientSecret,
-                callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+                callbackURL: callbackURLGitHub,
             },
             async (accesToken, _, profile, done) => {
                 console.log(profile);
@@ -36,6 +37,7 @@ export function iniPassport() {
 
                     let user = await UserModel.findOne({ email: profile.email });
                     if (!user) {
+                        const newCart = await CartService.createOne();
                         const newUser = {
                             email: profile.email,
                             firstName: profile._json.name || profile._json.login || "noname",
@@ -43,10 +45,10 @@ export function iniPassport() {
                             isAdmin: false,
                             pass: "nopass",
                             role: defaultRole,
+                            cart: newCart._id,
                         };
                         let userCreated = await UserModel.create(newUser);
                         console.log("User Registration succesful");
-                        const cart = await CartService.createOne(userCreated._id);
                         return done(null, userCreated);
                     } else {
                         console.log("User already exists");

@@ -94,7 +94,7 @@ export default function webSocket(socketServer) {
             try {
                 const email = socket.request.session.email;
                 const user = await UService.getByEmail(email);
-                const cid = user._id;
+                const cid = user.cart;
                 try {
                     console.log("email", email);
                     console.log("user", user);

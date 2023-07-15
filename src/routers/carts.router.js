@@ -15,9 +15,7 @@ const UService = new UserService();
 
 cartRouter.post("/", async (req, res) => {
     try {
-        const { id } = req.body;
-        const _id = new mongoose.Types.ObjectId(id);
-        const productCreated = await Service.createOne(_id);
+        const productCreated = await Service.createOne({});
         console.log("productCreated", productCreated);
         console.log("req.session.email", req.session.email);
         if (!productCreated.status) {
@@ -46,7 +44,7 @@ cartRouter.put("/product/:pid", isUserAjax, async (req, res) => {
     try {
         const email = req.session.email;
         const user = await UService.getByEmail(email);
-        const cid = user._id;
+        const cid = user.cart;
         const { pid } = req.params;
         const productAdd = await Service.updateOne(cid, { productId: pid });
         return res.status(201).json({
@@ -83,7 +81,7 @@ cartRouter.get("/:cid", async (req, res) => {
 cartRouter.delete("/:pid", async (req, res) => {
     const email = req.session.email;
     const user = await UService.getByEmail(email);
-    const cid = user._id;
+    const cid = user.cart;
     const { pid } = req.params;
 
     let productos = await Service.deleteProduct(cid, pid);

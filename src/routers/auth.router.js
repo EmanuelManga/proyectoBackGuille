@@ -4,6 +4,7 @@ import { isAdmin, isUser } from "../middlewares/auth.js";
 import { CartsService } from "../services/carts.service.js";
 import { createHash, isValidPassword } from "../utils.js";
 import { defaultRole } from "../../variables_globales.js";
+import { CartModel } from "../DAO/models/carts.model.js";
 
 export const authRouter = express.Router();
 
@@ -68,11 +69,13 @@ authRouter.post("/register", async (req, res) => {
         return res.status(400).render("error", { error: "ponga bien toooodoo cheee!!" });
     }
     try {
+        const newCart = await CartService.createOne();
+        console.log("newCart", newCart);
         const hashPass = createHash(pass);
-        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false, role: defaultRole });
+        const user = await UserModel.create({ email: email, pass: hashPass, firstName: firstName, lastName: lastName, isAdmin: false, role: defaultRole, cart: newCart._id });
         req.session.email = email;
         req.session.isAdmin = false;
-        // req.session.id = user.;
+        // req.session.id = user._id;
 
         return res.redirect("/realtimeproducts");
     } catch (e) {
