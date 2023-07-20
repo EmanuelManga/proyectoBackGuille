@@ -1,8 +1,6 @@
 import express from "express";
-import { producto } from "../DAO/ProductManager.js";
-import { ProductService } from "../services/product.services.js";
 import { ProductModel } from "../DAO/models/product.model.js";
-import { isUser } from "../middlewares/auth.js";
+import { ProductService } from "../services/product.services.js";
 import { UserService } from "../services/users.service.js";
 
 export const SocketRouter = express.Router();

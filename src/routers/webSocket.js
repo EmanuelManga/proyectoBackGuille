@@ -1,9 +1,8 @@
-import { producto } from "../DAO/ProductManager.js";
-import { ProductService } from "../services/product.services.js";
 import fs from "fs";
-import { __dirname, __filename } from "../utils.js";
 import { CartsService } from "../services/carts.service.js";
+import { ProductService } from "../services/product.services.js";
 import { UserService } from "../services/users.service.js";
+import { __dirname } from "../utils.js";
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -118,46 +117,3 @@ export default function webSocket(socketServer) {
         });
     });
 }
-
-// socket.on("POST", async (data) => {
-//     let obj = data.producto;
-//     // console.log("obj", obj);
-//     // let respuesta = await producto.addProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
-//     let respuesta = await Service.createOne(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
-//     console.log("respuesta", respuesta);
-//     // let productos = await producto.getProducts();
-//     if (respuesta.state) {
-//         let productoNew = await Service.getById(respuesta._id);
-//         console.log("productoNew", productoNew);
-//         socketServer.emit("response-post", {
-//             msg: productoNew,
-//         });
-//         socket.emit("response-post-toast", {
-//             msg: { msg: "success" },
-//         });
-//     } else {
-//         socket.emit("response-post-error", {
-//             msg: { status: "error", msg: `el producto no se pudo crear`, data: {} },
-//         });
-//     }
-// });
-
-// socket.on("DELETE", async (data) => {
-//     let id = data.producto;
-//     console.log("delete id ", id);
-
-//     let respuesta = await producto.deleteProduct(id);
-
-//     if (respuesta.state) {
-//         socketServer.emit("response-delete", {
-//             msg: id,
-//         });
-//         socket.emit("response-delete-toast", {
-//             msg: { msg: "success" },
-//         });
-//     } else {
-//         socket.emit("response-delete-error", {
-//             msg: { status: "error", msg: `No Existe un producto con ID: ${id}`, data: {} },
-//         });
-//     }
-// });
