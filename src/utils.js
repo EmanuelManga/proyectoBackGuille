@@ -33,12 +33,13 @@ export const __dirname = path.dirname(__filename);
 // --------------------Mongo------------------------------
 // const stringConect = "mongodb+srv://EmanuelMangani:vDzXZKvv15S3O8O4@backendcoder.s3uy0ix.mongodb.net/?retryWrites=true&w=majority";
 
+import dotenv from "dotenv";
 import { connect } from "mongoose";
-import { stringMongoConnect } from "../variables_globales.js";
 
+dotenv.config();
 export const connectMongo = async () => {
     try {
-        await connect(stringMongoConnect);
+        await connect(process.env.STRINGMONGOCONNECT);
         // await connect(stringConect);
         console.log("Plug to Mongo");
     } catch (e) {

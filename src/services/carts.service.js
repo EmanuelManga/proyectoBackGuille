@@ -1,7 +1,6 @@
+import mongoose from "mongoose";
 import { CartModel } from "../DAO/models/carts.model.js";
 import { ProductModel } from "../DAO/models/product.model.js";
-import { UserModel } from "../DAO/models/users.model.js";
-import mongoose from "mongoose";
 
 export class CartsService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -17,9 +16,15 @@ export class CartsService {
 
     async getById(id) {
         try {
-            const realProduct = await CartModel.findById(id);
+            let id_mongo = null;
+            if (typeof id === "string") {
+                id_mongo = new mongoose.Types.ObjectId(id);
+            } else {
+                id_mongo = id;
+            }
+            const realProduct = await CartModel.findById(id_mongo);
             if (!realProduct) throw new Error("cart not found");
-            console.log("realProduct", realProduct);
+            // console.log("realProduct", realProduct);
             return realProduct;
         } catch (error) {
             console.error("Error retrieving cart:", error.message);
@@ -34,7 +39,7 @@ export class CartsService {
             return cartsCreated;
         } catch (error) {
             console.error("Error al crear el nuevo elemento:", error);
-            return { status: false };
+            return error;
         }
     }
 

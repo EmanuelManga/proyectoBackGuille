@@ -1,10 +1,10 @@
-import passport from "passport";
-import { UserModel } from "../DAO/models/users.model.js";
+import dotenv from "dotenv";
 import fetch from "node-fetch";
+import passport from "passport";
 import GitHubStrategy from "passport-github2";
-import { clientIdGithub, clientSecret, defaultRole, callbackURLGitHub } from "../../variables_globales.js";
+import { UserModel } from "../DAO/models/users.model.js";
 import { CartsService } from "../services/carts.service.js";
-import { __dirname } from "../utils.js";
+dotenv.config();
 
 const CartService = new CartsService();
 
@@ -13,9 +13,9 @@ export function iniPassport() {
         "github",
         new GitHubStrategy(
             {
-                clientID: clientIdGithub,
-                clientSecret: clientSecret,
-                callbackURL: callbackURLGitHub,
+                clientID: process.env.CLIENTIDGITHUB,
+                clientSecret: process.env.CLIENTSECRET,
+                callbackURL: process.env.CALLBACKURLGITHUB,
             },
             async (accesToken, _, profile, done) => {
                 console.log(profile);
@@ -44,7 +44,7 @@ export function iniPassport() {
                             lastName: "nolast",
                             isAdmin: false,
                             pass: "nopass",
-                            role: defaultRole,
+                            role: process.env.DEFAULTROLE,
                             cart: newCart._id,
                         };
                         let userCreated = await UserModel.create(newUser);

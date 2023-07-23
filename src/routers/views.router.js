@@ -1,11 +1,7 @@
 import express from "express";
+import { viewController } from "../controllers/views.controller.js";
 export const viewsRouter = express.Router();
 
-viewsRouter.get("/", async (req, res) => {
-    // res.render("home");
-    res.redirect("/realtimeproducts");
-});
+viewsRouter.get("/", viewController.getMain);
 
-viewsRouter.get("/login", async (req, res) => {
-    res.render("login");
-});
+viewsRouter.get("/login", viewController.getLogin);

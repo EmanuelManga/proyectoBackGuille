@@ -1,26 +1,26 @@
 import MongoStore from "connect-mongo";
 import express from "express";
+import handlebars from "express-handlebars";
 import session from "express-session";
 import passport from "passport";
-import { productRouter } from "./routers/produts.router.js";
-import { cartRouter } from "./routers/carts.router.js";
-import { SocketRouter } from "./routers/socket.liveRouter.js";
-import { productHtmlRouter } from "./routers/productHtmlRouter.js";
-import { cartsHtmlRouter } from "./routers/cartsHtmlRouter.js";
-import { usersRouter } from "./routers/users.router.js";
-import { authRouter } from "./routers/auth.router.js";
-import handlebars from "express-handlebars";
 import path from "path";
-import { __dirname, connectMongo } from "./utils.js";
 import { Server } from "socket.io";
-import { uploader } from "./utils.js";
+import { authRouter } from "./routers/auth.router.js";
+import { cartRouter } from "./routers/carts.router.js";
+import { cartsHtmlRouter } from "./routers/cartsHtmlRouter.js";
+import { productHtmlRouter } from "./routers/productHtmlRouter.js";
+import { productRouter } from "./routers/produts.router.js";
+import { SocketRouter } from "./routers/socket.liveRouter.js";
+import { usersRouter } from "./routers/users.router.js";
+import { __dirname, connectMongo, uploader } from "./utils.js";
 
-import webSocket from "./routers/webSocket.js";
-import { stringMongoConnect, secretKey } from "../variables_globales.js";
+import dotenv from "dotenv";
 import { iniPassport } from "./config/passport.config.js";
-import { viewsRouter } from "./routers/views.router.js";
 import { sessionsRouter } from "./routers/session.router.js";
+import { viewsRouter } from "./routers/views.router.js";
+import webSocket from "./routers/webSocket.js";
 
+dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
 
 const app = express();
@@ -47,8 +47,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
     session({
-        store: MongoStore.create({ mongoUrl: stringMongoConnect, ttl: 7200 }),
-        secret: secretKey,
+        store: MongoStore.create({ mongoUrl: process.env.STRINGMONGOCONNECT, ttl: 7200 }),
+        secret: process.env.SECRETKEY,
         resave: true,
         saveUninitialized: true,
     })
