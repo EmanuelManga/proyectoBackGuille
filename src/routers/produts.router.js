@@ -6,8 +6,6 @@ import { isAdmin } from "../middlewares/auth.js";
 
 export const productRouter = express.Router();
 
-const Service = new ProductService();
-
 productRouter.get("/", productController.getProductApi);
 
 productRouter.post("/", isAdmin, uploader.single("thumbnail"), productController.postProductApi);
