@@ -1,7 +1,8 @@
-import { UserModel } from "../DAO/models/users.model.js";
-import { CartModel } from "../DAO/models/carts.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { UserModel } from "../DAO/models/users.model.js";
+import { createHash } from "../utils.js";
+dotenv.config();
 
 export class UserService {
     validateUser(firstName, lastName, email, pass, isAdmin, role, cart) {
@@ -34,7 +35,11 @@ export class UserService {
                 id_mongo = id;
             }
             const user = await UserModel.findOne({ _id: id_mongo });
-            return user;
+            if (user) {
+                return user;
+            } else {
+                throw new Error("No existe");
+            }
         } catch (error) {
             // Manejo de errores
             console.error("Error al obtener el usuario por correo electrónico:", error);
@@ -59,5 +64,40 @@ export class UserService {
         this.validateUser(firstName, lastName, email, pass, isAdmin, role, cart);
         const userUptaded = await UserModel.updateOne({ _id }, { firstName, lastName, email, pass, isAdmin, role, cart });
         return userUptaded;
+    }
+
+    async postUser(firstName, lastName, email, pass) {
+        try {
+            const isAdmin = false;
+            const role = process.env.DEFAULTROLE;
+            const userCreated = await this.createOne(firstName, lastName, email, pass, isAdmin, role);
+            return userCreated;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteUser(id) {
+        try {
+            const userDeleted = await this.getById(id);
+            try {
+                await this.deletedOne(id);
+                return userDeleted;
+            } catch (error) {
+                throw error;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async putUser(id, firstName, lastName, email, pass, isAdmin, role, cart) {
+        try {
+            await this.updateOne(id, firstName, lastName, email, pass, isAdmin, role, cart);
+            const user = await this.getById(id);
+            return user;
+        } catch (error) {
+            throw error;
+        }
     }
 }

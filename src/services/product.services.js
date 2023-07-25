@@ -1,5 +1,9 @@
 import { ProductModel } from "../DAO/models/product.model.js";
 import { __dirname } from "../utils.js";
+import { UserService } from "./users.service.js";
+import fs from "fs";
+
+const userService = new UserService();
 
 export class ProductService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -69,7 +73,7 @@ export class ProductService {
             const response = JSON.parse(JSON.stringify(array));
             return response;
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -104,10 +108,98 @@ export class ProductService {
     async deleteThumbnail(product) {
         try {
             const rutaArchivo = __dirname + "/public/pictures/" + product[0].thumbnail;
-            fs.unlink(rutaArchivo);
+            fs.unlink(rutaArchivo, (err) => {
+                if (err) {
+                    console.error("Error al borrar el archivo:", err);
+                } else {
+                    console.log("Archivo borrado exitosamente.");
+                }
+            });
             return true;
         } catch (error) {
-            return error;
+            throw error;
+        }
+    }
+
+    async getProductRender(email, query, querySerch, limit, page, sort) {
+        let name = null;
+        let isLoged = false;
+        const endPoint = "/products?page=";
+        let busqueda = {};
+        try {
+            const user = await userService.getByEmail(email);
+            email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
+
+            querySerch && query ? (busqueda = this.getSerchQuery(query, querySerch)) : null;
+
+            const queryRes = await this.getPaginate(busqueda, limit, page, query, sort);
+
+            const products = await this.getProduct(queryRes);
+
+            const { docs, ...rest } = queryRes;
+
+            const links = await this.getLink(rest, endPoint);
+
+            const pagination = await this.getNextPrevLink(rest, endPoint);
+
+            return { pagination, links, products, name, isLoged };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async postProduct(obj, file) {
+        if (!file) {
+            throw new Error("No se ha cargado ninguna imagen");
+        }
+        try {
+            const respuesta = await this.createOne(obj.title, obj.description, obj.price, file.filename, obj.code, obj.stock, obj.status, obj.category);
+            let productos = await this.getById(respuesta._id);
+            return productos;
+        } catch (error) {}
+    }
+
+    async deleteProduct(pid) {
+        try {
+            let product = await this.getByIdResString(pid);
+            await this.deleteThumbnail(product);
+            await this.deletedOne(pid);
+            const productos = await this.getAllString();
+            return productos;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async putProduct(pid, obj) {
+        try {
+            await this.updateOne(pid, obj.product);
+            const productos = await this.getAllString();
+            return productos;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async postProductApi(title, description, price, file, code, stock, status, category) {
+        if (!file) {
+            return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
+        }
+        try {
+            const productCreated = await this.createOne(title, description, price, file.filename, code, stock, status, category);
+            return productCreated;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async putProductApi(id, obj) {
+        try {
+            await this.updateOne(id, obj);
+            const product = await this.getById(id);
+            return product;
+        } catch (error) {
+            throw error;
         }
     }
 }

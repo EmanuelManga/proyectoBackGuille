@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import { CartModel } from "../DAO/models/carts.model.js";
 import { ProductModel } from "../DAO/models/product.model.js";
+import { UserService } from "./users.service.js";
+import { ProductService } from "./product.services.js";
+
+const userService = new UserService();
+const productService = new ProductService();
 
 export class CartsService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -39,7 +44,7 @@ export class CartsService {
             return cartsCreated;
         } catch (error) {
             console.error("Error al crear el nuevo elemento:", error);
-            return error;
+            throw error;
         }
     }
 
@@ -51,9 +56,19 @@ export class CartsService {
         return productCreated;
     }
 
-    async deletedOne(_id) {
-        const deleted = await CartModel.deleteOne({ _id: _id });
-        return deleted;
+    async deletedOne(id) {
+        let id_mongo = null;
+        if (typeof id === "string") {
+            id_mongo = new mongoose.Types.ObjectId(id);
+        } else {
+            id_mongo = id;
+        }
+        try {
+            const deleted = await CartModel.deleteOne({ _id: id_mongo });
+            return deleted;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async updateOne(_id, products) {
@@ -92,19 +107,55 @@ export class CartsService {
 
             // Encontrar y actualizar el documento
             const result = await CartModel.updateOne({ _id: docId }, { $pull: { products: { productId: prodId } } });
-            console.log("resultado", result);
+            // console.log("resultado", result);
             if (result.nModified === 0) {
                 console.log("No se encontró el producto en la lista.");
                 return null;
             } else {
                 const cart = await CartModel.findById(_id);
-                console.log("cart", cart);
+                // console.log("cart", cart);
                 console.log("Producto eliminado exitosamente.");
                 return cart;
             }
         } catch (error) {
             console.error("Error al eliminar el producto:", error);
             return null;
+        }
+    }
+
+    async getCartRender(email) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            const name = user.firstName;
+            let product = await this.getById(cid);
+            let response = await productService.getProductInfo(product);
+            return { response, name };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteByProductId(email, pid) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            let productos = await this.deleteProduct(cid, pid);
+            return { productos, cid };
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async addProductToCart(email) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            const productAdd = await this.updateOne(cid, { productId: pid });
+            return productAdd;
+        } catch (error) {
+            throw error;
         }
     }
 }

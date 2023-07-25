@@ -1,8 +1,7 @@
 import { UserService } from "../services/users.service.js";
-import dotenv from "dotenv";
-dotenv.config();
 
 const userService = new UserService();
+
 class UserController {
     async getAll(req, res) {
         try {
@@ -26,9 +25,8 @@ class UserController {
     async postUser(req, res) {
         try {
             const { firstName, lastName, email, pass } = req.body;
-            const isAdmin = false;
-            const role = process.env.DEFAULTROLE;
-            const userCreated = await userService.createOne(firstName, lastName, email, pass, isAdmin, role);
+
+            const userCreated = await userService.postUser(firstName, lastName, email, pass);
             return res.status(201).json({
                 status: "success",
                 msg: "user created",
@@ -47,12 +45,11 @@ class UserController {
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
-            const userDelete = await Service.deletedOne(id);
-            //TODO LLAMAR A OTA FUNCION
+            const userDeleted = await userService.deleteUser(id);
             return res.status(200).json({
                 status: "success",
                 msg: "user deleted",
-                data: {},
+                data: userDeleted,
             });
         } catch (e) {
             console.log(e);
@@ -69,8 +66,7 @@ class UserController {
             const { id } = req.params;
             const { firstName, lastName, email, pass, isAdmin, role, cart } = req.body;
 
-            await userService.updateOne(id, firstName, lastName, email, pass, isAdmin, role, cart);
-            const user = await userService.getById(id);
+            const user = await userService.putUser(id, firstName, lastName, email, pass, isAdmin, role, cart);
             console.log("user", user);
             return res.status(201).json({
                 status: "success",

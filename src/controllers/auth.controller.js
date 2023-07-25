@@ -1,10 +1,4 @@
 import { authService } from "../services/auth.services.js";
-import { CartsService } from "../services/carts.service.js";
-import { SessionService } from "../services/session.services.js";
-import { UserService } from "../services/users.service.js";
-
-const userService = new UserService();
-const cartService = new CartsService();
 
 class AuthController {
     async logout(req, res) {
@@ -29,11 +23,8 @@ class AuthController {
         const { email, pass } = req.body;
 
         try {
-            if (!email || !pass) {
-                return res.status(400).render("error", { error: "ponga su email y pass" });
-            }
-            const usarioEncontrado = await userService.getByEmail(email);
-            await authService.validPass(pass, usarioEncontrado, req);
+            await authService.isLoginOk(email, pass, req);
+
             return res.redirect("/products");
         } catch (error) {
             return res.status(401).json({
@@ -49,16 +40,10 @@ class AuthController {
 
     async postRegister(req, res) {
         const { email, pass, firstName, lastName } = req.body;
-        if (!email || !pass || !firstName || !lastName) {
-            return res.status(400).render("error", { error: "ponga bien toooodoo cheee!!" });
-        }
-        try {
-            const newCart = await cartService.createOne();
-            const user = await userService.createOne(firstName, lastName, email, pass, false, process.env.DEFAULTROLE, newCart._id);
-            req.session.email = email;
-            req.session.isAdmin = false;
-            // req.session.id = user._id;
 
+        try {
+            // req.session.id = user._id;
+            await authService.postRegister(email, pass, firstName, lastName, req);
             return res.redirect("/products");
         } catch (e) {
             console.log(e);

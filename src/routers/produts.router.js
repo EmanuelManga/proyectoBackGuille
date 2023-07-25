@@ -1,8 +1,7 @@
 import express from "express";
-import { ProductService } from "../services/product.services.js";
 import { productController } from "../controllers/products.controller.js";
-import { uploader } from "../utils.js";
 import { isAdmin } from "../middlewares/auth.js";
+import { uploader } from "../utils.js";
 
 export const productRouter = express.Router();
 
