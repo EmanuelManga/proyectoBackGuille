@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-import { CartModel } from "../DAO/models/carts.model.js";
-import { ProductModel } from "../DAO/models/product.model.js";
-import { UserService } from "./users.service.js";
+import { CartDao } from "../DAO/classes/carts.dao.js";
+import { ProductDao } from "../DAO/classes/product.dao.js";
 import { ProductService } from "./product.services.js";
+import { UserService } from "./users.service.js";
 
 const userService = new UserService();
 const productService = new ProductService();
+const Cart = new CartDao();
+const Product = new ProductDao();
 
 export class CartsService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -15,7 +17,7 @@ export class CartsService {
         }
     }
     async getAll() {
-        const products = await CartModel.find({});
+        const products = await Cart.find({});
         return products;
     }
 
@@ -27,7 +29,7 @@ export class CartsService {
             } else {
                 id_mongo = id;
             }
-            const realProduct = await CartModel.findById(id_mongo);
+            const realProduct = await Cart.findById(id_mongo);
             if (!realProduct) throw new Error("cart not found");
             // console.log("realProduct", realProduct);
             return realProduct;
@@ -40,7 +42,7 @@ export class CartsService {
 
     async createOne() {
         try {
-            const cartsCreated = await CartModel.create({});
+            const cartsCreated = await Cart.create({});
             return cartsCreated;
         } catch (error) {
             console.error("Error al crear el nuevo elemento:", error);
@@ -52,7 +54,7 @@ export class CartsService {
         array.forEach((element) => {
             this.validateUser(element.title, element.description, element.price, element.thumbnail, element.code, element.stock, element.status, element.category);
         });
-        const productCreated = await CartModel.insertMany(array);
+        const productCreated = await Cart.insertMany(array);
         return productCreated;
     }
 
@@ -64,7 +66,7 @@ export class CartsService {
             id_mongo = id;
         }
         try {
-            const deleted = await CartModel.deleteOne({ _id: id_mongo });
+            const deleted = await Cart.deleteOne(id_mongo);
             return deleted;
         } catch (error) {
             throw error;
@@ -72,25 +74,17 @@ export class CartsService {
     }
 
     async updateOne(_id, products) {
-        console.log("_id, products", _id, products);
+        // console.log("_id, products", _id, products);
         if (!_id) throw new Error("invalid _id");
-        const cart = await CartModel.findById(_id); // Obtener el documento del carrito por su _id
+        const cart = await Cart.findById(_id); // Obtener el documento del carrito por su _id
         if (!cart) throw new Error("cart not found");
-        const realProduct = await ProductModel.findOne({ _id: products.productId });
+        const realProduct = await Product.findOne(products.productId);
         if (!realProduct) throw new Error("product not found");
 
         // console.log("realProduct", realProduct);
         let id = new mongoose.Types.ObjectId(products.productId);
-        const existingProduct = await CartModel.findOneAndUpdate(
-            {
-                _id: _id,
-                "products.productId": products.productId,
-            },
-            {
-                $inc: { "products.$.quantity": 1 },
-            }
-        );
-        console.log("existingProduct", existingProduct);
+        const existingProduct = await Cart.findOneAndUpdate(_id, products.productId);
+        // console.log("existingProduct", existingProduct);
         if (!existingProduct) {
             cart.products.push({ productId: id, quantity: 1 });
         }
@@ -106,13 +100,13 @@ export class CartsService {
             const prodId = new mongoose.Types.ObjectId(productId);
 
             // Encontrar y actualizar el documento
-            const result = await CartModel.updateOne({ _id: docId }, { $pull: { products: { productId: prodId } } });
+            const result = await Cart.updateOne(docId, { products: { productId: prodId } });
             // console.log("resultado", result);
             if (result.nModified === 0) {
                 console.log("No se encontró el producto en la lista.");
                 return null;
             } else {
-                const cart = await CartModel.findById(_id);
+                const cart = await Cart.findById(_id);
                 // console.log("cart", cart);
                 console.log("Producto eliminado exitosamente.");
                 return cart;
@@ -130,7 +124,7 @@ export class CartsService {
             const name = user.firstName;
             let product = await this.getById(cid);
             let response = await productService.getProductInfo(product);
-            return { response, name };
+            return { response, name, cartId: user.cart };
         } catch (error) {
             throw error;
         }
@@ -148,7 +142,19 @@ export class CartsService {
         }
     }
 
-    async addProductToCart(email) {
+    async removeByProductId(email, pid) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            let productos = await Cart.findOneAndUpdateRemove(cid, pid);
+            return { productos, cid };
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async addProductToCart(email, pid) {
         try {
             const user = await userService.getByEmail(email);
             const cid = user.cart;

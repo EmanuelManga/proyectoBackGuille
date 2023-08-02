@@ -20,6 +20,27 @@ const socket = io();
 //                             </div>`;
 // });
 
+const handleEnter = (event) => {
+    if (event.keyCode === 13 && !event.shiftKey) {
+        event.preventDefault();
+        addMessage();
+    }
+};
+
+const addMessage = () => {
+    const message = document.getElementById("textAreaChat").value;
+
+    const chatSection = document.getElementById("chatSection");
+
+    chatSection.innerHTML += `<div class="cs-message-emisor">${message}</div>`;
+
+    chatSection.scrollTop = chatSection.scrollHeight;
+
+    socket.emit("addMessage", {
+        message,
+    });
+};
+
 socket.on("response-post", (data) => {
     console.log("response-post", data);
     // let producto = JSON.parse(JSON.stringify(data.msg));
@@ -82,3 +103,17 @@ function recuperarDatosDelSessionStorage() {
         return { usuario, cartId };
     }
 }
+
+socket.on("response-addMessage-error", (data) => {
+    console.log(data);
+    toast("Ha ocurrido un error!!", "error", "bottom-right");
+});
+
+socket.on("response-addMessage-toast", (data) => {
+    console.log(data.msg);
+    const chatSection = document.getElementById("chatSection");
+    chatSection.innerHTML += `<div class="cs-message-receptor">${data.msg.data}</div>`;
+    chatSection.scrollTop = chatSection.scrollHeight;
+
+    // toast("El producto se agregado el producto al carrito con exito!!", "success", "bottom-right");
+});

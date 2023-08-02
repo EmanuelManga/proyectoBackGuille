@@ -1,3 +1,31 @@
+        {{#if isLoged}}
+            <div class="btn-group dropup">
+                <button id="userDropdown" type="button" class="btn btn-secondary dropdown-toggle chatDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    Chat
+                </button>
+                <div class="dropdown-menu chatConteiner">
+                    <!-- Dropdown menu links -->
+                    <div class="chatSection" id="chatSection">
+                        {{#each chat.mensajes}}
+                            {{#ifEquals ../userIdActual this.userId}}
+                                <div class="cs-message cs-message-emisor">{{this.message}}</div>
+                            {{else}}
+                                <div class="cs-message cs-message-receptor">{{this.message}}</div>
+                            {{/ifEquals}}
+                        {{/each}}
+                    </div>
+                    {{#unless isAdmin}}
+                        <div class="inputSection">
+                            <textarea name="textarea" rows="10" cols="50" class="textAreaChat" id="textAreaChat" placeholder="Escribe un mensaje aquí" onkeydown="handleEnter(event)"></textarea>
+                            <button onclick="addMessage()"><i class="bi bi-send"></i></button>
+                        </div>
+                    {{/unless}}
+                </div>
+            </div>
+        {{/if}}
+
+
+
 {{! <style>
     .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; } img{width: 5rem;height: 3rem;} td{vertical-align: middle; }
 </style> }}
@@ -86,7 +114,7 @@
 
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
+
 <script src="/js/index.js"></script>
 <script src="/js/funcionesLiveProduct.js"></script>
 <script>btnNextPrev({{pagination.totalPages}})</script>

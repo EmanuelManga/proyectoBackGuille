@@ -2,3 +2,4 @@ node_modules
 variables_globales.js
 .env
 test.js
+nose.txt

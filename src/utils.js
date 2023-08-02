@@ -52,3 +52,12 @@ export const connectMongo = async () => {
 import bcrypt from "bcrypt";
 export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const isValidPassword = (password, hashPassword) => bcrypt.compareSync(password, hashPassword);
+
+//  -----------------handle-------------------------------
+import handlebars from "handlebars";
+handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
+    return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+});
+handlebars.registerHelper("notEquals", function (arg1, arg2, options) {
+    return arg1 != arg2 ? options.fn(this) : options.inverse(this);
+});
