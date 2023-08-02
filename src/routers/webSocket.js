@@ -6,10 +6,12 @@ import { __dirname } from "../utils.js";
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
+import { ChatService } from "../services/chat.service.js";
 
 const Service = new ProductService();
 const CService = new CartsService();
 const UService = new UserService();
+const Chat = new ChatService();
 
 export default function webSocket(socketServer) {
     const sessionMiddleware = session({
@@ -111,6 +113,23 @@ export default function webSocket(socketServer) {
                 }
             } catch (error) {
                 socket.emit("response-addCart-error", {
+                    msg: { status: "error", msg: `No se encuentra logeado`, data: {} },
+                });
+            }
+        });
+
+        socket.on("addMessage", async (data) => {
+            console.log("addMessage SOCKET", data);
+            const email = socket.request.session.email;
+            const { message } = data;
+            try {
+                const messageAdded = await Chat.addMessage(email, message);
+                socket.broadcast.emit("response-addMessage-toast", {
+                    msg: { msg: "success", data: message },
+                });
+            } catch (error) {
+                console.log(error);
+                socket.emit("response-addMessage-error", {
                     msg: { status: "error", msg: `No se encuentra logeado`, data: {} },
                 });
             }

@@ -19,6 +19,9 @@ import { iniPassport } from "./config/passport.config.js";
 import { sessionsRouter } from "./routers/session.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
+import { chatRouter } from "./routers/chat.router.js";
+import { ticketRouter } from "./routers/ticket.router.js";
+import { twilioRouter } from "./routers/twilio.router.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -65,6 +68,9 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/ticket", ticketRouter);
+app.use("/api/sms", twilioRouter);
 
 //Rutas: HTML RENDER SERVER SIDE
 app.use("/", viewsRouter);

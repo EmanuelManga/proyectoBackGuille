@@ -1,8 +1,10 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { UserModel } from "../DAO/models/users.model.js";
 import { createHash } from "../utils.js";
+import { UserDao } from "../DAO/classes/users.dao.js";
 dotenv.config();
+
+const User = new UserDao();
 
 export class UserService {
     validateUser(firstName, lastName, email, pass, isAdmin, role, cart) {
@@ -12,13 +14,13 @@ export class UserService {
         }
     }
     async getAll() {
-        const users = await UserModel.find({});
+        const users = await User.find({});
         return users;
     }
 
     async getByEmail(email) {
         try {
-            const user = await UserModel.findOne({ email });
+            const user = await User.findOne({ email });
             return user;
         } catch (error) {
             // Manejo de errores
@@ -34,7 +36,7 @@ export class UserService {
             } else {
                 id_mongo = id;
             }
-            const user = await UserModel.findOne({ _id: id_mongo });
+            const user = await User.findOne({ _id: id_mongo });
             if (user) {
                 return user;
             } else {
@@ -50,19 +52,19 @@ export class UserService {
     async createOne(firstName, lastName, email, pass, isAdmin, role, cart) {
         this.validateUser(firstName, lastName, email, pass, isAdmin, role, cart);
         const hashPass = createHash(pass);
-        const userCreated = await UserModel.create({ firstName, lastName, email, pass: hashPass, isAdmin, role, cart });
+        const userCreated = await User.create({ firstName, lastName, email, pass: hashPass, isAdmin, role, cart });
         return userCreated;
     }
 
     async deletedOne(_id) {
-        const deleted = await UserModel.deleteOne({ _id: _id });
+        const deleted = await User.deleteOne({ _id: _id });
         return deleted;
     }
 
     async updateOne(_id, firstName, lastName, email, pass, isAdmin, role, cart) {
         if (!_id) throw new Error("invalid _id");
         this.validateUser(firstName, lastName, email, pass, isAdmin, role, cart);
-        const userUptaded = await UserModel.updateOne({ _id }, { firstName, lastName, email, pass, isAdmin, role, cart });
+        const userUptaded = await User.updateOne(_id, { firstName, lastName, email, pass, isAdmin, role, cart });
         return userUptaded;
     }
 
@@ -97,6 +99,18 @@ export class UserService {
             const user = await this.getById(id);
             return user;
         } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCurrent(email) {
+        try {
+            const user = await User.findOne({ email });
+            const current = { firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin, role: user.role, cart: user.cart };
+            return current;
+        } catch (error) {
+            // Manejo de errores
+            console.error("Error al obtener el usuario por correo electrónico:", error);
             throw error;
         }
     }

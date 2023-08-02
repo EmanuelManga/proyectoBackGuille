@@ -6,3 +6,5 @@ import { isUser } from "../middlewares/auth.js";
 export const cartsHtmlRouter = express.Router();
 
 cartsHtmlRouter.get("/", isUser, cartController.getCartRender);
+
+cartsHtmlRouter.post("/:cid/purchase", isUser, cartController.generarTicket);

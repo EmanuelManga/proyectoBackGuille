@@ -17,11 +17,11 @@ class SessionController {
     async current(req, res) {
         try {
             const email = req.session.email;
-            const getUser = await userService.getByEmail(email);
+            const getCurrent = await userService.getCurrent(email);
             return res.status(201).json({
                 status: "success",
                 msg: "Current User",
-                data: getUser,
+                data: getCurrent,
             });
         } catch (e) {
             console.log(e);

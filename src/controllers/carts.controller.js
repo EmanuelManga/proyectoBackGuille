@@ -1,17 +1,19 @@
 import { CartsService } from "../services/carts.service.js";
 import { ProductService } from "../services/product.services.js";
+import { TicketService } from "../services/ticket.service.js";
 import { UserService } from "../services/users.service.js";
 
 const cartsService = new CartsService();
 const userService = new UserService();
 const productService = new ProductService();
+const ticketService = new TicketService();
 
 class CartsController {
     async getCartRender(req, res) {
         const email = req.session.email;
         try {
             const cart = await cartsService.getCartRender(email);
-            return res.status(200).render("cart", { productos: cart.response, name: cart.name, isLoged: true });
+            return res.status(200).render("cart", { productos: cart.response, name: cart.name, isLoged: true, cartId: cart.cartId });
         } catch (error) {
             return res.status(404).json({ status: "error", msg: `Ha ocurrido un error`, data: {} });
         }
@@ -64,6 +66,26 @@ class CartsController {
                 status: "success",
                 msg: "Producto agregado al carrito con exito",
                 data: productoAdded,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
+    }
+
+    async generarTicket(req, res) {
+        const email = req.session.email;
+        // const { message } = req.body;
+        try {
+            const ticketCreated = await ticketService.creatTicket(email);
+            return res.status(201).json({
+                status: "success",
+                msg: "Mensaje agregado correctamente",
+                data: ticketCreated,
             });
         } catch (error) {
             console.log(error);

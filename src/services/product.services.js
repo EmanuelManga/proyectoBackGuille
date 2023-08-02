@@ -1,9 +1,12 @@
-import { ProductModel } from "../DAO/models/product.model.js";
+import { ChatDao } from "../DAO/classes/chat.dao.js";
+import { ProductDao } from "../DAO/classes/product.dao.js";
 import { __dirname } from "../utils.js";
 import { UserService } from "./users.service.js";
 import fs from "fs";
 
 const userService = new UserService();
+const Product = new ProductDao();
+const Chat = new ChatDao();
 
 export class ProductService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -13,28 +16,28 @@ export class ProductService {
         }
     }
     async getAll() {
-        const products = await ProductModel.find({});
+        const products = await Product.find({});
         return products;
     }
     async getAllString() {
-        const products = await ProductModel.find({});
+        const products = await Product.find({});
         return JSON.parse(JSON.stringify(products));
     }
 
     async getById(id) {
-        const products = await ProductModel.find({ _id: id });
+        const products = await Product.find({ _id: id });
         return products;
     }
 
     async getByIdResString(id) {
-        const products = await ProductModel.find({ _id: id });
+        const products = await Product.find({ _id: id });
         return JSON.parse(JSON.stringify(products));
     }
 
     async createOne(title, description, price, thumbnail, code, stock, status, category) {
         console.log("validate", title, description, price, thumbnail, code, stock, status, category);
         this.validateUser(title, description, price, thumbnail, code, stock, status, category);
-        const productCreated = await ProductModel.create({ title, description, price, thumbnail, code, stock, status, category });
+        const productCreated = await Product.create({ title, description, price, thumbnail, code, stock, status, category });
         return productCreated;
     }
 
@@ -42,12 +45,12 @@ export class ProductService {
         array.forEach((element) => {
             this.validateUser(element.title, element.description, element.price, element.thumbnail, element.code, element.stock, element.status, element.category);
         });
-        const productCreated = await ProductModel.insertMany(array);
+        const productCreated = await Product.insertMany(array);
         return productCreated;
     }
 
     async deletedOne(_id) {
-        const deleted = await ProductModel.deleteOne({ _id: _id });
+        const deleted = await Product.deleteOne(_id);
         return deleted;
     }
 
@@ -55,7 +58,7 @@ export class ProductService {
         if (!_id) throw new Error("invalid _id");
         console.log("obj", obj);
         this.validateUser(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
-        const productUptaded = await ProductModel.updateOne({ _id }, obj);
+        const productUptaded = await Product.updateOne(_id, obj);
         return productUptaded;
     }
 
@@ -64,7 +67,7 @@ export class ProductService {
         const array = [];
         try {
             for (const ele of product.products) {
-                let getProduct = await ProductModel.find({ _id: ele.productId });
+                let getProduct = await Product.find({ _id: ele.productId });
                 getProduct = JSON.parse(JSON.stringify(getProduct));
                 getProduct[0].quantity = ele.quantity;
                 getProduct[0].total = ele.quantity * getProduct[0].price;
@@ -83,7 +86,7 @@ export class ProductService {
     }
 
     async getPaginate(busqueda, limit, page, query, sort) {
-        const paginate = await ProductModel.paginate(busqueda, { limit: limit || 10, page: page || 1, sort: { [query]: sort || 1 } });
+        const paginate = await Product.paginate(busqueda, limit, page, query, sort);
         return paginate;
     }
 
@@ -126,6 +129,8 @@ export class ProductService {
         let isLoged = false;
         const endPoint = "/products?page=";
         let busqueda = {};
+        let chat;
+        let userId;
         try {
             const user = await userService.getByEmail(email);
             email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
@@ -142,7 +147,15 @@ export class ProductService {
 
             const pagination = await this.getNextPrevLink(rest, endPoint);
 
-            return { pagination, links, products, name, isLoged };
+            if (isLoged) {
+                chat = await Chat.findFirstone();
+
+                chat = JSON.parse(JSON.stringify(chat));
+
+                userId = JSON.parse(JSON.stringify(user._id));
+            }
+
+            return { pagination, links, products, name, isLoged, chat, userId };
         } catch (error) {
             throw error;
         }

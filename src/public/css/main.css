@@ -25,3 +25,95 @@ td {
     gap: 1rem;
     margin: 1rem;
 }
+
+.chatDropdown {
+    position: fixed !important;
+    bottom: 1rem;
+    right: 1.625rem;
+    z-index: 999999;
+    box-shadow: 0 1px 20px 1px #5e61e6;
+}
+
+.chatConteiner {
+    width: 20rem;
+    height: 22rem;
+    max-width: 20rem;
+    max-height: 22rem;
+}
+
+.chatSection {
+    display: flex;
+    flex-direction: column;
+    height: 85%;
+    max-height: 85%;
+    overflow: auto;
+}
+
+.inputSection {
+    height: 15%;
+    max-height: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    margin: auto;
+}
+
+.textAreaChat {
+    width: 90%;
+    height: 90%;
+    resize: none;
+}
+
+/* -*-*-*-*-*-*-*-*-* */
+
+.cs-message-emisor::before {
+    content: "";
+    position: absolute;
+    right: 0px;
+    bottom: -7px;
+    width: 8px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: lightgreen;
+    transform: skew(0deg, 45deg);
+}
+
+.cs-message-emisor {
+    max-width: 70%;
+    width: auto;
+    height: auto;
+    background-color: lightgreen;
+    float: right;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    word-wrap: break-word;
+    margin-left: 6rem;
+}
+
+.cs-message-receptor {
+    max-width: 70%;
+    width: auto;
+    height: auto;
+    background-color: lightgrey;
+    float: left;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.cs-message-receptor::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    bottom: -6px;
+    width: 8px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: lightgrey;
+    transform: skew(1deg, -45deg);
+}
