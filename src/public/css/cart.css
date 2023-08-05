@@ -34,7 +34,8 @@
     max-height: 100%;
 }
 
-.page-link {
+button.page-link,
+input.page-link {
     width: 2rem;
     height: 2rem;
     padding: 6px;

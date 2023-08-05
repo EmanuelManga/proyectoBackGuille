@@ -65,6 +65,12 @@ td {
     resize: none;
 }
 
+.container-fluid {
+    width: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 /* -*-*-*-*-*-*-*-*-* */
 
 .cs-message-emisor::before {

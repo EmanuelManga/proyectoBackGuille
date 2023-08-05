@@ -8,7 +8,7 @@ class SocketController {
         const email = req.session.email;
         const isAdmin = req.session.isAdmin;
         try {
-            const objRender = await productService.getProductRender(email, query, querySerch, limit, page, sort);
+            const objRender = await productService.getProductRenderSocket(email, query, querySerch, limit, page, sort);
             // return res.status(200).render("realTimeProducts", { productos: objRender.products, pagination: objRender.pagination, links: objRender.links, name: objRender.name, isLoged: objRender.isLoged });
             return res.status(200).render("realTimeProducts", {
                 productos: objRender.products,
