@@ -1,12 +1,14 @@
+import fs from "fs";
 import { ChatDao } from "../DAO/classes/chat.dao.js";
 import { ProductDao } from "../DAO/classes/product.dao.js";
 import { __dirname } from "../utils.js";
 import { UserService } from "./users.service.js";
-import fs from "fs";
+import { CartsService, cartsService } from "./carts.service.js";
 
 const userService = new UserService();
 const Product = new ProductDao();
 const Chat = new ChatDao();
+// const CartS = new CartsService();
 
 export class ProductService {
     validateUser(title, description, price, thumbnail, code, stock, status, category) {
@@ -131,6 +133,7 @@ export class ProductService {
         let busqueda = {};
         let chat;
         let userId;
+        let cart;
         try {
             const user = await userService.getByEmail(email);
             email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
@@ -148,6 +151,8 @@ export class ProductService {
             const pagination = await this.getNextPrevLink(rest, endPoint);
 
             if (isLoged) {
+                cart = await cartsService.getCartRender(email);
+                // console.log("cart", cart);
                 chat = await Chat.findFirstone();
 
                 chat = JSON.parse(JSON.stringify(chat));
@@ -155,7 +160,7 @@ export class ProductService {
                 userId = JSON.parse(JSON.stringify(user._id));
             }
 
-            return { pagination, links, products, name, isLoged, chat, userId };
+            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response };
         } catch (error) {
             throw error;
         }

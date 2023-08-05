@@ -5,8 +5,8 @@ import { ProductService } from "./product.services.js";
 import { UserService } from "./users.service.js";
 
 const userService = new UserService();
-const productService = new ProductService();
 const Cart = new CartDao();
+const productService = new ProductService();
 const Product = new ProductDao();
 
 export class CartsService {
@@ -36,7 +36,7 @@ export class CartsService {
         } catch (error) {
             console.error("Error retrieving cart:", error.message);
             // Maneja el error de acuerdo a tus necesidades (por ejemplo, retornar null, lanzar otro error personalizado, etc.)
-            return null;
+            return error;
         }
     }
 
@@ -165,3 +165,5 @@ export class CartsService {
         }
     }
 }
+
+export const cartsService = new CartsService();

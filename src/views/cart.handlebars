@@ -1,6 +1,53 @@
 {{! <style>
     .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
 </style> }}
+
+<link rel="stylesheet" href="../css/cart.css" />
+
+<div class="container-fluid">
+    <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="container-cart">
+            {{#each productos}}
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="container-img col-md-4" style="background-image: url(../pictures/{{this.thumbnail}})">
+                            <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <div>
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <button class="page-link" onclick="restProductCart('cart-cont-{{this._id}}')">
+                                                <span aria-hidden="true">-</span>
+                                            </button>
+                                        </li>
+                                        <li class="page-item"><input type="number" min="1" step="1" name="" value="{{this.quantity}}" id="cart-cont-{{this._id}}" class="page-link page-link-input" /></li>
+                                        <li class="page-item">
+                                            <button class="page-link" onclick="addProductCart('cart-cont-{{this._id}}')">
+                                                <span aria-hidden="true">+</span>
+                                            </button>
+                                        </li>
+                                        <h3>$ {{this.total}}</h3>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+
+        </div>
+        <div class="container-details">
+            <h2></h2>
+        </div>
+    </div>
+</div>
+
 <div id="product-conteiner" style="width: 80%;margin: auto;padding: 3rem 0">
     <table class="table table-bordered">
         <thead class="thead-dark">
@@ -37,5 +84,9 @@
 </div>
 
 <script src="../js/funcionesCart.js"></script>
+
+<script>
+    const addProductCart = (id) => { let cart_cont = document.getElementById(id); cart_cont.value = cart_cont.value * 1 + 1; }; const restProductCart = (id) => { let cart_cont = document.getElementById(id); cart_cont.value = cart_cont.value * 1 - 1; };
+</script>
 
 {{! <script></script> }}
