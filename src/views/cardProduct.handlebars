@@ -18,7 +18,7 @@
                                 <span aria-hidden="true">-</span>
                             </button>
                         </li>
-                        <li class="page-item"><input type="number" min="1" step="1" name="" value="{{this.quantity}}" id="card-cont-{{this._id}}" class="page-link page-link-input" /></li>
+                        <li class="page-item"><input type="number" min="1" step="1" name="" value="1" id="card-cont-{{this._id}}" class="page-link page-link-input" /></li>
                         <li class="page-item">
                             <button class="page-link" onclick="addProductCart('card-cont-{{this._id}}')">
                                 <span aria-hidden="true">+</span>
@@ -27,7 +27,7 @@
                     </ul>
                     <div style="display: flex;">
                         <h3 class="card-text">$ {{this.price}}</h3>
-                        <h4 class="card-text">{{this.stock}}</h4>
+                        {{!-- <h3 class="card-text">{{this.stock}}</h3> --}}
                     </div>
                 </div>
             </div>
