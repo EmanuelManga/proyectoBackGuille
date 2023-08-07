@@ -1,0 +1,55 @@
+{{! <div class="album py-5 bg-body-tertiary">
+    <div class="container"> }}
+<link rel="stylesheet" href="../css/card.css" />
+
+<div class="row row-cols-1 row-cols-md-4 g-4 card-conteiner">
+    {{#each productos}}
+        <div class="col">
+            <div class="card">
+                <div class="card-img-top">
+                    <img class="thumbnail-card" src="../pictures/{{this.thumbnail}}" alt="{{this.code}}" />
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    {{!-- <p class="card-text">{{this.description}}</p> --}}
+                    <ul class="card-text pagination d-flex justify-content-between align-items-center">
+                        <li class="page-item">
+                            <button class="page-link" onclick="restProductCart('card-cont-{{this._id}}')">
+                                <span aria-hidden="true">-</span>
+                            </button>
+                        </li>
+                        <li class="page-item"><input type="number" min="1" step="1" name="" value="{{this.quantity}}" id="card-cont-{{this._id}}" class="page-link page-link-input" /></li>
+                        <li class="page-item">
+                            <button class="page-link" onclick="addProductCart('card-cont-{{this._id}}')">
+                                <span aria-hidden="true">+</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <div style="display: flex;">
+                        <h3 class="card-text">$ {{this.price}}</h3>
+                        <h4 class="card-text">{{this.stock}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
+{{! </div>
+</div> }}
+
+{{!-- <ul class="pagination">
+    {{#if pagination.hasPrevPage}}
+        <li class="page-item"><a id="btnPrev" class="page-link" href="{{pagination.prevLink}}">Previous</a></li>
+    {{else}}
+        <li class="page-item"><a id="btnPrev" class="page-link aDisable">Previous</a></li>
+    {{/if}}
+    {{#each links}}
+        <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
+    {{/each}}
+    {{#if pagination.hasNextPage}}
+        <li class="page-item"><a id="btnNext" class="page-link" href="{{pagination.nextLink}}">Next</a></li>
+    {{else}}
+        <li class="page-item"><a id="btnPrev" class="page-link aDisable">Next</a></li>
+    {{/if}}
+
+</ul> --}}

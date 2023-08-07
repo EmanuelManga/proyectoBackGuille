@@ -15,19 +15,26 @@ import { usersRouter } from "./routers/users.router.js";
 import { __dirname, connectMongo, uploader } from "./utils.js";
 
 import dotenv from "dotenv";
+import compression from "express-compression";
 import { iniPassport } from "./config/passport.config.js";
-import { sessionsRouter } from "./routers/session.router.js";
-import { viewsRouter } from "./routers/views.router.js";
-import webSocket from "./routers/webSocket.js";
 import { chatRouter } from "./routers/chat.router.js";
+import { sessionsRouter } from "./routers/session.router.js";
 import { ticketRouter } from "./routers/ticket.router.js";
 import { twilioRouter } from "./routers/twilio.router.js";
+import { viewsRouter } from "./routers/views.router.js";
+import webSocket from "./routers/webSocket.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
 
 const app = express();
 const port = 8080;
+
+app.use(
+    compression({
+        brotli: { enabled: true, zlib: {} },
+    })
+);
 
 const httpServer = app.listen(port, () => {
     console.log(`Example app listening on http://localhost:${port}`);
@@ -44,6 +51,8 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", handlebars.engine());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
+
+// handlebars.registerPartial("nose", "{{> nose}}");
 
 // app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));

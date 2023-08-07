@@ -30,7 +30,7 @@ td {
     position: fixed !important;
     bottom: 1rem;
     right: 1.625rem;
-    z-index: 999999;
+    z-index: 10;
     box-shadow: 0 1px 20px 1px #5e61e6;
 }
 
@@ -63,6 +63,12 @@ td {
     width: 90%;
     height: 90%;
     resize: none;
+}
+
+.container-fluid {
+    width: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 /* -*-*-*-*-*-*-*-*-* */

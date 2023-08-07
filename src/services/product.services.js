@@ -126,17 +126,17 @@ export class ProductService {
         }
     }
 
-    async getProductRender(email, query, querySerch, limit, page, sort) {
+    async getProductRender(email, query, querySerch, limit, page, sort, endPoint) {
         let name = null;
         let isLoged = false;
-        const endPoint = "/products?page=";
         let busqueda = {};
         let chat;
         let userId;
-        let cart;
+        let cart = [];
+        let cartId;
         try {
             const user = await userService.getByEmail(email);
-            email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
+            email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart)) : (isLoged = false);
 
             querySerch && query ? (busqueda = this.getSerchQuery(query, querySerch)) : null;
 
@@ -150,8 +150,11 @@ export class ProductService {
 
             const pagination = await this.getNextPrevLink(rest, endPoint);
 
-            if (isLoged) {
+            if (isLoged && email) {
                 cart = await cartsService.getCartRender(email);
+            }
+
+            if (isLoged) {
                 // console.log("cart", cart);
                 chat = await Chat.findFirstone();
 
@@ -160,7 +163,7 @@ export class ProductService {
                 userId = JSON.parse(JSON.stringify(user._id));
             }
 
-            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response };
+            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId };
         } catch (error) {
             throw error;
         }
@@ -216,6 +219,26 @@ export class ProductService {
             await this.updateOne(id, obj);
             const product = await this.getById(id);
             return product;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductRenderProduct(email, query, querySerch, limit, page, sort) {
+        try {
+            const endPoint = "/products?page=";
+            const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
+            console.log("result", result);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getProductRenderSocket(email, query, querySerch, limit, page, sort) {
+        try {
+            const endPoint = "/realtimeproducts?page=";
+            const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
+            return result;
         } catch (error) {
             throw error;
         }
