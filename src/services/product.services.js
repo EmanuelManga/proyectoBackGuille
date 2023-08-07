@@ -83,31 +83,51 @@ export class ProductService {
     }
 
     async getSerchQuery(query, querySerch) {
-        busqueda = { [query]: [querySerch] };
-        return busqueda;
+        try {
+            busqueda = { [query]: [querySerch] };
+            return busqueda;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getPaginate(busqueda, limit, page, query, sort) {
-        const paginate = await Product.paginate(busqueda, limit, page, query, sort);
-        return paginate;
+        try {
+            const paginate = await Product.paginate(busqueda, limit, page, query, sort);
+            return paginate;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getLink(rest, endPoint) {
-        let links = [];
-        for (let i = 1; i < rest.totalPages + 1; i++) {
-            links.push({ label: i, href: endPoint + i });
+        try {
+            let links = [];
+            for (let i = 1; i < rest.totalPages + 1; i++) {
+                links.push({ label: i, href: endPoint + i });
+            }
+            return links;
+        } catch (error) {
+            throw error;
         }
-        return links;
     }
 
     async getNextPrevLink(rest, endPoint) {
-        rest.hasPrevPage ? (rest.prevLink = endPoint + rest.prevPage) : (rest.prevLink = null);
-        rest.hasNextPage ? (rest.nextLink = endPoint + rest.nextPage) : (rest.nextLink = null);
-        return rest;
+        try {
+            rest.hasPrevPage ? (rest.prevLink = endPoint + rest.prevPage) : (rest.prevLink = null);
+            rest.hasNextPage ? (rest.nextLink = endPoint + rest.nextPage) : (rest.nextLink = null);
+            return rest;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getProduct(queryRes) {
-        return JSON.parse(JSON.stringify(queryRes.docs));
+        try {
+            return JSON.parse(JSON.stringify(queryRes.docs));
+        } catch (error) {
+            throw error;
+        }
     }
 
     async deleteThumbnail(product) {
@@ -127,15 +147,17 @@ export class ProductService {
     }
 
     async getProductRender(email, query, querySerch, limit, page, sort, endPoint) {
-        let name = null;
-        let isLoged = false;
-        let busqueda = {};
-        let chat;
-        let userId;
-        let cart = [];
         try {
+            let name = null;
+            let isLoged = false;
+            let busqueda = {};
+            let chat;
+            let userId;
+            let cart = { response: [] };
+            let cartId;
+
             const user = await userService.getByEmail(email);
-            email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
+            email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart)) : (isLoged = false);
 
             querySerch && query ? (busqueda = this.getSerchQuery(query, querySerch)) : null;
 
@@ -154,15 +176,12 @@ export class ProductService {
             }
 
             if (isLoged) {
-                // console.log("cart", cart);
                 chat = await Chat.findFirstone();
-
                 chat = JSON.parse(JSON.stringify(chat));
-
                 userId = JSON.parse(JSON.stringify(user._id));
             }
 
-            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId: user.cart };
+            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId };
         } catch (error) {
             throw error;
         }
@@ -227,7 +246,7 @@ export class ProductService {
         try {
             const endPoint = "/products?page=";
             const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
-            console.log("result", result);
+            // console.log("result", result);
             return result;
         } catch (error) {
             throw error;

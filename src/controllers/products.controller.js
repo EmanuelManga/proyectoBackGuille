@@ -25,6 +25,7 @@ class ProductController {
                 cartId: objRender.cartId,
             });
         } catch (error) {
+            console.log(error);
             return res.status(400).json({ status: "error", msg: "No se ha cargado la pagina", data: { error } });
         }
     }

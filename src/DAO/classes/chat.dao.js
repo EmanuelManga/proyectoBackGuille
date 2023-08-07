@@ -20,9 +20,12 @@ export class ChatDao {
     }
 
     async findFirstone() {
-        const primerRegistro = await ChatModel.findOne().lean();
-
-        return primerRegistro;
+        try {
+            const primerRegistro = await ChatModel.findOne().lean();
+            return primerRegistro;
+        } catch (error) {
+            throw error;
+        }
     }
 
     // async findOneAndUpdate(_id, productId) {
