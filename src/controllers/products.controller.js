@@ -1,3 +1,4 @@
+import handleErrorResponse from "../middlewares/error.js";
 import { ProductService } from "../services/product.services.js";
 import { UserService } from "../services/users.service.js";
 
@@ -12,7 +13,7 @@ class ProductController {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
             // console.log("cart", objRender.cart);
             // console.log("isLoged", objRender.isLoged);
-            return res.status(200).render("cardProduct", {
+            return res.status(200).render("home", {
                 productos: objRender.products,
                 pagination: objRender.pagination,
                 links: objRender.links,
@@ -106,25 +107,20 @@ class ProductController {
     }
 
     async postProductApi(req, res) {
-        // try {
-        const file = req.file;
-        const { title, description, price, code, stock, status, category } = req.body;
+        try {
+            const file = req.file;
+            const { title, description, price, code, stock, status, category } = req.body;
 
-        const productCreated = await productService.postProductApi(title, description, price, file, code, stock, status, category);
-        return res.status(201).json({
-            status: "success",
-            msg: "product created",
-            data: productCreated,
-        });
-        // } catch (error) {
-        //     console.log("Controller", error);
-
-        //     return res.status(500).json({
-        //         status: "error",
-        //         msg: "something went wrong :(",
-        //         data: {},
-        //     });
-        // }
+            const productCreated = await productService.postProductApi(title, description, price, file, code, stock, status, category);
+            return res.status(201).json({
+                status: "success",
+                msg: "product created",
+                data: productCreated,
+            });
+        } catch (error) {
+            console.log("Controller", error);
+            handleErrorResponse(res, error);
+        }
     }
 
     async deleteProductApi(req, res) {
@@ -157,8 +153,8 @@ class ProductController {
                 msg: "user uptaded",
                 data: product,
             });
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.log("putProductApi", error);
             return res.status(500).json({
                 status: "error",
                 msg: "something went wrong :(",

@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import { CartDao } from "../DAO/classes/carts.dao.js";
 import { ProductDao } from "../DAO/classes/product.dao.js";
+import CustomError from "../error/custom-error.js";
+import EErros from "../error/list-error.js";
+import { getCartById, getProductById } from "../error/message-error.js";
 import { ProductService } from "./product.services.js";
 import { UserService } from "./users.service.js";
 
@@ -75,22 +78,41 @@ export class CartsService {
 
     async updateOne(_id, products) {
         // console.log("_id, products", _id, products);
-        if (!_id) throw new Error("invalid _id");
-        const cart = await Cart.findById(_id); // Obtener el documento del carrito por su _id
-        if (!cart) throw new Error("cart not found");
-        const realProduct = await Product.findOne(products.productId);
-        if (!realProduct) throw new Error("product not found");
+        try {
+            if (!_id) throw new Error("invalid _id");
+            const cart = await Cart.findById(_id); // Obtener el documento del carrito por su _id
+            // if (!cart) throw new Error("cart not found");
+            if (!cart) {
+                CustomError.createError({
+                    name: "Cart error",
+                    cause: getCartById(_id),
+                    message: "Error trying to add item in cart",
+                    code: EErros.CART_ID_ERROR,
+                });
+            }
+            try {
+                const realProduct = await Product.findOne(products.productId);
+            } catch (error) {
+                CustomError.createError({
+                    name: "Product error",
+                    cause: getProductById(_id),
+                    message: "Error trying to find product",
+                    code: EErros.PRODUCT_ERROR,
+                });
+            }
 
-        // console.log("realProduct", realProduct);
-        let id = new mongoose.Types.ObjectId(products.productId);
-        const existingProduct = await Cart.findOneAndUpdate(_id, products.productId);
-        // console.log("existingProduct", existingProduct);
-        if (!existingProduct) {
-            cart.products.push({ productId: id, quantity: 1 });
+            let id = new mongoose.Types.ObjectId(products.productId);
+            const existingProduct = await Cart.findOneAndUpdate(_id, products.productId);
+            // console.log("existingProduct", existingProduct);
+            if (!existingProduct) {
+                cart.products.push({ productId: id, quantity: 1 });
+            }
+            // Guardar los cambios en la base de datos
+            const updatedCart = await cart.save();
+            return updatedCart;
+        } catch (error) {
+            throw error;
         }
-        // Guardar los cambios en la base de datos
-        const updatedCart = await cart.save();
-        return updatedCart;
     }
 
     async deleteProduct(_id, productId) {

@@ -1,3 +1,4 @@
+import handleErrorResponse from "../middlewares/error.js";
 import { CartsService } from "../services/carts.service.js";
 import { ProductService } from "../services/product.services.js";
 import { TicketService } from "../services/ticket.service.js";
@@ -69,11 +70,12 @@ class CartsController {
             });
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                status: "error",
-                msg: "something went wrong :(",
-                data: {},
-            });
+            handleErrorResponse(res, error);
+            // return res.status(500).json({
+            //     status: "error",
+            //     msg: "something went wrong :(",
+            //     data: {},
+            // });
         }
     }
 

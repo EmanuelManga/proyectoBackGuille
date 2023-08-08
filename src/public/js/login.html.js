@@ -1,10 +1,3 @@
-const quitarNav = () => {
-    const nav = document.getElementById("contenedor-menu");
-    nav.style.display = "none";
-};
-
-quitarNav();
-
 const toggleView = (state) => {
     const singin = document.getElementById("singin");
     const login = document.getElementById("login");

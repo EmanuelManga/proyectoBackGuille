@@ -7,8 +7,7 @@ export const productRouter = express.Router();
 
 productRouter.get("/", productController.getProductApi);
 
-// productRouter.post("/", isAdmin, uploader.single("thumbnail"), productController.postProductApi);
-productRouter.post("/", uploader.single("thumbnail"), productController.postProductApi);
+productRouter.post("/", isAdmin, uploader.single("thumbnail"), productController.postProductApi);
 
 productRouter.delete("/:id", isAdmin, productController.deleteProductApi);
 

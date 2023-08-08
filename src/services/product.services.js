@@ -2,12 +2,11 @@ import fs from "fs";
 import { ChatDao } from "../DAO/classes/chat.dao.js";
 import { ProductDao } from "../DAO/classes/product.dao.js";
 import CustomError from "../error/custom-error.js";
-import { generateProductErrorInfo, updateProductErrorInfo } from "../error/message-error.js";
+import EErros from "../error/list-error.js";
+import { errorId, generateProductErrorInfo, updateProductErrorId, updateProductErrorInfo } from "../error/message-error.js";
 import { __dirname } from "../utils.js";
 import { cartsService } from "./carts.service.js";
 import { UserService } from "./users.service.js";
-import EErros from "../error/list-error.js";
-import ErrorUtils from "./error.service.js";
 
 const userService = new UserService();
 const Product = new ProductDao();
@@ -17,7 +16,12 @@ const Chat = new ChatDao();
 export class ProductService {
     validateCreateProduct(title, description, price, thumbnail, code, stock, status, category) {
         if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
-            ErrorUtils.validateUser({ title, description, price, thumbnail, code, stock, status, category });
+            CustomError.createError({
+                name: "Product creation error",
+                cause: generateProductErrorInfo({ title, description, price, thumbnail, code, stock, status, category }),
+                message: "Error trying to create product",
+                code: EErros.CREATE_PRODUCT_ERROR,
+            });
         }
     }
     validateUpdateProduct(title, description, price, thumbnail, code, stock, status, category) {
@@ -51,13 +55,13 @@ export class ProductService {
 
     async createOne(title, description, price, thumbnail, code, stock, status, category) {
         // console.log("validate", title, description, price, thumbnail, code, stock, status, category);
-        // try {
-        this.validateCreateProduct(title, description, price, thumbnail, code, stock, status, category);
-        const productCreated = await Product.create({ title, description, price, thumbnail, code, stock, status, category });
-        return productCreated;
-        // } catch (error) {
-        //     throw error;
-        // }
+        try {
+            this.validateCreateProduct(title, description, price, thumbnail, code, stock, status, category);
+            const productCreated = await Product.create({ title, description, price, thumbnail, code, stock, status, category });
+            return productCreated;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async createMany(array) {
@@ -76,9 +80,13 @@ export class ProductService {
     async updateOne(_id, obj) {
         if (!_id) throw new Error("invalid _id");
         console.log("obj", obj);
-        this.validateUpdateProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
-        const productUptaded = await Product.updateOne(_id, obj);
-        return productUptaded;
+        try {
+            this.validateUpdateProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
+            const productUptaded = await Product.updateOne(_id, obj);
+            return productUptaded;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async getProductInfo(product) {
@@ -223,12 +231,12 @@ export class ProductService {
         if (!file) {
             return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
         }
-        // try {
-        const productCreated = await this.createOne(title, description, price, file.filename, code, stock, status, category);
-        return productCreated;
-        // } catch (error) {
-        //     throw error;
-        // }
+        try {
+            const productCreated = await this.createOne(title, description, price, file.filename, code, stock, status, category);
+            return productCreated;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async putProductApi(id, obj) {

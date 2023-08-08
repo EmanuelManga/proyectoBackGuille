@@ -4,6 +4,10 @@ const EErros = {
     DATABASES_ERROR: 3,
     CREATE_PRODUCT_ERROR: 4,
     UPDATE_PRODUCT_ERROR: 5,
+    UPDATE_PRODUCT_UNDEFINED_ID_ERROR: 6,
+    PRODUCT_ID_ERROR: 7,
+    CART_ID_ERROR: 8,
+    PRODUCT_ERROR: 9,
 };
 
 export default EErros;
