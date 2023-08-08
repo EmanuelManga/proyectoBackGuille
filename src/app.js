@@ -24,6 +24,7 @@ import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
 import { mockingproductsRouter } from "./routers/mockingproducts.router.js";
+import errorHandler from "./middlewares/error.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -105,6 +106,8 @@ app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
     // Realiza las operaciones necesarias con el archivo
     // Puedes enviar una respuesta al cliente con el resultado de la carga
 });
+
+app.use(errorHandler);
 
 app.get("/*", async (req, res) => {
     return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });

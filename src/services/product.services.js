@@ -7,6 +7,7 @@ import { __dirname } from "../utils.js";
 import { cartsService } from "./carts.service.js";
 import { UserService } from "./users.service.js";
 import EErros from "../error/list-error.js";
+import ErrorUtils from "./error.service.js";
 
 const userService = new UserService();
 const Product = new ProductDao();
@@ -16,12 +17,7 @@ const Chat = new ChatDao();
 export class ProductService {
     validateCreateProduct(title, description, price, thumbnail, code, stock, status, category) {
         if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
-            CustomError.createError({
-                name: `Product creation error`,
-                cause: generateProductErrorInfo({ title, description, price, thumbnail, code, stock, status, category }),
-                message: "Error trying to create product",
-                code: EErros.CREATE_PRODUCT_ERROR,
-            });
+            ErrorUtils.validateUser({ title, description, price, thumbnail, code, stock, status, category });
         }
     }
     validateUpdateProduct(title, description, price, thumbnail, code, stock, status, category) {
@@ -55,9 +51,13 @@ export class ProductService {
 
     async createOne(title, description, price, thumbnail, code, stock, status, category) {
         // console.log("validate", title, description, price, thumbnail, code, stock, status, category);
+        // try {
         this.validateCreateProduct(title, description, price, thumbnail, code, stock, status, category);
         const productCreated = await Product.create({ title, description, price, thumbnail, code, stock, status, category });
         return productCreated;
+        // } catch (error) {
+        //     throw error;
+        // }
     }
 
     async createMany(array) {
@@ -223,12 +223,12 @@ export class ProductService {
         if (!file) {
             return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
         }
-        try {
-            const productCreated = await this.createOne(title, description, price, file.filename, code, stock, status, category);
-            return productCreated;
-        } catch (error) {
-            throw error;
-        }
+        // try {
+        const productCreated = await this.createOne(title, description, price, file.filename, code, stock, status, category);
+        return productCreated;
+        // } catch (error) {
+        //     throw error;
+        // }
     }
 
     async putProductApi(id, obj) {

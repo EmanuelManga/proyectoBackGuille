@@ -1,11 +1,13 @@
 import EErros from "../error/list-error.js";
 
 export default (error, req, res, next) => {
-    console.log(error.cause);
+    console.log("error", error);
+    // console.log("nosequehacer", error.cause);
 
     switch (error.code) {
         case EErros.UPDATE_PRODUCT_ERROR:
             res.status(400).send({ status: "error", error: error.name, cause: error.cause });
+            break;
         case EErros.CREATE_PRODUCT_ERROR:
             res.status(400).send({ status: "error", error: error.name, cause: error.cause });
             break;

@@ -106,24 +106,25 @@ class ProductController {
     }
 
     async postProductApi(req, res) {
-        try {
-            const file = req.file;
-            const { title, description, price, code, stock, status, category } = req.body;
+        // try {
+        const file = req.file;
+        const { title, description, price, code, stock, status, category } = req.body;
 
-            const productCreated = await productService.postProductApi(title, description, price, file, code, stock, status, category);
-            return res.status(201).json({
-                status: "success",
-                msg: "product created",
-                data: productCreated,
-            });
-        } catch (e) {
-            console.log(e);
-            return res.status(500).json({
-                status: "error",
-                msg: "something went wrong :(",
-                data: {},
-            });
-        }
+        const productCreated = await productService.postProductApi(title, description, price, file, code, stock, status, category);
+        return res.status(201).json({
+            status: "success",
+            msg: "product created",
+            data: productCreated,
+        });
+        // } catch (error) {
+        //     console.log("Controller", error);
+
+        //     return res.status(500).json({
+        //         status: "error",
+        //         msg: "something went wrong :(",
+        //         data: {},
+        //     });
+        // }
     }
 
     async deleteProductApi(req, res) {
