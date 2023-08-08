@@ -61,3 +61,43 @@ handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
 handlebars.registerHelper("notEquals", function (arg1, arg2, options) {
     return arg1 != arg2 ? options.fn(this) : options.inverse(this);
 });
+
+// ----------------------Testing---------------------------------
+
+import { faker } from "@faker-js/faker";
+
+faker.locale = "es";
+
+export const generateUser = () => {
+    const numOfProducts = parseInt(faker.random.numeric(1, { bannedDigits: ["0"] }));
+    const products = [];
+
+    for (let i = 0; i < numOfProducts; i++) {
+        products.push(generateProduct());
+    }
+
+    return {
+        name: faker.name.firstName(),
+        last_name: faker.name.lastName(),
+        birthgDate: faker.date.birthdate(),
+        email: faker.internet.email(),
+        phone: faker.phone.number(),
+        sex: faker.name.sex(),
+        products,
+    };
+};
+
+export const generateProduct = () => {
+    return {
+        _id: faker.database.mongodbObjectId(),
+        title: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        department: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        stock: faker.random.numeric(2),
+        thumbnail: faker.image.image(),
+        code: faker.commerce.productMaterial(),
+        status: faker.datatype.boolean(),
+        category: faker.commerce.productMaterial(),
+    };
+};

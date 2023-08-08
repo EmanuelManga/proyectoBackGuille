@@ -23,6 +23,7 @@ import { ticketRouter } from "./routers/ticket.router.js";
 import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
+import { mockingproductsRouter } from "./routers/mockingproducts.router.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -71,6 +72,9 @@ iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 //FIN TODO LO DE PASSPORT
+
+//Rutas: MOCKING TEST CON JSON
+app.use("/mockingproducts", mockingproductsRouter);
 
 //Rutas: API REST CON JSON
 app.use("/api/products", productRouter);

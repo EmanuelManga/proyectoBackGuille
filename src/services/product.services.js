@@ -1,9 +1,12 @@
 import fs from "fs";
 import { ChatDao } from "../DAO/classes/chat.dao.js";
 import { ProductDao } from "../DAO/classes/product.dao.js";
+import CustomError from "../error/custom-error.js";
+import { generateProductErrorInfo, updateProductErrorInfo } from "../error/message-error.js";
 import { __dirname } from "../utils.js";
+import { cartsService } from "./carts.service.js";
 import { UserService } from "./users.service.js";
-import { CartsService, cartsService } from "./carts.service.js";
+import EErros from "../error/list-error.js";
 
 const userService = new UserService();
 const Product = new ProductDao();
@@ -11,10 +14,24 @@ const Chat = new ChatDao();
 // const CartS = new CartsService();
 
 export class ProductService {
-    validateUser(title, description, price, thumbnail, code, stock, status, category) {
+    validateCreateProduct(title, description, price, thumbnail, code, stock, status, category) {
         if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
-            console.log("validation error: please complete firstName, lastname and email.");
-            throw new Error("validation error: please complete firstName, lastname and email.");
+            CustomError.createError({
+                name: `Product creation error`,
+                cause: generateProductErrorInfo({ title, description, price, thumbnail, code, stock, status, category }),
+                message: "Error trying to create product",
+                code: EErros.CREATE_PRODUCT_ERROR,
+            });
+        }
+    }
+    validateUpdateProduct(title, description, price, thumbnail, code, stock, status, category) {
+        if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
+            CustomError.createError({
+                name: `Product update error`,
+                cause: updateProductErrorInfo({ title, description, price, thumbnail, code, stock, status, category }),
+                message: "Error trying to update product",
+                code: EErros.UPDATE_PRODUCT_ERROR,
+            });
         }
     }
     async getAll() {
@@ -37,15 +54,15 @@ export class ProductService {
     }
 
     async createOne(title, description, price, thumbnail, code, stock, status, category) {
-        console.log("validate", title, description, price, thumbnail, code, stock, status, category);
-        this.validateUser(title, description, price, thumbnail, code, stock, status, category);
+        // console.log("validate", title, description, price, thumbnail, code, stock, status, category);
+        this.validateCreateProduct(title, description, price, thumbnail, code, stock, status, category);
         const productCreated = await Product.create({ title, description, price, thumbnail, code, stock, status, category });
         return productCreated;
     }
 
     async createMany(array) {
         array.forEach((element) => {
-            this.validateUser(element.title, element.description, element.price, element.thumbnail, element.code, element.stock, element.status, element.category);
+            this.validateCreateProduct(element.title, element.description, element.price, element.thumbnail, element.code, element.stock, element.status, element.category);
         });
         const productCreated = await Product.insertMany(array);
         return productCreated;
@@ -59,7 +76,7 @@ export class ProductService {
     async updateOne(_id, obj) {
         if (!_id) throw new Error("invalid _id");
         console.log("obj", obj);
-        this.validateUser(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
+        this.validateUpdateProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
         const productUptaded = await Product.updateOne(_id, obj);
         return productUptaded;
     }
