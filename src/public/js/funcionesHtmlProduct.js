@@ -115,3 +115,7 @@ const agregarCarrito = (productId) => {
     });
     // }
 };
+
+const redirectDetalle = (id) => {
+    window.location.href = `products/detalle/${id}`;
+};

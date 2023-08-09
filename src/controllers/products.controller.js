@@ -1,5 +1,7 @@
+import handleErrorResponse from "../middlewares/error.js";
 import { ProductService } from "../services/product.services.js";
 import { UserService } from "../services/users.service.js";
+import { __dirname } from "../utils.js";
 
 const userService = new UserService();
 const productService = new ProductService();
@@ -12,6 +14,7 @@ class ProductController {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
             // console.log("cart", objRender.cart);
             // console.log("isLoged", objRender.isLoged);
+            // home // cardProduct
             return res.status(200).render("cardProduct", {
                 productos: objRender.products,
                 pagination: objRender.pagination,
@@ -78,9 +81,10 @@ class ProductController {
 
     async getDetalle(req, res) {
         let pid = req.params.pid;
+        const email = req.session.email;
         try {
-            const product = await productService.getByIdResString(pid);
-            return res.status(200).render("detalle", { productos: product[0] });
+            const result = await productService.getDetalle(pid, email);
+            return res.status(200).render("detalle", { productos: result.product[0], name: result.name, isLoged: result.isLoged, cartId: result.cartId, cart: result.cart });
         } catch (error) {
             return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${pid}`, data: {} });
         }
@@ -117,13 +121,9 @@ class ProductController {
                 msg: "product created",
                 data: productCreated,
             });
-        } catch (e) {
-            console.log(e);
-            return res.status(500).json({
-                status: "error",
-                msg: "something went wrong :(",
-                data: {},
-            });
+        } catch (error) {
+            console.log("Controller", error);
+            handleErrorResponse(res, error);
         }
     }
 
@@ -157,8 +157,8 @@ class ProductController {
                 msg: "user uptaded",
                 data: product,
             });
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.log("putProductApi", error);
             return res.status(500).json({
                 status: "error",
                 msg: "something went wrong :(",

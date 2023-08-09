@@ -61,3 +61,67 @@ handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
 handlebars.registerHelper("notEquals", function (arg1, arg2, options) {
     return arg1 != arg2 ? options.fn(this) : options.inverse(this);
 });
+
+handlebars.registerHelper("formatNumber", function (number) {
+    // number = number * 1;
+    // return number.toLocaleString();
+    return formatNumber(number);
+});
+
+function formatNumber(number) {
+    // Asegurarse de que el número sea de tipo numérico
+    if (typeof number !== "number") {
+        return "NaN";
+    }
+
+    // Dividir el número en parte entera y decimal
+    const parts = number.toFixed(2).split(".");
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
+
+    // Agregar separadores de miles (puntos)
+    const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Combinar parte entera formateada con parte decimal y retornar el resultado
+    return formattedIntegerPart + "," + decimalPart;
+}
+
+// ----------------------Testing---------------------------------
+
+import { faker } from "@faker-js/faker";
+
+faker.locale = "es";
+
+export const generateUser = () => {
+    const numOfProducts = parseInt(faker.random.numeric(1, { bannedDigits: ["0"] }));
+    const products = [];
+
+    for (let i = 0; i < numOfProducts; i++) {
+        products.push(generateProduct());
+    }
+
+    return {
+        name: faker.name.firstName(),
+        last_name: faker.name.lastName(),
+        birthgDate: faker.date.birthdate(),
+        email: faker.internet.email(),
+        phone: faker.phone.number(),
+        sex: faker.name.sex(),
+        products,
+    };
+};
+
+export const generateProduct = () => {
+    return {
+        _id: faker.database.mongodbObjectId(),
+        title: faker.commerce.productName(),
+        price: faker.commerce.price(),
+        department: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        stock: faker.random.numeric(2),
+        thumbnail: faker.image.image(),
+        code: faker.commerce.productMaterial(),
+        status: faker.datatype.boolean(),
+        category: faker.commerce.productMaterial(),
+    };
+};
