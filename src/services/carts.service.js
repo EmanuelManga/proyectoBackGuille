@@ -109,7 +109,8 @@ export class CartsService {
             }
             // Guardar los cambios en la base de datos
             const updatedCart = await cart.save();
-            return updatedCart;
+            const result = await Cart.findOne(_id);
+            return result;
         } catch (error) {
             throw error;
         }

@@ -62,6 +62,30 @@ handlebars.registerHelper("notEquals", function (arg1, arg2, options) {
     return arg1 != arg2 ? options.fn(this) : options.inverse(this);
 });
 
+handlebars.registerHelper("formatNumber", function (number) {
+    // number = number * 1;
+    // return number.toLocaleString();
+    return formatNumber(number);
+});
+
+function formatNumber(number) {
+    // Asegurarse de que el número sea de tipo numérico
+    if (typeof number !== "number") {
+        return "NaN";
+    }
+
+    // Dividir el número en parte entera y decimal
+    const parts = number.toFixed(2).split(".");
+    const integerPart = parts[0];
+    const decimalPart = parts[1];
+
+    // Agregar separadores de miles (puntos)
+    const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Combinar parte entera formateada con parte decimal y retornar el resultado
+    return formattedIntegerPart + "," + decimalPart;
+}
+
 // ----------------------Testing---------------------------------
 
 import { faker } from "@faker-js/faker";

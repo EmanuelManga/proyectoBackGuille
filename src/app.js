@@ -107,7 +107,7 @@ app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
     // Puedes enviar una respuesta al cliente con el resultado de la carga
 });
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 app.get("/*", async (req, res) => {
     return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });

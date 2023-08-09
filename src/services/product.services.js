@@ -253,7 +253,7 @@ export class ProductService {
         try {
             const endPoint = "/products?page=";
             const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
-            console.log("result", result);
+            // console.log("result", result);
             return result;
         } catch (error) {
             throw error;
@@ -264,6 +264,26 @@ export class ProductService {
             const endPoint = "/realtimeproducts?page=";
             const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
             return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getDetalle(id, email) {
+        try {
+            let cart = [];
+
+            let name = null;
+            let isLoged = false;
+            let cartId;
+            const user = await userService.getByEmail(email);
+            email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart)) : (isLoged = false);
+
+            if (isLoged && email) {
+                cart = await cartsService.getCartRender(email);
+            }
+
+            const product = await this.getByIdResString(id);
+            return { product, name, isLoged, cartId, cart: cart.response };
         } catch (error) {
             throw error;
         }
