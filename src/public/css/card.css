@@ -1,0 +1,33 @@
+.card-conteiner {
+    width: 70%;
+    margin: auto;
+}
+
+/* h5.card-title:hover { */
+.card {
+    -webkit-line-clamp: unset;
+    /* background: white; */
+}
+
+h5.card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-img-top {
+    display: flex;
+    justify-content: center;
+    height: 16rem;
+    padding: 16px 16px 0 16px;
+    overflow: hidden;
+}
+
+.thumbnail-card {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    height: auto;
+    width: auto;
+}

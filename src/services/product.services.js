@@ -147,15 +147,14 @@ export class ProductService {
     }
 
     async getProductRender(email, query, querySerch, limit, page, sort, endPoint) {
+        let name = null;
+        let isLoged = false;
+        let busqueda = {};
+        let chat;
+        let userId;
+        let cart = [];
+        let cartId;
         try {
-            let name = null;
-            let isLoged = false;
-            let busqueda = {};
-            let chat;
-            let userId;
-            let cart = { response: [] };
-            let cartId;
-
             const user = await userService.getByEmail(email);
             email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart)) : (isLoged = false);
 

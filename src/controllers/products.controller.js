@@ -12,7 +12,7 @@ class ProductController {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
             // console.log("cart", objRender.cart);
             // console.log("isLoged", objRender.isLoged);
-            return res.status(200).render("home", {
+            return res.status(200).render("cardProduct", {
                 productos: objRender.products,
                 pagination: objRender.pagination,
                 links: objRender.links,
@@ -90,10 +90,11 @@ class ProductController {
         try {
             const product = await productService.getAll();
             // console.log(product);
+            let test = { product, product, product, product, product, product };
             return res.status(200).json({
                 status: "success",
                 msg: "listado de productos",
-                data: product,
+                data: test,
             });
         } catch (e) {
             console.log(e);

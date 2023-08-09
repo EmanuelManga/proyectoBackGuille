@@ -16,7 +16,7 @@ class AuthController {
     }
 
     async getLogin(req, res) {
-        return res.render("login", {});
+        return res.render("login", { isLogIn: true });
     }
 
     async postLogin(req, res) {
