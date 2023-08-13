@@ -13,6 +13,7 @@ class ProductController {
         try {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
             // console.log("cart", objRender.cart);
+            // req.logger.debug("Objeto:", objRender.products);
             // console.log("isLoged", objRender.isLoged);
             // home // cardProduct
             return res.status(200).render("cardProduct", {
@@ -28,7 +29,8 @@ class ProductController {
                 cartId: objRender.cartId,
             });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            req.logger.error(error);
             return res.status(400).json({ status: "error", msg: "No se ha cargado la pagina", data: { error } });
         }
     }
@@ -40,6 +42,7 @@ class ProductController {
             let productos = await productService.getByIdResString(pid);
             return res.status(200).render("home", { productos });
         } catch (error) {
+            req.logger.error(error);
             return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${pid}`, data: {} });
         }
     }
@@ -52,6 +55,7 @@ class ProductController {
             const productos = await productService.postProduct(obj, file);
             return res.status(200).json({ status: "success", msg: "El producto fue creado con éxito", data: productos.producto });
         } catch (error) {
+            req.logger.error(error);
             return res.status(404).json({ status: "error", msg: "El producto no se pudo crear", data: {} });
         }
     }
@@ -64,6 +68,7 @@ class ProductController {
             const productos = await productService.deleteProduct(pid);
             return res.status(200).render("home", { productos });
         } catch (error) {
+            req.logger.error(error);
             return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} });
         }
     }
@@ -75,6 +80,7 @@ class ProductController {
             const productos = await productService.putProduct(pid, obj);
             return res.status(200).render("home", { productos });
         } catch (error) {
+            req.logger.error(error);
             return res.status(404).json({ status: "error", msg: `No Existe un producto con ID: ${pid}`, data: {} });
         }
     }
@@ -86,6 +92,7 @@ class ProductController {
             const result = await productService.getDetalle(pid, email);
             return res.status(200).render("detalle", { productos: result.product[0], name: result.name, isLoged: result.isLoged, cartId: result.cartId, cart: result.cart });
         } catch (error) {
+            req.logger.error(error);
             return res.status(404).json({ status: "error", msg: `No se encuentra ningun producto con el id: ${pid}`, data: {} });
         }
     }
@@ -100,8 +107,8 @@ class ProductController {
                 msg: "listado de productos",
                 data: test,
             });
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            req.logger.error(error);
             return res.status(500).json({
                 status: "error",
                 msg: "something went wrong :(",
@@ -122,6 +129,7 @@ class ProductController {
                 data: productCreated,
             });
         } catch (error) {
+            req.logger.error(error);
             console.log("Controller", error);
             handleErrorResponse(res, error);
         }
@@ -136,8 +144,8 @@ class ProductController {
                 msg: "product deleted",
                 data: {},
             });
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            req.logger.error(error);
             return res.status(500).json({
                 status: "error",
                 msg: "something went wrong :(",
@@ -158,6 +166,7 @@ class ProductController {
                 data: product,
             });
         } catch (error) {
+            req.logger.error(error);
             console.log("putProductApi", error);
             return res.status(500).json({
                 status: "error",

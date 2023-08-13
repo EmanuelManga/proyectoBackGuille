@@ -79,7 +79,7 @@ export class ProductService {
 
     async updateOne(_id, obj) {
         if (!_id) throw new Error("invalid _id");
-        console.log("obj", obj);
+        // console.log("obj", obj);
         try {
             this.validateUpdateProduct(obj.title, obj.description, obj.price, obj.thumbnail, obj.code, obj.stock, obj.status, obj.category);
             const productUptaded = await Product.updateOne(_id, obj);

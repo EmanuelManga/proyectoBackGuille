@@ -25,6 +25,7 @@ import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
 import { mockingproductsRouter } from "./routers/mockingproducts.router.js";
 import errorHandler from "./middlewares/error.js";
+import { addLogger } from "./utils/logger.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -41,6 +42,8 @@ app.use(
 const httpServer = app.listen(port, () => {
     console.log(`Example app listening on http://localhost:${port}`);
 });
+
+app.use(addLogger);
 
 connectMongo();
 
@@ -94,6 +97,13 @@ app.use("/auth", authRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);
+
+app.get("/loggerTest", (req, res) => {
+    req.logger.info("Mensaje de información");
+    req.logger.debug("Mensaje de depuración");
+    req.logger.error("Mensaje de error");
+    res.send("Hello World");
+});
 
 app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
     const file = req.file;
