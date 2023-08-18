@@ -75,6 +75,7 @@ export function iniPassport() {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
+                    console.log(profile);
                     // Aquí puedes procesar el perfil del usuario que ha iniciado sesión.
                     // Por ejemplo, puedes guardar el perfil en la base de datos.
 
@@ -93,8 +94,8 @@ export function iniPassport() {
                         const newCart = await CartService.createOne();
                         const newUser = {
                             email: email.value,
-                            firstName: profile.displayName || "noname",
-                            lastName: "nolast",
+                            firstName: profile.name.givenName || profile.displayName || "noname",
+                            lastName: profile.name.familyName || "nolast",
                             isAdmin: false,
                             pass: "nopass",
                             role: process.env.DEFAULTROLE,
