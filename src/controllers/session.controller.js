@@ -7,7 +7,11 @@ const userService = new UserService();
 class SessionController {
     async gitCallBack(req, res) {
         req.session.email = req.user.email;
-        res.redirect("/realtimeproducts");
+        res.redirect("/products");
+    }
+    async googleCallBack(req, res) {
+        req.session.email = req.user.email;
+        res.redirect("/products");
     }
 
     async showCurrent(req, res) {
