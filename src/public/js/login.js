@@ -36,7 +36,7 @@ for (let i = 0; i < password.length; i++) {
 
 const svg_fondo = document.getElementById("svg-fondo");
 
-svg_fondo.innerHTML = `<svg width="100%" height="100%" id="svg" viewBox="0 200 1350 200" xmlns="http://www.w3.org/2000/svg" class="mooj transition duration-300 ease-in-out delay-150" ><style>
+svg_fondo.innerHTML = `<svg width="100%" height="100%" id="svg" viewBox="0 0 1350 300" xmlns="http://www.w3.org/2000/svg" class="mooj transition duration-300 ease-in-out delay-150" ><style>
       .path-0{
         animation:pathAnim-0 4s;
         animation-timing-function: linear;
