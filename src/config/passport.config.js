@@ -70,7 +70,7 @@ export function iniPassport() {
                 name: "google",
                 clientID: process.env.GOOGLE_CLIENT_ID,
                 clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                callbackURL: "http://localhost:8080/api/sessions/google/callback",
+                callbackURL: process.env.GOOGLE_CALL_BACK,
                 // passReqToCallback: true,
             },
             async (accessToken, refreshToken, profile, done) => {
