@@ -1,0 +1,129 @@
+paths:
+    /api/carts:
+        post:
+            summary: Crear un nuevo carrito
+            tags:
+                - Carrito
+            description: Crea un nuevo carrito de compra.
+            responses:
+                "201":
+                    description: Carrito creado con éxito
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    msg:
+                                        type: string
+                                    data:
+                                        $ref: "#/components/schemas/Cart"
+                "500":
+                    description: Error del servidor
+
+    /api/carts/product/{pid}:
+        put:
+            summary: Agregar producto al carrito
+            tags:
+                - Carrito
+            description: Agrega un producto al carrito de compra.
+            parameters:
+                - name: pid
+                  in: path
+                  required: true
+                  description: ID del producto a agregar al carrito
+                  schema:
+                      type: string
+            responses:
+                "201":
+                    description: Producto agregado al carrito con éxito
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    msg:
+                                        type: string
+                                    data:
+                                        $ref: "#/components/schemas/Cart"
+                "500":
+                    description: Error del servidor
+
+    /api/carts/{cid}:
+        get:
+            summary: Obtener carrito por ID
+            tags:
+                - Carrito
+            description: Obtiene el carrito de compra por su ID.
+            parameters:
+                - name: cid
+                  in: path
+                  required: true
+                  description: ID del carrito a obtener
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Carrito obtenido con éxito
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    msg:
+                                        type: string
+                                    data:
+                                        $ref: "#/components/schemas/Cart"
+                "404":
+                    description: Carrito no encontrado
+
+        delete:
+            summary: Eliminar producto del carrito
+            tags:
+                - Carrito
+            description: Elimina un producto del carrito de compra por su ID.
+            parameters:
+                - name: pid
+                  in: path
+                  required: true
+                  description: ID del producto a eliminar del carrito
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Producto eliminado del carrito con éxito
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    msg:
+                                        type: string
+                                    data:
+                                        $ref: "#/components/schemas/Cart"
+                "404":
+                    description: Carrito no encontrado
+                "500":
+                    description: Error del servidor
+
+components:
+    schemas:
+        Cart:
+            type: object
+            properties:
+                products:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            productId:
+                                type: string
+                            quantity:
+                                type: integer

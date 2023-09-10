@@ -1,0 +1,157 @@
+paths:
+    /api/products:
+        get:
+            summary: Obtener todos los productos
+            tags:
+                - Productos
+            description: Obtiene una lista de todos los productos disponibles.
+            responses:
+                "200":
+                    description: Lista de productos obtenida con éxito
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Product"
+                "500":
+                    description: Error del servidor
+
+        post:
+            summary: Crear un nuevo producto
+            tags:
+                - Productos
+            description: |
+                Crea un nuevo producto con los datos proporcionados. Esta operación requiere autenticación de administrador.
+
+            security:
+                - adminAuth: []
+
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                    maxLength: 100
+                                description:
+                                    type: string
+                                    maxLength: 300
+                                price:
+                                    type: number
+                                code:
+                                    type: string
+                                    maxLength: 100
+                                stock:
+                                    type: number
+                                status:
+                                    type: boolean
+                                category:
+                                    type: string
+                                    maxLength: 100
+                                thumbnail:
+                                    type: string
+                                    format: binary
+                            required:
+                                - title
+                                - description
+                                - price
+                                - code
+                                - stock
+                                - status
+                                - category
+                                - thumbnail
+
+            responses:
+                "201":
+                    description: Producto creado con éxito
+                "400":
+                    description: Solicitud inválida
+                "401":
+                    description: No autorizado. Se requiere autenticación de administrador.
+                "500":
+                    description: Error del servidor
+
+    /api/products/{id}:
+        parameters:
+            - name: id
+              in: path
+              required: true
+              description: ID del producto a operar
+              schema:
+                  type: string
+
+        delete:
+            summary: Eliminar un producto
+            tags:
+                - Productos
+            description: |
+                Elimina un producto específico por su ID. Esta operación requiere autenticación de administrador.
+
+            security:
+                - adminAuth: []
+
+            responses:
+                "200":
+                    description: Producto eliminado con éxito
+                "401":
+                    description: No autorizado. Se requiere autenticación de administrador.
+                "500":
+                    description: Error del servidor
+
+        put:
+            summary: Actualizar un producto
+            tags:
+                - Productos
+            description: |
+                Actualiza un producto existente por su ID. Esta operación requiere autenticación de administrador.
+
+            security:
+                - adminAuth: []
+
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Product"
+                description: Datos del producto a actualizar.
+
+            responses:
+                "201":
+                    description: Producto actualizado con éxito
+                "400":
+                    description: Solicitud inválida
+                "401":
+                    description: No autorizado. Se requiere autenticación de administrador.
+                "500":
+                    description: Error del servidor
+components:
+    schemas:
+        Product:
+            type: object
+            properties:
+                title:
+                    type: string
+                    maxLength: 100
+                description:
+                    type: string
+                    maxLength: 300
+                price:
+                    type: number
+                thumbnail:
+                    type: string
+                    maxLength: 100
+                code:
+                    type: string
+                    maxLength: 100
+                stock:
+                    type: number
+                status:
+                    type: boolean
+                category:
+                    type: string
+                    maxLength: 100
