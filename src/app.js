@@ -13,6 +13,8 @@ import { productRouter } from "./routers/produts.router.js";
 import { SocketRouter } from "./routers/socket.liveRouter.js";
 import { usersRouter } from "./routers/users.router.js";
 import { __dirname, connectMongo, uploader } from "./utils.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 import dotenv from "dotenv";
 import compression from "express-compression";
@@ -67,11 +69,29 @@ app.use(
     })
 );
 
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentacion Fakevi´s",
+            version: "1.0.0",
+            description: "Documentacion del proyecto final del curso de backend de coderhouse",
+        },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`],
+};
+console.log(__dirname);
+
+const specs = swaggerJSDoc(swaggerOptions);
+
 //TODO LO DE PASSPORT
 iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 //FIN TODO LO DE PASSPORT
+
+// Rutas: SWAGGER
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 //Rutas: MOCKING TEST CON JSON
 app.use("/mockingproducts", mockingproductsRouter);
