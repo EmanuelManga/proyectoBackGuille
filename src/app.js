@@ -18,13 +18,12 @@ import dotenv from "dotenv";
 import compression from "express-compression";
 import { iniPassport } from "./config/passport.config.js";
 import { chatRouter } from "./routers/chat.router.js";
+import { mockingproductsRouter } from "./routers/mockingproducts.router.js";
 import { sessionsRouter } from "./routers/session.router.js";
 import { ticketRouter } from "./routers/ticket.router.js";
 import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
-import { mockingproductsRouter } from "./routers/mockingproducts.router.js";
-import errorHandler from "./middlewares/error.js";
 import { addLogger } from "./utils/logger.js";
 
 dotenv.config();
