@@ -2,17 +2,19 @@
     <div class="container"> }}
 <link rel="stylesheet" href="../css/card.css" />
 
-<div class="row row-cols-1 row-cols-md-4 g-4 card-conteiner">
-    {{#each productos}}
-        <div class="col">
-            <div class="card" onclick="redirectDetalle('{{this._id}}')">
-                <div class="card-img-top">
-                    <img class="thumbnail-card" src="../pictures/{{this.thumbnail}}" alt="{{this.code}}" />
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    {{!-- <p class="card-text">{{this.description}}</p> --}}
-                    {{!-- <ul class="card-text pagination d-flex justify-content-between align-items-center">
+<main id="product-wrap">
+
+    <div class="row row-cols-1 row-cols-md-4 g-4 card-conteiner">
+        {{#each productos}}
+            <div class="col">
+                <div class="card" onclick="redirectDetalle('{{this._id}}')">
+                    <div class="card-img-top">
+                        <img class="thumbnail-card" src="../pictures/{{this.thumbnail}}" alt="{{this.code}}" />
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.title}}</h5>
+                        {{!-- <p class="card-text">{{this.description}}</p> --}}
+                        {{!-- <ul class="card-text pagination d-flex justify-content-between align-items-center">
                         <li class="page-item">
                             <button class="page-link" onclick="restProductCart('card-cont-{{this._id}}')">
                                 <span aria-hidden="true">-</span>
@@ -25,35 +27,38 @@
                             </button>
                         </li>
                     </ul> --}}
-                    {{!-- <button type="button" class="card-text btn btn-success" onclick="agregarCarrito('{{this._id}}')"><i class="fa-solid fa-cart-plus">+</i></button> --}}
-                    <div style="display: flex;">
-                        {{!-- <h3 class="card-text">$ {{this.price}}</h3> --}}
-                        <h3 class="card-text">$ {{formatNumber this.price}}</h3>
+                        {{!-- <button type="button" class="card-text btn btn-success" onclick="agregarCarrito('{{this._id}}')"><i class="fa-solid fa-cart-plus">+</i></button> --}}
+                        <div style="display: flex;">
+                            {{!-- <h3 class="card-text">$ {{this.price}}</h3> --}}
+                            <h3 class="card-text">$ {{formatNumber this.price}}</h3>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {{/each}}
-</div>
+        {{/each}}
+
+    </div>
+
+    <ul class="pagination">
+        {{#if pagination.hasPrevPage}}
+            <li class="page-item"><a id="btnPrev" class="page-link" href="{{pagination.prevLink}}">Previous</a></li>
+        {{else}}
+            <li class="page-item"><a id="btnPrev" class="page-link aDisable">Previous</a></li>
+        {{/if}}
+        {{#each links}}
+            <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
+        {{/each}}
+        {{#if pagination.hasNextPage}}
+            <li class="page-item"><a id="btnNext" class="page-link" href="{{pagination.nextLink}}">Next</a></li>
+        {{else}}
+            <li class="page-item"><a id="btnPrev" class="page-link aDisable">Next</a></li>
+        {{/if}}
+
+    </ul>
+
+</main>
 {{! </div>
 </div> }}
-
-{{!-- <ul class="pagination">
-    {{#if pagination.hasPrevPage}}
-        <li class="page-item"><a id="btnPrev" class="page-link" href="{{pagination.prevLink}}">Previous</a></li>
-    {{else}}
-        <li class="page-item"><a id="btnPrev" class="page-link aDisable">Previous</a></li>
-    {{/if}}
-    {{#each links}}
-        <li class="page-item"><a class="page-link" href="{{this.href}}">{{this.label}}</a></li>
-    {{/each}}
-    {{#if pagination.hasNextPage}}
-        <li class="page-item"><a id="btnNext" class="page-link" href="{{pagination.nextLink}}">Next</a></li>
-    {{else}}
-        <li class="page-item"><a id="btnPrev" class="page-link aDisable">Next</a></li>
-    {{/if}}
-
-</ul> --}}
 
 <script src="../js/funcionesHtmlProduct.js"></script>
 <script src="/js/index.js"></script>

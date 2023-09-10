@@ -11,3 +11,7 @@ sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureR
 sessionsRouter.get("/show", sessionController.showCurrent);
 
 sessionsRouter.get("/current", sessionController.current);
+
+sessionsRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+sessionsRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), sessionController.googleCallBack);

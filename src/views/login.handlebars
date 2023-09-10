@@ -1,55 +1,91 @@
-<div class="contenedor-login">
-
-    <div id="login" class="container">
-        <h1>LogIn</h1>
-        <form id="form-login" class="form-login" method="post" action="/auth/login">
-            <div class="mb-3">
-                <label for="email2" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email2" name="email" placeholder="Ingresa tu correo electrónico" />
-            </div>
-            <div class="mb-3">
-                <label for="password2" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password2" name="pass" placeholder="Ingresa tu contraseña" />
-            </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-            </div>
-        </form>
-        <div class="contenedir-btn-login">
-            <button class="btn btn-info" onclick="toggleView(true)">Registrarce</button>
-            <a href="/api/sessions/github" class="btn btn-info">Entrar con github</a>
-        </div>
-    </div>
-
-    <div id="singin" class="container" style="display: none;">
-        <h1>SingIn</h1>
-        <form id="form-singin" class="form-login" method="post" action="/auth/register">
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="firstName" placeholder="Ingresa tu nombre" />
-            </div>
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido" name="lastName" placeholder="Ingresa tu apellido" />
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo electrónico" />
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="pass" placeholder="Ingresa tu contraseña" />
-            </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Registrarce</button>
-            </div>
-        </form>
-        <div class="contenedir-btn-login">
-            <button class="btn btn-info" onclick="toggleView(false)">Iniciar sesión</button>
-            <a href="/api/sessions/github" class="btn btn-info">Entrar con github</a>
-        </div>
-    </div>
-
-</div>
 <link rel="stylesheet" href="/css/login.css" />
-<script src="/js/login.html.js"></script>
+<script src="https://kit.fontawesome.com/7b39153ed3.js" crossorigin="anonymous"></script>
+
+{{! <main style="background-image: url(/wave.svg)"> }}
+<main>
+    <div id="svg-fondo">
+
+    </div>
+
+    <div class="container">
+        <div class="wrapper">
+            <div class="title-text">
+                <div class="title login">Login</div>
+                <div class="title signup">Signup</div>
+            </div>
+            <div class="social-container">
+                {{! <a href="#"><i class="fa-brands fa-facebook"></i></a> }}
+                <a href="/api/sessions/google"><i class="fa-brands fa-google"></i></a>
+                <a href="/api/sessions/github"><i class="fa-brands fa-github"></i></a>
+            </div>
+            <div class="form-container">
+                <div class="slide-controls">
+                    <input type="radio" name="slider" id="login" checked />
+                    <input type="radio" name="slider" id="signup" />
+                    <label for="login" class="slide text-login">Login</label>
+                    <label for="signup" class="slide text-signup">Signup</label>
+                    <div class="slide-tab"></div>
+                </div>
+
+                <div class="form-inner">
+                    <form method="post" action="/auth/login" class="login">
+                        <div class="field">
+                            <input id="uname" type="text" name="email" maxlength="35" required />
+                            <label>User Email</label>
+                        </div>
+                        <div class="field box-pass">
+                            <input id="lpass" class="password" name="pass" type="password" required />
+                            <label>Password</label>
+                            <i class="icon-password bi-eye-slash-fill"></i>
+                        </div>
+                        <p id="alertlpass">The password must be 8 digits</p>
+                        <div class="field">
+                            <input class="btn-login" type="submit" value="Login" />
+                        </div>
+                    </form>
+
+                    <form method="post" action="/auth/register" class="signup">
+                        <div class="field">
+                            <input id="username" type="text" maxlength="22" name="firstName" required />
+                            <label>User Name</label>
+                        </div>
+                        <div class="field">
+                            <input id="userlastname" type="text" maxlength="22" name="lastName" required />
+                            <label>User Last Name</label>
+                        </div>
+                        <p id="alertuname">This name has already been used</p>
+                        <div class="field">
+                            <input id="email" type="email" maxlength="35" name="email" required />
+                            <label id="lemail">Email</label>
+                        </div>
+                        <div class="field box-pass">
+                            <input id="pass" class="password" type="password" minlength="8" name="pass" required />
+                            <label>Password</label>
+                            <i class="icon-password bi-eye-slash-fill"></i>
+                        </div>
+                        <p id="alertpass">The password must be 8 digits</p>
+                        <div class="field box-pass">
+                            <input id="cpass" class="password" type="password" minlength="8" required />
+                            <label>Confirm password</label>
+                            <i class="icon-password bi-eye-slash-fill"></i>
+                        </div>
+                        <p id="alertcpass">Password is incorrect</p>
+                        <div class="field">
+                            <button class="btn btn-signup" type="submit">
+                                <span class="btn__text">Signup</span>
+                                <svg class="btn__progress" viewBox="0 0 48 48" width="48px" height="48px">
+                                    <circle class="btn__progress-track" r="20" cx="24" cy="24" fill="none" stroke="#c7cad1" stroke-width="8" />
+                                    <circle class="btn__progress-fill" r="20" cx="24" cy="24" fill="none" stroke="#000000" stroke-width="8" transform="rotate(-90,24,24)" stroke-dasharray="125.66 125.66" stroke-dashoffset="125.66" />
+                                    <polyline class="btn__progress-check" points="12,24 20,32 36,16" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="34 34" stroke-dashoffset="34" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script src="/js/login.js"></script>

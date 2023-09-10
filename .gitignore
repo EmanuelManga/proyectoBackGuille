@@ -3,3 +3,4 @@ variables_globales.js
 .env
 test.js
 nose.txt
+google-auth.json

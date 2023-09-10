@@ -13,6 +13,8 @@ import { productRouter } from "./routers/produts.router.js";
 import { SocketRouter } from "./routers/socket.liveRouter.js";
 import { usersRouter } from "./routers/users.router.js";
 import { __dirname, connectMongo, uploader } from "./utils.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 import dotenv from "dotenv";
 import compression from "express-compression";
@@ -24,7 +26,6 @@ import { ticketRouter } from "./routers/ticket.router.js";
 import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
-import { addLogger } from "./utils/logger.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -41,8 +42,6 @@ app.use(
 const httpServer = app.listen(port, () => {
     console.log(`Example app listening on http://localhost:${port}`);
 });
-
-app.use(addLogger);
 
 connectMongo();
 
@@ -70,11 +69,29 @@ app.use(
     })
 );
 
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentacion Fakevi´s",
+            version: "1.0.0",
+            description: "Documentacion del proyecto final del curso de backend de coderhouse",
+        },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`],
+};
+console.log(__dirname);
+
+const specs = swaggerJSDoc(swaggerOptions);
+
 //TODO LO DE PASSPORT
 iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 //FIN TODO LO DE PASSPORT
+
+// Rutas: SWAGGER
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 //Rutas: MOCKING TEST CON JSON
 app.use("/mockingproducts", mockingproductsRouter);
@@ -96,13 +113,6 @@ app.use("/auth", authRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);
-
-app.get("/loggerTest", (req, res) => {
-    req.logger.info("Mensaje de información");
-    req.logger.debug("Mensaje de depuración");
-    req.logger.error("Mensaje de error");
-    res.send("Hello World");
-});
 
 app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
     const file = req.file;
