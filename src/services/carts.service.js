@@ -116,6 +116,63 @@ export class CartsService {
         }
     }
 
+    async updateOneReturnAll(_id, products) {
+        // console.log("_id, products", _id, products);
+        try {
+            if (!_id) throw new Error("invalid _id");
+            const cart = await Cart.findById(_id); // Obtener el documento del carrito por su _id
+            // if (!cart) throw new Error("cart not found");
+            if (!cart) {
+                CustomError.createError({
+                    name: "Cart error",
+                    cause: getCartById(_id),
+                    message: "Error trying to add item in cart",
+                    code: EErros.CART_ID_ERROR,
+                });
+            }
+            try {
+                const realProduct = await Product.findOne(products.productId);
+            } catch (error) {
+                CustomError.createError({
+                    name: "Product error",
+                    cause: getProductById(_id),
+                    message: "Error trying to find product",
+                    code: EErros.PRODUCT_ERROR,
+                });
+            }
+
+            let id = new mongoose.Types.ObjectId(products.productId);
+            const existingProduct = await Cart.findOneAndUpdate(_id, products.productId);
+            // console.log("existingProduct", existingProduct);
+            if (!existingProduct) {
+                cart.products.push({ productId: id, quantity: 1 });
+            }
+            // Guardar los cambios en la base de datos
+            const updatedCart = await cart.save();
+            const thisCart = await Cart.findOne(_id);
+            // const result = await productService.getProductInfo(thisCart.products);
+            // const result = await Product.findById()
+            let result = await Promise.all(
+                thisCart.products.map(async (product) => {
+                    // console.log("product del map", product);
+                    let thisproduct = await Product.findById(product.productId);
+                    let updatedProduct = {
+                        ...thisproduct.toObject(),
+                        quantity: product.quantity,
+                        total: thisproduct.price * product.quantity,
+                    };
+                    // console.log("updatedProduct", updatedProduct);
+                    return updatedProduct;
+                })
+            );
+
+            // console.log(result);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteProduct(_id, productId) {
         try {
             // Convertir los valores a ObjectId
@@ -181,7 +238,9 @@ export class CartsService {
         try {
             const user = await userService.getByEmail(email);
             const cid = user.cart;
-            const productAdd = await this.updateOne(cid, { productId: pid });
+            // const productAdd = await this.updateOne(cid, { productId: pid });
+            const productAdd = await this.updateOneReturnAll(cid, { productId: pid });
+
             return productAdd;
         } catch (error) {
             throw error;

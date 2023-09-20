@@ -1,0 +1,11 @@
+:root {
+    --hue: 223;
+    --bg2: hsl(var(--hue), 10%, 80%);
+
+    --var-first-color: #cc0500;
+    --var-second-color: #ef2f2a;
+    --var-third-color: #ef832a;
+    --var-fourth-color: #efac2a;
+
+    --var-text-color: rgba(0, 0, 0);
+}

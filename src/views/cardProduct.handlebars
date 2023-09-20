@@ -51,7 +51,7 @@
 
     <div class="row row-cols-1 row-cols-md-4 g-4 card-conteiner">
         {{#each productos}}
-            <div class="col">
+            <div class="col contenedor-relativo">
                 <div class="card" onclick="redirectDetalle('{{this._id}}')">
                     <div class="card-img-top">
                         <img class="thumbnail-card" src="../pictures/{{this.thumbnail}}" alt="{{this.code}}" />
@@ -79,6 +79,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="add-cart-card" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="custom-tooltip" data-bs-title="Agregar al Carrito." onclick="agregarCarrito('{{this._id}}')"><i class="bi bi-bag-plus"></i></div>
             </div>
         {{/each}}
 
