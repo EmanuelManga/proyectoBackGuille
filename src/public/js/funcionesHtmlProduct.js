@@ -98,9 +98,11 @@ const agregarCarrito = (productId) => {
         url: `/api/carts/product/${productId}`,
         type: "PUT",
         success: function (response) {
-            console.log(response);
+            console.log("response", response);
             // alert("¡Formulario enviado con éxito!");
             toast("El producto se agrego al carrito con exito!!", "success", "bottom-right");
+            llenarCarrito(response.data);
+
             // Manejar la respuesta del servidor
         },
         error: function (error) {
@@ -118,4 +120,46 @@ const agregarCarrito = (productId) => {
 
 const redirectDetalle = (id) => {
     window.location.href = `products/detalle/${id}`;
+};
+
+const llenarCarrito = (carts) => {
+    let carro = "";
+
+    carts.forEach((cart) => {
+        // console.log(cart);
+        let product = `<div class="card-cart mb-3">
+                            <div class="row g-0" id="card-cart-${cart._id}">
+                                <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/${cart.thumbnail})">
+                                    <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${cart.title}</h5>
+                                        <div>
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <button class="page-link" onclick="restProductCart('${cart._id}')">
+                                                        <span aria-hidden="true">-</span>
+                                                    </button>
+                                                </li>
+                                                <li class="page-item"><input type="number" min="1" step="1" name="" value="${cart.quantity}" id="cart-cont-${cart._id}" class="page-link page-link-input" /></li>
+                                                <li class="page-item">
+                                                    <button class="page-link" onclick="addProductCart('${cart._id}')">
+                                                        <span aria-hidden="true">+</span>
+                                                    </button>
+                                                </li>
+                                                <h3>$ ${cart.total}</h3>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+
+        carro += product;
+    });
+
+    // console.log("carro", carro);
+
+    document.getElementById("container-cart").innerHTML = carro;
 };

@@ -6,7 +6,7 @@
     font-family: "Poppins", sans-serif;
 }
 
-:root {
+/* :root {
     --hue: 223;
     --bg2: hsl(var(--hue), 10%, 80%);
 
@@ -16,7 +16,7 @@
     --var-fourth-color: #efac2a;
 
     --var-text-color: rgba(0, 0, 0);
-}
+} */
 
 html {
     display: grid;
