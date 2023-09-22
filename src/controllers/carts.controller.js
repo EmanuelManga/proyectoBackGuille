@@ -58,11 +58,53 @@ class CartsController {
         }
     }
 
+    async addProductToCartReturnAll(req, res) {
+        const email = req.session.email;
+        const { pid } = req.params;
+        try {
+            const productoAdded = await cartsService.addProductToCartReturnAll(email, pid);
+            return res.status(201).json({
+                status: "success",
+                msg: "Producto agregado al carrito con exito",
+                data: productoAdded,
+            });
+        } catch (error) {
+            console.log(error);
+            handleErrorResponse(res, error);
+            // return res.status(500).json({
+            //     status: "error",
+            //     msg: "something went wrong :(",
+            //     data: {},
+            // });
+        }
+    }
+
     async addProductToCart(req, res) {
         const email = req.session.email;
         const { pid } = req.params;
         try {
             const productoAdded = await cartsService.addProductToCart(email, pid);
+            return res.status(201).json({
+                status: "success",
+                msg: "Producto agregado al carrito con exito",
+                data: productoAdded,
+            });
+        } catch (error) {
+            console.log(error);
+            handleErrorResponse(res, error);
+            // return res.status(500).json({
+            //     status: "error",
+            //     msg: "something went wrong :(",
+            //     data: {},
+            // });
+        }
+    }
+
+    async subtractProductToCart(req, res) {
+        const email = req.session.email;
+        const { pid } = req.params;
+        try {
+            const productoAdded = await cartsService.subtractProductToCart(email, pid);
             return res.status(201).json({
                 status: "success",
                 msg: "Producto agregado al carrito con exito",

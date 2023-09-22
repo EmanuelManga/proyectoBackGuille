@@ -123,3 +123,7 @@ td {
     background-color: lightgrey;
     transform: skew(1deg, -45deg);
 }
+
+.offcanvas.offcanvas-end {
+    width: 500px !important;
+}

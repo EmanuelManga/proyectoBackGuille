@@ -33,6 +33,21 @@ export class CartDao {
         return order;
     }
 
+    async findOneAndUpdateSubtract(_id, productId) {
+        const order = await CartModel.findOneAndUpdate(
+            {
+                _id: _id,
+                "products.productId": productId,
+            },
+            {
+                $inc: { "products.$.quantity": -1 },
+            }
+        );
+
+        const cart = await this.findOne(_id);
+        return cart;
+    }
+
     async create(order) {
         const result = await CartModel.create(order);
 

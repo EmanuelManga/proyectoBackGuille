@@ -92,15 +92,19 @@ export class ProductService {
     async getProductInfo(product) {
         product = JSON.parse(JSON.stringify(product));
         const array = [];
+        let totalCost = 0;
         try {
             for (const ele of product.products) {
                 let getProduct = await Product.find({ _id: ele.productId });
                 getProduct = JSON.parse(JSON.stringify(getProduct));
                 getProduct[0].quantity = ele.quantity;
                 getProduct[0].total = ele.quantity * getProduct[0].price;
+                totalCost += getProduct[0].total;
                 array.push(getProduct[0]);
             }
-            const response = JSON.parse(JSON.stringify(array));
+            const arrayProducts = JSON.parse(JSON.stringify(array));
+            const response = { arrayProducts, totalCost };
+            // console.log("response", response);
             return response;
         } catch (error) {
             throw error;
@@ -179,6 +183,8 @@ export class ProductService {
                 cart = await cartsService.getCartRender(email);
             }
 
+            // console.log(cart);
+
             if (isLoged) {
                 // console.log("cart", cart);
                 chat = await Chat.findFirstone();
@@ -188,8 +194,9 @@ export class ProductService {
                 userId = JSON.parse(JSON.stringify(user._id));
             }
 
-            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId };
+            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId, totalCost: cart.totalCost };
         } catch (error) {
+            // console.log(error);
             throw error;
         }
     }
@@ -253,7 +260,6 @@ export class ProductService {
         try {
             const endPoint = "/products?page=";
             const result = await this.getProductRender(email, query, querySerch, limit, page, sort, endPoint);
-            // console.log("result", result);
             return result;
         } catch (error) {
             throw error;

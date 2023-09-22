@@ -109,8 +109,67 @@ export class CartsService {
             }
             // Guardar los cambios en la base de datos
             const updatedCart = await cart.save();
-            const result = await Cart.findOne(_id);
-            return result;
+            const thisCart = await Cart.findOne(_id);
+            // console.log("result", result);
+            let totalCost = 0;
+
+            await Promise.all(
+                thisCart.products.map(async (product) => {
+                    let thisproduct = await Product.findById(product.productId);
+                    totalCost += thisproduct.price * product.quantity;
+                })
+            );
+
+            // console.log(totalCost);
+            return { thisCart, totalCost };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateOneSubtract(_id, products) {
+        // console.log("_id, products", _id, products);
+        try {
+            if (!_id) throw new Error("invalid _id");
+            const cart = await Cart.findById(_id); // Obtener el documento del carrito por su _id
+            // if (!cart) throw new Error("cart not found");
+            if (!cart) {
+                CustomError.createError({
+                    name: "Cart error",
+                    cause: getCartById(_id),
+                    message: "Error trying to add item in cart",
+                    code: EErros.CART_ID_ERROR,
+                });
+            }
+            try {
+                const realProduct = await Product.findOne(products.productId);
+            } catch (error) {
+                CustomError.createError({
+                    name: "Product error",
+                    cause: getProductById(_id),
+                    message: "Error trying to find product",
+                    code: EErros.PRODUCT_ERROR,
+                });
+            }
+
+            let id = new mongoose.Types.ObjectId(products.productId);
+            const existingProduct = await Cart.findOneAndUpdateSubtract(_id, products.productId);
+            // Guardar los cambios en la base de datos
+            // console.log("existingProduct", existingProduct);
+            await existingProduct.save();
+            const thisCart = await Cart.findOne(_id);
+            // console.log("result", result);
+            let totalCost = 0;
+
+            await Promise.all(
+                thisCart.products.map(async (product) => {
+                    let thisproduct = await Product.findById(product.productId);
+                    totalCost += thisproduct.price * product.quantity;
+                })
+            );
+
+            // console.log(totalCost);
+            return { thisCart, totalCost };
         } catch (error) {
             throw error;
         }
@@ -150,8 +209,7 @@ export class CartsService {
             // Guardar los cambios en la base de datos
             const updatedCart = await cart.save();
             const thisCart = await Cart.findOne(_id);
-            // const result = await productService.getProductInfo(thisCart.products);
-            // const result = await Product.findById()
+            let totalCost = 0;
             let result = await Promise.all(
                 thisCart.products.map(async (product) => {
                     // console.log("product del map", product);
@@ -161,13 +219,14 @@ export class CartsService {
                         quantity: product.quantity,
                         total: thisproduct.price * product.quantity,
                     };
+                    totalCost += updatedProduct.total;
                     // console.log("updatedProduct", updatedProduct);
                     return updatedProduct;
                 })
             );
 
             // console.log(result);
-            return result;
+            return { result, totalCost };
         } catch (error) {
             throw error;
         }
@@ -204,7 +263,7 @@ export class CartsService {
             const name = user.firstName;
             let product = await this.getById(cid);
             let response = await productService.getProductInfo(product);
-            return { response, name, cartId: user.cart };
+            return { response: response.arrayProducts, name, cartId: user.cart, totalCost: response.totalCost };
         } catch (error) {
             throw error;
         }
@@ -234,7 +293,7 @@ export class CartsService {
         }
     }
 
-    async addProductToCart(email, pid) {
+    async addProductToCartReturnAll(email, pid) {
         try {
             const user = await userService.getByEmail(email);
             const cid = user.cart;
@@ -242,6 +301,37 @@ export class CartsService {
             const productAdd = await this.updateOneReturnAll(cid, { productId: pid });
 
             return productAdd;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async addProductToCart(email, pid) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            const productAdd = await this.updateOne(cid, { productId: pid });
+            console.log("productAdd", productAdd);
+            const productAdded = productAdd.thisCart.products.find((product) => product.productId == pid);
+            // console.log("pid", pid);
+            // console.log("productAdded", productAdded);
+            return { productAdded, totalCost: productAdd.totalCost };
+        } catch (error) {
+            throw error;
+        }
+    }
+    async subtractProductToCart(email, pid) {
+        try {
+            const user = await userService.getByEmail(email);
+            const cid = user.cart;
+            const productAdd = await this.updateOneSubtract(cid, { productId: pid });
+            // console.log("productAdd", productAdd);
+            let productAdded = productAdd.thisCart.products.find((product) => product.productId == pid);
+            // console.log("pid", pid);
+            // console.log("productAdded", productAdded);
+            if (!productAdded) {
+                productAdded = { productId: pid, quantity: 0 };
+            }
+            return { productAdded, totalCost: productAdd.totalCost };
         } catch (error) {
             throw error;
         }

@@ -23,15 +23,40 @@
     border-radius: 10px;
 }
 
+.cart-card-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .card-cart {
     max-width: 540px !important;
     height: 130px !important;
+    border: 2px solid #00000063;
+    border-radius: 10px;
 }
 
 .cart-img {
     display: flex;
     max-width: 100%;
     max-height: 100%;
+}
+
+.btn-close-cart {
+    width: 2rem;
+    height: 2rem;
+    background: #ffffff;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.btn-close-cart:hover {
+    color: var(--var-first-color);
+    border: 2px solid var(--var-first-color);
+}
+
+.container-details {
+    margin: 1rem 0 2rem 0;
 }
 
 button.page-link,
@@ -51,6 +76,37 @@ button.page-link {
 .row,
 .g-0 {
     height: 130px !important;
+}
+
+.offcanvas-header {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1rem;
+}
+
+.offcanvas-header-title {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.offcanvas-header-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 1px solid rgba(67, 67, 67, 0.1);
+    border-bottom: 1px solid rgba(67, 67, 67, 0.1);
+    padding: 1rem 3rem 1rem 0;
+}
+
+.cart-header-content-subtitle {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* *-*-*-*-*-*-*-*- sacar botones dentro del input number *-*-*-*-*-*-*-*- */

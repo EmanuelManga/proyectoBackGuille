@@ -91,17 +91,14 @@ $(document).ready(function () {
 // };
 
 const agregarCarrito = (productId) => {
-    // const session = recuperarDatosDelSessionStorage();
-    // if (session.cartId) {
-    // console.log(`http://localhost:8080/api/carts/${session.cartId}/product/${productId}`);
     $.ajax({
-        url: `/api/carts/product/${productId}`,
+        url: `/api/carts/products/${productId}`,
         type: "PUT",
         success: function (response) {
             console.log("response", response);
             // alert("¡Formulario enviado con éxito!");
             toast("El producto se agrego al carrito con exito!!", "success", "bottom-right");
-            llenarCarrito(response.data);
+            llenarCarrito(response.data.result, response.data.totalCost);
 
             // Manejar la respuesta del servidor
         },
@@ -122,12 +119,14 @@ const redirectDetalle = (id) => {
     window.location.href = `products/detalle/${id}`;
 };
 
-const llenarCarrito = (carts) => {
+const llenarCarrito = (carts, total) => {
+    console.log(total);
+
     let carro = "";
 
     carts.forEach((cart) => {
         // console.log(cart);
-        let product = `<div class="card-cart mb-3">
+        let product = `<div class="card-cart mb-3" id="card-cart-container-${cart._id}">
                             <div class="row g-0" id="card-cart-${cart._id}">
                                 <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/${cart.thumbnail})">
                                     <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
@@ -142,14 +141,14 @@ const llenarCarrito = (carts) => {
                                                         <span aria-hidden="true">-</span>
                                                     </button>
                                                 </li>
-                                                <li class="page-item"><input type="number" min="1" step="1" name="" value="${cart.quantity}" id="cart-cont-${cart._id}" class="page-link page-link-input" /></li>
+                                                <li class="page-item"><input type="number" min="1" step="1" name="" value="${cart.quantity}" id="cart-cont-${cart._id}" data-cartValueId="${cart._id}" class="page-link page-link-input" readonly /></li>
                                                 <li class="page-item">
                                                     <button class="page-link" onclick="addProductCart('${cart._id}')">
                                                         <span aria-hidden="true">+</span>
                                                     </button>
                                                 </li>
+                                                </ul>
                                                 <h3>$ ${cart.total}</h3>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -162,4 +161,5 @@ const llenarCarrito = (carts) => {
     // console.log("carro", carro);
 
     document.getElementById("container-cart").innerHTML = carro;
+    document.getElementById("cart-total-price").innerHTML = total;
 };
