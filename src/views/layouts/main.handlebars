@@ -136,10 +136,12 @@
                     {{#each cart}}
                         <div class="card-cart mb-3" id="card-cart-container-{{this._id}}">
                             <div class="row g-0" id="card-cart-{{this._id}}">
-                                <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/{{this.thumbnail}})">
+                                {{!-- <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/{{this.thumbnail}})"> --}}
+                                <div class="container-img col-md-3">
                                     <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
+                                    <img class="cart-img" src="http://localhost:8080/pictures/{{this.thumbnail}}" alt="" />
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="card-body">
                                         <h5 class="card-title">{{this.title}}</h5>
                                         <div class="cart-card-description">
@@ -156,9 +158,12 @@
                                                     </button>
                                                 </li>
                                             </ul>
-                                            <h3>$ {{formatNumber this.total}}</h3>
                                         </div>
+                                        <h6>$ {{this.price}}</h6>
                                     </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>$ {{formatNumber this.total}}</h4>
                                 </div>
                             </div>
                         </div>
