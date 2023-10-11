@@ -26,6 +26,7 @@ import { ticketRouter } from "./routers/ticket.router.js";
 import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
+import { paymentsRouter } from "./routers/payments.router.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -97,6 +98,7 @@ app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use("/mockingproducts", mockingproductsRouter);
 
 //Rutas: API REST CON JSON
+app.use("/api/payments", paymentsRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/users", usersRouter);
@@ -110,6 +112,10 @@ app.use("/", viewsRouter);
 app.use("/products", productHtmlRouter);
 app.use("/carts", cartsHtmlRouter);
 app.use("/auth", authRouter);
+
+app.use("/stripe", (req, res) => {
+    res.render("stripe");
+});
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);
