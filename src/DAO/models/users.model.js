@@ -40,6 +40,11 @@ const schema = new Schema({
         ref: "carts",
         required: true,
     },
+    last_login: {
+        type: Date,
+        required: true,
+        default: Date.now,
+    },
 });
 schema.plugin(monsoosePaginate);
 export const UserModel = model("users", schema);

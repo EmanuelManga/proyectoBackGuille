@@ -8,11 +8,12 @@ const cartService = new CartsService();
 class AuthService {
     async validPass(pass, usuarioEncontrado, req) {
         try {
-            // console.log(pass, usuarioEncontrado);
             const isPasswordValid = isValidPassword(pass, usuarioEncontrado.pass);
             if (usuarioEncontrado && isPasswordValid) {
+                console.log("awdawda", pass, usuarioEncontrado);
                 req.session.email = usuarioEncontrado.email;
                 req.session.isAdmin = usuarioEncontrado.isAdmin;
+                await userService.updateLastLogin(usuarioEncontrado._id);
             }
         } catch (error) {
             throw error;

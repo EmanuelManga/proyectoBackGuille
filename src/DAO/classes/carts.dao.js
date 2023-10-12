@@ -89,6 +89,11 @@ export class CartDao {
 
         return order;
     }
+
+    async deleteMany(obj) {
+        const result = await CartModel.deleteMany(obj);
+        return result;
+    }
 }
 
 // export const Cart = new CartDAO();

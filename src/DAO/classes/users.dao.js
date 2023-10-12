@@ -54,4 +54,14 @@ export class UserDao {
 
         return result;
     }
+
+    async updateLastLogin(id) {
+        const result = await UserModel.updateOne({ _id: id }, { $set: { last_login: new Date() } });
+        return result;
+    }
+
+    async deleteMany(obj) {
+        const result = await UserModel.deleteMany(obj);
+        return result;
+    }
 }

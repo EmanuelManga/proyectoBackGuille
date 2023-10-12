@@ -5,9 +5,11 @@ import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
 import { UserModel } from "../DAO/models/users.model.js";
 import { CartsService } from "../services/carts.service.js";
+import { UserDao } from "../DAO/classes/users.dao.js";
 dotenv.config();
 
 const CartService = new CartsService();
+const userDao = new UserDao();
 
 export function iniPassport() {
     passport.use(
@@ -49,15 +51,16 @@ export function iniPassport() {
                             cart: newCart._id,
                         };
                         let userCreated = await UserModel.create(newUser);
-                        console.log("User Registration succesful");
+                        // console.log("User Registration succesful");
                         return done(null, userCreated);
                     } else {
-                        console.log("User already exists");
+                        // console.log("User already exists");
+                        userDao.updateLastLogin(user._id); // call the updateLastLogin function
                         return done(null, user);
                     }
                 } catch (e) {
-                    console.log("Error en auth github");
-                    console.log(e);
+                    // console.log("Error en auth github");
+                    // console.log(e);
                     return done(e);
                 }
             }
@@ -102,15 +105,16 @@ export function iniPassport() {
                             cart: newCart._id,
                         };
                         let userCreated = await UserModel.create(newUser);
-                        console.log("User Registration successful");
+                        // console.log("User Registration successful");
                         return done(null, userCreated);
                     } else {
-                        console.log("User already exists");
+                        // console.log("User already exists");
+                        userDao.updateLastLogin(user._id); // call the updateLastLogin function
                         return done(null, user);
                     }
                 } catch (error) {
-                    console.log("Error in Google authentication");
-                    console.log(error);
+                    // console.log("Error in Google authentication");
+                    // console.log(error);
                     return done(error);
                 }
             }

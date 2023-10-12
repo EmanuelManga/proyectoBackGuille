@@ -61,6 +61,24 @@ class UserController {
         }
     }
 
+    async deleteUserInactives(req, res) {
+        try {
+            const userDeleted = await userService.deleteUserInactives();
+            return res.status(200).json({
+                status: "success",
+                msg: "user deleted",
+                data: userDeleted,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
+    }
+
     async putUser(req, res) {
         try {
             const { id } = req.params;

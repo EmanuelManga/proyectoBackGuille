@@ -10,4 +10,6 @@ usersRouter.post("/", userController.postUser);
 
 usersRouter.delete("/:id", isAdmin, userController.deleteUser);
 
+usersRouter.delete("/", isAdmin, userController.deleteUserInactives);
+
 usersRouter.put("/:id", isAdmin, userController.putUser);

@@ -2,9 +2,11 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { createHash } from "../utils.js";
 import { UserDao } from "../DAO/classes/users.dao.js";
+import { CartDao } from "../DAO/classes/carts.dao.js";
 dotenv.config();
 
 const User = new UserDao();
+const Cart = new CartDao();
 
 export class UserService {
     validateUser(firstName, lastName, email, pass, isAdmin, role, cart) {
@@ -13,6 +15,12 @@ export class UserService {
             throw new Error("validation error: please complete firstName, lastname and email.");
         }
     }
+
+    async updateLastLogin(id) {
+        const uptaded = await User.updateLastLogin(id);
+        return uptaded;
+    }
+
     async getAll() {
         const users = await User.find({});
         return users;
@@ -95,6 +103,22 @@ export class UserService {
             } catch (error) {
                 throw error;
             }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteUserInactives() {
+        try {
+            const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // Calcula la fecha de hace 2 días
+            const usersToDelete = await User.find({ last_login: { $lt: twoDaysAgo } }); // Encuentra los usuarios cuyo last_login es anterior a la fecha de hace 2 días
+            const cartIdsToDelete = usersToDelete.map((user) => user.cart); // Obtiene los IDs de los carritos de los usuarios a borrar
+            const result = await Promise.all([
+                User.deleteMany({ _id: { $in: usersToDelete.map((user) => user._id) } }), // Borra los usuarios encontrados
+                Cart.deleteMany({ _id: { $in: cartIdsToDelete } }), // Borra los carritos asociados a los usuarios encontrados
+            ]);
+            console.log(result);
+            return result;
         } catch (error) {
             throw error;
         }
