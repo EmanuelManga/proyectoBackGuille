@@ -123,11 +123,10 @@ class CartsController {
 
     async generarTicket(req, res) {
         const email = req.session.email;
-        // const { message } = req.body;
-        console.log("awjdbakwjdbwakj");
+        const email_ticket = req.body.email;
 
         try {
-            const ticketCreated = await ticketService.creatTicket(email);
+            const ticketCreated = await ticketService.creatTicket(email, email_ticket);
             return res.status(201).json({
                 status: "success",
                 msg: "Mensaje agregado correctamente",

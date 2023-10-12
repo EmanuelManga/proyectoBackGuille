@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="http://localhost:8080/css/cart.css" />
         <link rel="stylesheet" href="http://localhost:8080/css/navBar.css" />
         <link rel="stylesheet" href="http://localhost:8080/css/variables.css" />
+        <link rel="stylesheet" href="http://localhost:8080/css/stripe.css" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="http://localhost:8080/socket.io/socket.io.js"></script>
@@ -173,8 +174,12 @@
                     {{! <h2></h2> }}
                     <div style="display: flex; justify-content: center">
                         <button class="btn btn-success" onclick="generarTicket('{{cartId}}')">Generar Ticket</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                        {{! <button type="button" id="modal-peyment" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPasarelaPago">
                             Vertically centered modal
+                        </button> }}
+                        <button type="button" id="modal-peyment" class="btn btn-primary" onclick="payButton('{{cartId}}')">
+                            {{! Agrega el texto que deseas mostrar dentro del botón }}
+                            Pagar ahora
                         </button>
                     </div>
                     <h3 id="cart-total-price">{{totalCost}}</h3>
@@ -184,39 +189,42 @@
 
         {{{body}}}
 
-        <footer style="background: var(--var-first-color);padding:2rem">
-            <div>
-                <h4>NAVEGACION</h4>
-                <ul class="me-auto mb-2 mb-lg-0" style="list-style: none;padding: 0px;">
-                    <li class="">
-                        <a class="" href="/products">INICIO</a>
-                    </li>
-                    <li class="">
-                        <a class="" href="/products">PRODUCTOS</a>
-                    </li>
-                    <li class="">
-                        <a class="" href="/realtimeproducts">REAL-TIME</a>
-                    </li>
-                    <li class="">
-                        <a class="" href="#">CONTACTOS</a>
-                    </li>
-                </ul>
-            </div>
-        </footer>
+        {{#unless isLogIn}}
+            <footer style="background: var(--var-first-color);padding:2rem">
+                <div>
+                    <h4>NAVEGACION</h4>
+                    <ul class="me-auto mb-2 mb-lg-0" style="list-style: none;padding: 0px;">
+                        <li class="">
+                            <a class="" href="/products">INICIO</a>
+                        </li>
+                        <li class="">
+                            <a class="" href="/products">PRODUCTOS</a>
+                        </li>
+                        <li class="">
+                            <a class="" href="/realtimeproducts">REAL-TIME</a>
+                        </li>
+                        <li class="">
+                            <a class="" href="#">CONTACTOS</a>
+                        </li>
+                    </ul>
+                </div>
+            </footer>
 
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none;" aria-hidden="true">
+        {{/unless}}
+
+        <div class="modal fade" id="modalPasarelaPago" tabindex="-1" aria-labelledby="modalPasarelaPagoTitle" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form id="payment-form">
+                    <form id="payment-form" class="payment-form">
                         <div id="link-authentication-element">
                             <!--Stripe.js injects the Link Authentication Element-->
                         </div>
                         <div id="payment-element">
                             <!--Stripe.js injects the Payment Element-->
                         </div>
-                        <button id="submit">
+                        <button id="submit" class="btn btn-success">
                             <div class="spinner hidden" id="spinner"></div>
-                            <span id="button-text">Pay now</span>
+                            <span id="button-text">Pagar</span>
                         </button>
                         <div id="payment-message" class="hidden"></div>
                     </form>
@@ -232,11 +240,10 @@
 
     {{! <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> }}
 
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="http://localhost:8080/js/stripe.js"></script>
-
     <script src="http://localhost:8080/js/main.js"></script>
     {{#unless isLogIn}}
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="http://localhost:8080/js/stripe.js"></script>
         <script src="http://localhost:8080/js/funcionesCart.js"></script>
     {{/unless}}
 

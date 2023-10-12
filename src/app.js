@@ -113,9 +113,7 @@ app.use("/products", productHtmlRouter);
 app.use("/carts", cartsHtmlRouter);
 app.use("/auth", authRouter);
 
-app.use("/stripe", (req, res) => {
-    res.render("stripe");
-});
+app.use("/payment", paymentsRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);

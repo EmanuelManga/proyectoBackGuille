@@ -8,7 +8,8 @@ const Product = new ProductService();
 const ProductD = new ProductDao();
 
 export class EmailService {
-    async sendEmail(user, ticket) {
+    async sendEmail(user, ticket, email_ticket) {
+        console.log("email_ticket", email_ticket);
         const transport = nodemailer.createTransport({
             service: "gmail",
             port: 587,
@@ -24,7 +25,8 @@ export class EmailService {
         // console.log("content", content);
         const result = await transport.sendMail({
             from: process.env.GOOGLE_EMAIL,
-            to: process.env.EMAIL_TO,
+            // to: process.env.EMAIL_TO,
+            to: email_ticket,
             subject: "Ticket",
             html: content,
         });

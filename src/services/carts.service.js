@@ -328,9 +328,9 @@ export class CartsService {
             let productAdded = productAdd.thisCart.products.find((product) => product.productId == pid);
             // console.log("pid", pid);
             // console.log("productAdded", productAdded);
-            if (!productAdded) {
-                productAdded = { productId: pid, quantity: 0 };
-            }
+            // if (!productAdded) {
+            //     productAdded = { productId: pid, quantity: 0 };
+            // }
             return { productAdded, totalCost: productAdd.totalCost };
         } catch (error) {
             throw error;

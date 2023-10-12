@@ -84,16 +84,16 @@ export class TicketService {
         return ticketUptaded;
     }
 
-    async creatTicket(email) {
+    async creatTicket(email, email_ticket) {
         try {
             const user = await User.getByEmail(email);
             const cart = await Cart.getById(user.cart);
             const ticket = await this.loopProducts(cart, email);
             const ticketGenereted = await this.createOne(ticket);
-            const sendEmail = await Email.sendEmail(user, ticketGenereted);
+            const sendEmail = await Email.sendEmail(user, ticketGenereted, email_ticket);
             // console.log("user", user);
             // console.log("cart", cart);
-            console.log("ticketGenereted", ticketGenereted);
+            // console.log("ticketGenereted", ticketGenereted);
             return ticketGenereted;
         } catch (error) {
             throw error;

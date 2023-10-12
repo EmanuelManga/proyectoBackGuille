@@ -5,7 +5,7 @@ const userService = new UserService();
 class UserController {
     async getAll(req, res) {
         try {
-            const users = await userService.getAll();
+            const users = await userService.getAllRegisted();
             // console.log(users);
             return res.status(200).json({
                 status: "success",

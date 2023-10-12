@@ -12,7 +12,7 @@ class ProductController {
         const isAdmin = req.session.isAdmin;
         try {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
-            console.log("cart", objRender);
+            // console.log("cart", objRender);
             // console.log("isLoged", objRender.isLoged);
             // home // cardProduct
             return res.status(200).render("cardProduct", {

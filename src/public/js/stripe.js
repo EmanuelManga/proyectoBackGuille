@@ -1,13 +1,49 @@
+// import fetch from "node-fetch";
+
 // This is your test publishable API key.
 const stripe = Stripe("pk_test_51NzeI7Ewsblfmvmo69I6HbPZ4EGYU5FL9tW3Aky0RAWn4DbJBvz6QSUodD9y4lJLnVH5RAAwhaE3G3xIeQvpu4sO00chZdsvsu");
 
-// The items the customer wants to buy
-const items = [{ id: "xl-tshirt" }];
-
 let elements;
 
-initialize();
 checkStatus();
+
+const payButton = (cartId) => {
+    fetch("http://" + window.location.host + "/api/carts/" + cartId)
+        .then((res) => res.json())
+        .then(async (data) => {
+            // console.log(data);
+            let emailActual = await getemail();
+
+            if (data.data.length > 0) {
+                const myModal = new bootstrap.Modal(document.getElementById("modalPasarelaPago"), {
+                    backdrop: true,
+                });
+
+                myModal.show();
+                await initialize(emailActual);
+                await checkStatus();
+                // console.log(emailActual);
+            } else {
+                toast("No hay ningunn producto en el carrito", "error", "bottom-right");
+            }
+            // document.getElementById("Field-emailInput").value = emailActual;
+        })
+        .catch((err) => toast("Ha ocurrido un error!!", "error", "bottom-right"));
+};
+
+const getemail = async () => {
+    let result;
+    await fetch("http://" + window.location.host + "/api/sessions/current")
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            if (data) {
+                // document.getElementById("Field-emailInput").value = data.data.email;
+                result = data.data.email;
+            }
+        });
+    return result;
+};
 
 document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
 
@@ -17,7 +53,7 @@ async function initialize() {
     const response = await fetch("/api/payments/payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items }),
+        // body: JSON.stringify(),
     });
     const { clientSecret } = await response.json();
 
@@ -28,9 +64,12 @@ async function initialize() {
 
     const linkAuthenticationElement = elements.create("linkAuthentication");
     linkAuthenticationElement.mount("#link-authentication-element");
+    // console.log("linkAuthenticationElement", linkAuthenticationElement);
 
     linkAuthenticationElement.on("change", (event) => {
+        // event.value.email = email;
         emailAddress = event.value.email;
+        guardarEnLocalStorage("email_ticket_pago", emailAddress);
     });
 
     const paymentElementOptions = {
@@ -49,7 +88,7 @@ async function handleSubmit(e) {
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "http://" + window.location.host + "/stripe",
+            return_url: "http://" + window.location.host + "/payment/after-payment",
             receipt_email: emailAddress,
         },
     });
@@ -95,20 +134,21 @@ async function checkStatus() {
     }
 }
 
-const generarTicket2 = async () => {
+const generarTicket2 = async (email) => {
     const urlActual = "http://" + window.location.host + "/carts/purchase";
-    $.ajax({
-        type: "post",
-        url: urlActual,
-        // data: formData,
-        success: function (response) {
-            toast("El producto se a eliminadoo con exito!!", "success", "bottom-right");
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-            toast("Ha ocurrido un error!!", "error", "bottom-right");
-        },
-    });
+    const email_ticket_pago = obtenerDeLocalStorage("email_ticket_pago");
+
+    fetch("http://" + window.location.host + "/carts/purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email_ticket_pago }),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("data", data);
+            // toast("El producto se a eliminadoo con exito!!", "success", "bottom-right");
+        })
+        .catch((err) => toast("Ha ocurrido un error!!", "error", "bottom-right"));
 };
 
 // ------- UI helpers -------
@@ -118,11 +158,6 @@ function showMessage(messageText) {
 
     messageContainer.classList.remove("hidden");
     messageContainer.textContent = messageText;
-
-    // setTimeout(function () {
-    //     messageContainer.classList.add("hidden");
-    //     messageContainer.textContent = "";
-    // }, 4000);
 }
 
 // Show a spinner on payment submission

@@ -17,6 +17,13 @@ export class UserService {
         const users = await User.find({});
         return users;
     }
+    async getAllRegisted() {
+        const users = await User.find({});
+        const usersRegisted = users.map((user) => {
+            return { firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin, role: user.role };
+        });
+        return usersRegisted;
+    }
 
     async getByEmail(email) {
         try {
