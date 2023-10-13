@@ -28,7 +28,7 @@ export class UserService {
     async getAllRegisted() {
         const users = await User.find({});
         const usersRegisted = users.map((user) => {
-            return { firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin, role: user.role };
+            return { firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin, role: user.role, id: user._id };
         });
         return usersRegisted;
     }
@@ -128,6 +128,33 @@ export class UserService {
         try {
             await this.updateOne(id, firstName, lastName, email, pass, isAdmin, role, cart);
             const user = await this.getById(id);
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async toggleIsAdmin(userId) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error("User not found");
+            }
+            user.isAdmin = !user.isAdmin;
+            await user.save();
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async setRole(userId, role) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error("User not found");
+            }
+            user.role = role;
+            await user.save();
             return user;
         } catch (error) {
             throw error;

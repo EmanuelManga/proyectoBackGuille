@@ -27,6 +27,7 @@ import { twilioRouter } from "./routers/twilio.router.js";
 import { viewsRouter } from "./routers/views.router.js";
 import webSocket from "./routers/webSocket.js";
 import { paymentsRouter } from "./routers/payments.router.js";
+import { adminRouter } from "./routers/admin.router.js";
 
 dotenv.config();
 // import { producto } from "./../DAO/ProductManager.js";
@@ -112,6 +113,7 @@ app.use("/", viewsRouter);
 app.use("/products", productHtmlRouter);
 app.use("/carts", cartsHtmlRouter);
 app.use("/auth", authRouter);
+app.use("/admin", adminRouter);
 
 app.use("/payment", paymentsRouter);
 

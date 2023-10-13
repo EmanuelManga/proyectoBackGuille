@@ -85,7 +85,48 @@ class UserController {
             const { firstName, lastName, email, pass, isAdmin, role, cart } = req.body;
 
             const user = await userService.putUser(id, firstName, lastName, email, pass, isAdmin, role, cart);
-            console.log("user", user);
+            // console.log("user", user);
+            return res.status(201).json({
+                status: "success",
+                msg: "user uptaded",
+                data: user,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
+    }
+    async toggleIsAdmin(req, res) {
+        try {
+            const { id } = req.params;
+
+            const user = await userService.toggleIsAdmin(id);
+            // console.log("user", user);
+            return res.status(201).json({
+                status: "success",
+                msg: "user uptaded",
+                data: user,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
+    }
+    async setRole(req, res) {
+        try {
+            const { id } = req.params;
+            const { role } = req.body;
+
+            const user = await userService.setRole(id, role);
+            // console.log("user", user);
             return res.status(201).json({
                 status: "success",
                 msg: "user uptaded",

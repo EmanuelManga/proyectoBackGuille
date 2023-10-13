@@ -13,3 +13,7 @@ usersRouter.delete("/:id", isAdmin, userController.deleteUser);
 usersRouter.delete("/", isAdmin, userController.deleteUserInactives);
 
 usersRouter.put("/:id", isAdmin, userController.putUser);
+
+usersRouter.put("/:id/admin", isAdmin, userController.toggleIsAdmin);
+
+usersRouter.put("/:id/role", isAdmin, userController.setRole);

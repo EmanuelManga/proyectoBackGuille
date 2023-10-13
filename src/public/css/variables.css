@@ -8,4 +8,5 @@
     --var-fourth-color: #efac2a;
 
     --var-text-color: rgba(0, 0, 0);
+    --footer-height: 190px; /* Cambia 50px por el alto real de tu footer */
 }

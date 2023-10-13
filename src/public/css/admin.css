@@ -1,0 +1,8 @@
+#product-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 70%;
+    margin: auto;
+    margin-top: 3rem;
+}
