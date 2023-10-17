@@ -52,7 +52,7 @@ const loginStyling = (user, cid) => {
     const aCarrito = document.getElementById("a-carrito");
     const dropdownMenuButton2 = document.getElementById("dropdownMenuButton2");
     const contenedorUsuario = document.getElementById("contenedor-usuario");
-    aCarrito.setAttribute("href", "http://localhost:8080/carts/" + cid);
+    aCarrito.setAttribute("href", "https://proyecto-backend-emanuel-m.onrender.com/carts/" + cid);
     btnLogIn.style.display = "none";
     contenedorUsuario.style.display = "";
     dropdownMenuButton2.textContent = user;

@@ -3,7 +3,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="http://localhost:8080/css/main.css" />
+        <link rel="stylesheet" href="https://proyecto-backend-emanuel-m.onrender.com/css/main.css" />
         <title>Fakevi's</title>
         {{! <link data-react-helmet="true" rel="icon" type="image/png" href="https://levisarg.vteximg.com.br/arquivos/favicon-levis.png" /> }}
 
@@ -19,13 +19,13 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> }}
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-        <link rel="stylesheet" href="http://localhost:8080/css/cart.css" />
-        <link rel="stylesheet" href="http://localhost:8080/css/navBar.css" />
-        <link rel="stylesheet" href="http://localhost:8080/css/variables.css" />
-        <link rel="stylesheet" href="http://localhost:8080/css/stripe.css" />
+        <link rel="stylesheet" href="https://proyecto-backend-emanuel-m.onrender.com/css/cart.css" />
+        <link rel="stylesheet" href="https://proyecto-backend-emanuel-m.onrender.com/css/navBar.css" />
+        <link rel="stylesheet" href="https://proyecto-backend-emanuel-m.onrender.com/css/variables.css" />
+        <link rel="stylesheet" href="https://proyecto-backend-emanuel-m.onrender.com/css/stripe.css" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script src="https://proyecto-backend-emanuel-m.onrender.com/socket.io/socket.io.js"></script>
 
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
@@ -138,10 +138,10 @@
                     {{#each cart}}
                         <div class="card-cart mb-3" id="card-cart-container-{{this._id}}">
                             <div class="row g-0" id="card-cart-{{this._id}}">
-                                {{!-- <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/{{this.thumbnail}})"> --}}
+                                {{!-- <div class="container-img col-md-4" style="background-image: url(https://proyecto-backend-emanuel-m.onrender.com/pictures/{{this.thumbnail}})"> --}}
                                 <div class="container-img col-md-3">
                                     <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
-                                    <img class="cart-img" src="http://localhost:8080/pictures/{{this.thumbnail}}" alt="" />
+                                    <img class="cart-img" src="https://proyecto-backend-emanuel-m.onrender.com/pictures/{{this.thumbnail}}" alt="" />
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card-body">
@@ -257,11 +257,11 @@
 
     {{! <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> }}
 
-    <script src="http://localhost:8080/js/main.js"></script>
+    <script src="https://proyecto-backend-emanuel-m.onrender.com/js/main.js"></script>
     {{#unless isLogIn}}
         <script src="https://js.stripe.com/v3/"></script>
-        <script src="http://localhost:8080/js/stripe.js"></script>
-        <script src="http://localhost:8080/js/funcionesCart.js"></script>
+        <script src="https://proyecto-backend-emanuel-m.onrender.com/js/stripe.js"></script>
+        <script src="https://proyecto-backend-emanuel-m.onrender.com/js/funcionesCart.js"></script>
     {{/unless}}
 
 
@@ -273,7 +273,7 @@
             const formData = new FormData(form);
             console.log("FormData", formData);
 
-            fetch('http://localhost:8080/upload-profile-picture', {
+            fetch('https://proyecto-backend-emanuel-m.onrender.com/upload-profile-picture', {
                 method: 'POST',
                 body: formData
             })
@@ -304,7 +304,7 @@
                 const urlActual = window.location.href;
 
                 $.ajax({
-                    url: 'http://localhost:8080/api/users/652827424ac3b38d461040c2/documents',
+                    url: 'https://proyecto-backend-emanuel-m.onrender.com/api/users/652827424ac3b38d461040c2/documents',
                     type: "POST",
                     data: formData,
                     processData: false,

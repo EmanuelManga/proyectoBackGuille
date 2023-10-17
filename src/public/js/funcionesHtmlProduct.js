@@ -128,7 +128,7 @@ const llenarCarrito = (carts, total) => {
         // console.log(cart);
         let product = `<div class="card-cart mb-3" id="card-cart-container-${cart._id}">
                             <div class="row g-0" id="card-cart-${cart._id}">
-                                <div class="container-img col-md-4" style="background-image: url(http://localhost:8080/pictures/${cart.thumbnail})">
+                                <div class="container-img col-md-4" style="background-image: url(https://proyecto-backend-emanuel-m.onrender.com/pictures/${cart.thumbnail})">
                                     <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
                                 </div>
                                 <div class="col-md-8">
