@@ -8,7 +8,7 @@ let elements;
 checkStatus();
 
 const payButton = (cartId) => {
-    fetch("http://" + window.location.host + "/api/carts/" + cartId)
+    fetch("https://" + window.location.host + "/api/carts/" + cartId)
         .then((res) => res.json())
         .then(async (data) => {
             // console.log(data);
@@ -33,7 +33,7 @@ const payButton = (cartId) => {
 
 const getemail = async () => {
     let result;
-    await fetch("http://" + window.location.host + "/api/sessions/current")
+    await fetch("https://" + window.location.host + "/api/sessions/current")
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
@@ -88,7 +88,7 @@ async function handleSubmit(e) {
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "http://" + window.location.host + "/payment/after-payment",
+            return_url: "https://" + window.location.host + "/payment/after-payment",
             receipt_email: emailAddress,
         },
     });
@@ -135,10 +135,10 @@ async function checkStatus() {
 }
 
 const generarTicket2 = async (email) => {
-    const urlActual = "http://" + window.location.host + "/carts/purchase";
+    const urlActual = "https://" + window.location.host + "/carts/purchase";
     const email_ticket_pago = obtenerDeLocalStorage("email_ticket_pago");
 
-    fetch("http://" + window.location.host + "/carts/purchase", {
+    fetch("https://" + window.location.host + "/carts/purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email_ticket_pago }),

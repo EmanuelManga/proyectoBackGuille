@@ -1,5 +1,5 @@
 const borrarInactivos = () => {
-    fetch("http://" + window.location.host + "/api/users", {
+    fetch("https://" + window.location.host + "/api/users", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
     })
@@ -13,7 +13,7 @@ const borrarInactivos = () => {
 };
 
 const borrarUsuario = (id) => {
-    fetch("http://" + window.location.host + "/api/users/" + id, {
+    fetch("https://" + window.location.host + "/api/users/" + id, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
     })
@@ -27,7 +27,7 @@ const borrarUsuario = (id) => {
 };
 
 const toggleIsAdmin = (id) => {
-    fetch("http://" + window.location.host + "/api/users/" + id + "/admin", {
+    fetch("https://" + window.location.host + "/api/users/" + id + "/admin", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
     })
@@ -50,7 +50,7 @@ const editRole = (id) => {
 };
 
 const setRole = (id) => {
-    fetch("http://" + window.location.host + "/api/users/" + id + "/role", {
+    fetch("https://" + window.location.host + "/api/users/" + id + "/role", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: document.getElementById("role-" + id).value }),
