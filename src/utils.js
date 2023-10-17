@@ -14,6 +14,16 @@ const storage = multer.diskStorage({
     },
 });
 
+const storageDocuments = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "public"));
+    },
+    filename: (req, file, cb) => {
+        // cb(null, quitarEspacios(file.originalname));
+        cb(null, uuidv4() + obtenerExtension(file.originalname));
+    },
+});
+
 function quitarEspacios(string) {
     return string.replace(/\s/g, "");
 }
@@ -27,6 +37,7 @@ function obtenerExtension(nombreArchivo) {
 }
 
 export const uploader = multer({ storage });
+export const uploaderDocuments = multer({ storageDocuments });
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 

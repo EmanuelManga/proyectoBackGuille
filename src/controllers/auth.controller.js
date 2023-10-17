@@ -21,7 +21,6 @@ class AuthController {
 
     async postLogin(req, res) {
         const { email, pass } = req.body;
-
         try {
             await authService.isLoginOk(email, pass, req);
 

@@ -102,6 +102,7 @@
                                     </div>
                                     <ul class="dropdown-menu text-small shadow" style="">
                                         <li><button class="dropdown-item" onclick="logOut()">Sign out</button></li>
+                                        <li><button type="button" id="modal-peyment" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalUploadProfilePicture">Cargar Imagen Perfil</li>
                                     </ul>
                                 </div>
                             {{else}}
@@ -232,6 +233,22 @@
             </div>
         </div>
 
+        <div class="modal fade" id="modalUploadProfilePicture" tabindex="-1" aria-labelledby="modalUploadProfilePictureTitle" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="upload-profile-pict" enctype="multipart/form-data">
+                        <label for="file">Selecciona una imagen de perfil:</label>
+                        <input type="file" id="profile-pict-file" name="file"  />
+                        <br />
+                        <label for="name">Nombre del archivo:</label>
+                        <input type="text" id="profile-pict-name" name="name" />
+                        <br />
+                        <button type="submit">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </body>
 
     {{! <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script> }}
@@ -247,4 +264,62 @@
         <script src="http://localhost:8080/js/funcionesCart.js"></script>
     {{/unless}}
 
+
+    <script>
+
+        function enviarArchivo() {
+            const form = document.querySelector('#upload-profile-pict');
+
+            const formData = new FormData(form);
+            console.log("FormData", formData);
+
+            fetch('http://localhost:8080/upload-profile-picture', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Archivo enviado exitosamente');
+                    // Manejar la respuesta del servidor
+                } else {
+                    console.error('Error al enviar el archivo');
+                    // Manejar errores de la solicitud
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar el archivo', error);
+                // Manejar errores de la solicitud
+            });
+        }
+    </script>
+
 </html>
+
+{{!-- 
+ $(document).ready(function () {
+            $("#upload-profile-pict").submit(function (event) {
+                event.preventDefault();
+
+                let formData = new FormData(this);
+                const urlActual = window.location.href;
+
+                $.ajax({
+                    url: 'http://localhost:8080/api/users/652827424ac3b38d461040c2/documents',
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        // alert("¡Formulario enviado con éxito!");
+                        toast("El producto se a cargado con exito!!", "success", "bottom-right");
+                        // Manejar la respuesta del servidor
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        toast("Ha ocurrido un error!!", "error", "bottom-right");
+                        // Manejar errores de la solicitud
+                    },
+                });
+            });
+        });  --}}

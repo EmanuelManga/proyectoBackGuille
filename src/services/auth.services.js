@@ -12,8 +12,15 @@ class AuthService {
             if (usuarioEncontrado && isPasswordValid) {
                 console.log("awdawda", pass, usuarioEncontrado);
                 req.session.email = usuarioEncontrado.email;
-                req.session.isAdmin = usuarioEncontrado.isAdmin;
+                // req.session.isAdmin = usuarioEncontrado.role;
+                if (usuarioEncontrado.role.toLowerCase() === "admin") {
+                    req.session.isAdmin = true;
+                } else {
+                    req.session.isAdmin = false;
+                }
                 await userService.updateLastLogin(usuarioEncontrado._id);
+            } else {
+                throw new Error("Password incorrecto");
             }
         } catch (error) {
             throw error;

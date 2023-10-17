@@ -64,10 +64,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
     session({
-        store: MongoStore.create({ mongoUrl: process.env.STRINGMONGOCONNECT, ttl: 7200 }),
         secret: process.env.SECRETKEY,
-        resave: true,
-        saveUninitialized: true,
+        store: MongoStore.create({ mongoUrl: process.env.STRINGMONGOCONNECT, ttl: 7200 }),
+        resave: false,
+        saveUninitialized: false,
     })
 );
 
@@ -119,18 +119,6 @@ app.use("/payment", paymentsRouter);
 
 //Rutas: SOCKETS
 app.use("/realtimeproducts", SocketRouter);
-
-app.post("/upload", uploader.single("thumbnail"), function (req, res, next) {
-    const file = req.file;
-    if (!file) {
-        return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
-    } else {
-        return res.status(200).json({ status: "success", msg: "Se ha cargado la imagen", file: file.filename });
-    }
-    // Aquí puedes acceder al archivo cargado utilizando req.file
-    // Realiza las operaciones necesarias con el archivo
-    // Puedes enviar una respuesta al cliente con el resultado de la carga
-});
 
 // app.use(errorHandler);
 

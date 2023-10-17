@@ -94,6 +94,23 @@ export class UserService {
         }
     }
 
+    async postUserDocuments(file, uId, name, reference) {
+        try {
+            if (!file) throw new Error("No se ha cargado ninguna archivo");
+            const user = await this.getById(uId);
+            const documentIndex = user.documents.findIndex((doc) => doc.name === name);
+            if (documentIndex !== -1) {
+                user.documents[documentIndex].reference = reference;
+            } else {
+                user.documents.push({ name, reference });
+            }
+            const userUpdated = await user.save();
+            return userUpdated;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteUser(id) {
         try {
             const userDeleted = await this.getById(id);
@@ -164,6 +181,7 @@ export class UserService {
     async getCurrent(email) {
         try {
             const user = await User.findOne({ email });
+            console.log("getCurrent", email);
             const current = { firstName: user.firstName, lastName: user.lastName, email: user.email, isAdmin: user.isAdmin, role: user.role, cart: user.cart };
             return current;
         } catch (error) {

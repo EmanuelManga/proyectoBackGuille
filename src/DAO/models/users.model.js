@@ -45,6 +45,18 @@ const schema = new Schema({
         required: true,
         default: Date.now,
     },
+    documents: [
+        {
+            name: {
+                type: String,
+                required: true,
+            },
+            reference: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
 });
 schema.plugin(monsoosePaginate);
 export const UserModel = model("users", schema);

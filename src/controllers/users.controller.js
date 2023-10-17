@@ -1,4 +1,5 @@
 import { UserService } from "../services/users.service.js";
+import { uploaderDocuments } from "../utils.js";
 
 const userService = new UserService();
 
@@ -31,6 +32,47 @@ class UserController {
                 status: "success",
                 msg: "user created",
                 data: userCreated,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({
+                status: "error",
+                msg: "something went wrong :(",
+                data: {},
+            });
+        }
+    }
+
+    async postUserDocuments(req, res) {
+        try {
+            // console.log(" req.params.id", req.params.id);
+            // console.log("req", req);
+            console.log("req.body", req.body);
+
+            uploaderDocuments.single("file")(req, res, async function (err) {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        status: "error",
+                        msg: "something went wrong :(",
+                        data: {},
+                    });
+                }
+
+                const file = req.file;
+                const uId = req.params.id;
+                const { name } = req.body;
+
+                const reference = "123";
+
+                console.log("file", file);
+
+                const userCreated = await userService.postUserDocuments(file, uId, name, reference);
+                return res.status(201).json({
+                    status: "success",
+                    msg: "user created",
+                    data: userCreated,
+                });
             });
         } catch (e) {
             console.log(e);
