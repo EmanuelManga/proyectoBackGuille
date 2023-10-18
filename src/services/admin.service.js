@@ -21,6 +21,21 @@ export class AdminService {
 
         return { registedUsers, email, name, isLoged, idActual: user._id };
     }
+
+    async getAllProducts(email) {
+        let name = null;
+        let isLoged = false;
+
+        // const registedUsers = await userService.getAllRegisted();
+        const allProducts = await productService.getAll();
+        const products = JSON.parse(JSON.stringify(allProducts));
+
+        const user = await userService.getByEmail(email);
+        // console.log(user);
+        email ? ((isLoged = true), (name = user.firstName)) : (isLoged = false);
+
+        return { products, email, name, isLoged, idActual: user._id };
+    }
 }
 
 export const adminService = new AdminService();

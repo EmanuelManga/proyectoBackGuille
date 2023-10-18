@@ -126,30 +126,35 @@ const llenarCarrito = (carts, total) => {
 
     carts.forEach((cart) => {
         // console.log(cart);
+        let totalParsed = formatearNumero(cart.total);
         let product = `<div class="card-cart mb-3" id="card-cart-container-${cart._id}">
                             <div class="row g-0" id="card-cart-${cart._id}">
-                                <div class="container-img col-md-4" style="background-image: url(https://proyecto-backend-emanuel-m.onrender.com/pictures/${cart.thumbnail})">
-                                    <!-- <img class="cart-img" src="flaca.webp" alt="" /> -->
+                                <div class="container-img col-md-3">
+                                    <img class="cart-img" src="/pictures/${cart.thumbnail}" alt="" />
                                 </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${cart.title}</h5>
-                                        <div>
-                                            <ul class="pagination">
-                                                <li class="page-item">
-                                                    <button class="page-link" onclick="restProductCart('${cart._id}')">
-                                                        <span aria-hidden="true">-</span>
-                                                    </button>
-                                                </li>
-                                                <li class="page-item"><input type="number" min="1" step="1" name="" value="${cart.quantity}" id="cart-cont-${cart._id}" data-cartValueId="${cart._id}" class="page-link page-link-input" readonly /></li>
-                                                <li class="page-item">
-                                                    <button class="page-link" onclick="addProductCart('${cart._id}')">
-                                                        <span aria-hidden="true">+</span>
-                                                    </button>
-                                                </li>
+                                <div class="col-md-6">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${cart.title}</h5>
+                                            <div class="cart-card-description">
+                                                <ul class="pagination">
+                                                    <li class="page-item">
+                                                        <button class="page-link" onclick="restProductCart('${cart._id}')">
+                                                            <span aria-hidden="true">-</span>
+                                                        </button>
+                                                    </li>
+                                                    <li class="page-item"><input type="number" min="1" step="1" name="" value="${cart.quantity}" id="cart-cont-${cart._id}" data-cartValueId="${cart._id}" class="page-link page-link-input" readonly /></li>
+                                                    <li class="page-item">
+                                                        <button class="page-link" onclick="addProductCart('${cart._id}')">
+                                                            <span aria-hidden="true">+</span>
+                                                        </button>
+                                                    </li>
                                                 </ul>
-                                                <h3>$ ${cart.total}</h3>
+                                            </div>
+                                            <h6>$ ${cart.price}</h6>
                                         </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4>$ ${totalParsed}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -163,3 +168,7 @@ const llenarCarrito = (carts, total) => {
     document.getElementById("container-cart").innerHTML = carro;
     document.getElementById("cart-total-price").innerHTML = total;
 };
+
+function formatearNumero(numero) {
+    return numero.toLocaleString("es-ES", { minimumFractionDigits: 2 });
+}

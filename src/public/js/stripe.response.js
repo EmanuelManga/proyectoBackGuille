@@ -31,10 +31,10 @@ async function checkStatus() {
 }
 
 const generarTicket2 = async (email) => {
-    const urlActual = "https://" + window.location.host + "/carts/purchase";
+    const urlActual = window.location.protocol + "/carts/purchase";
     const email_ticket_pago = obtenerDeLocalStorage("email_ticket_pago");
 
-    fetch("https://" + window.location.host + "/carts/purchase", {
+    fetch(urlActual, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email_ticket_pago }),

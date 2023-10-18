@@ -82,6 +82,10 @@ handlebars.registerHelper("formatNumber", function (number) {
     return formatNumber(number);
 });
 
+handlebars.registerHelper("entorno", () => {
+    return process.env.ENTORNO;
+});
+
 function formatNumber(number) {
     // Asegurarse de que el número sea de tipo numérico
     if (typeof number !== "number") {

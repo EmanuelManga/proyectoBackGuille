@@ -7,3 +7,5 @@ dotenv.config();
 export const adminRouter = express.Router();
 
 adminRouter.get("/", isAdmin, adminController.getAllUsers);
+
+adminRouter.get("/create", isAdmin, adminController.getFormCreate);

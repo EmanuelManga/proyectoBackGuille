@@ -1,5 +1,5 @@
 const generarTicket = (id) => {
-    const urlActual = "https://" + window.location.host + "/carts/" + id + "/purchase";
+    const urlActual = window.location.protocol + "//" + window.location.host + "/carts/" + id + "/purchase";
     $.ajax({
         type: "post",
         url: urlActual,
@@ -15,7 +15,7 @@ const generarTicket = (id) => {
 };
 
 const restProductCart = (id) => {
-    // const url = "https://" + window.location.host + "/api/carts/product/" + id;
+    // const url = window.location.protocol + "//" + window.location.host + "/api/carts/product/" + id;
     const url = `/api/carts/subtract-product/${id}`;
     // console.log(url);
     $.ajax({
@@ -37,7 +37,7 @@ const restProductCart = (id) => {
     });
 };
 const addProductCart = (id) => {
-    // const url = "https://" + window.location.host + "/api/carts/product/" + id;
+    // const url = window.location.protocol + "//" + window.location.host + "/api/carts/product/" + id;
     const url = `/api/carts/add-product/${id}`;
     // console.log(url);
     $.ajax({

@@ -47,16 +47,19 @@ socket.on("response-post", (data) => {
     let producto = data.msg;
     console.log("producto", producto);
     let lista = document.getElementById("table-product-body");
-    lista.innerHTML += `<tr id="product-${producto._id}" >
-                            <td>${producto._id}</td>
-                            <td>${producto.title}</td>
-                            <td>${producto.code}</td>
-                            <td>${producto.description}</td>
-                            <td>${producto.price}</td>
-                            <td>${producto.stock}</td>
-                            <td><img class="" src="${producto.thumbnail}" /></td>
-                            <td><button type="button" class="btn btn-danger" onclick="borrarProducto('${producto._id}')"><i class="bi bi-trash3-fill"></i></button></td>
-                        </tr>`;
+    lista.innerHTML += `</tr>
+                            <th scope="row">${producto._id}</th>
+                                <td>${producto.title}</td>
+                                <td>${producto.price}</td>
+                                <td>${producto.code}</td>
+                                <td>${producto.stock}</td>
+                                <td>${producto.category}</td>
+                                <td>
+                                    <div>
+                                        <button class="btn btn-danger" onclick="borrarProducto('${producto._id}')"><i class="bi bi-trash" style="color: white;"></i></button>
+                                    </div>
+                                </td>
+                                </tr>`;
 });
 
 socket.on("response-post-error", (data) => {

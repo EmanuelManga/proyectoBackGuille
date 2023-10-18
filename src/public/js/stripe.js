@@ -8,7 +8,9 @@ let elements;
 checkStatus();
 
 const payButton = (cartId) => {
-    fetch("https://" + window.location.host + "/api/carts/" + cartId)
+    const url = window.location.protocol + "//" + window.location.host + "/api/carts/" + cartId;
+    console.log(url);
+    fetch(url)
         .then((res) => res.json())
         .then(async (data) => {
             // console.log(data);
@@ -32,8 +34,9 @@ const payButton = (cartId) => {
 };
 
 const getemail = async () => {
+    const url = window.location.protocol + "//" + window.location.host + "/api/sessions/current";
     let result;
-    await fetch("https://" + window.location.host + "/api/sessions/current")
+    await fetch(url)
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
@@ -83,12 +86,14 @@ async function initialize() {
 async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+    const callback_url = window.location.protocol + "//" + window.location.host + "/payment/after-payment";
 
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
             // Make sure to change this to your payment completion page
-            return_url: "https://" + window.location.host + "/payment/after-payment",
+            // return_url: "http://localhost:8080/payment/after-payment",
+            return_url: callback_url,
             receipt_email: emailAddress,
         },
     });
@@ -135,10 +140,10 @@ async function checkStatus() {
 }
 
 const generarTicket2 = async (email) => {
-    const urlActual = "https://" + window.location.host + "/carts/purchase";
+    const urlActual = window.location.protocol + "//" + window.location.host + "/carts/purchase";
     const email_ticket_pago = obtenerDeLocalStorage("email_ticket_pago");
 
-    fetch("https://" + window.location.host + "/carts/purchase", {
+    fetch(urlActual, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email_ticket_pago }),
