@@ -7,6 +7,8 @@ export const paymentsRouter = express.Router();
 
 const paymentsController = new PaymentsController();
 
+paymentsRouter.get("/payment-intent", isUser, paymentsController.paymentIntent);
+
 paymentsRouter.post("/payment-intent", isUser, paymentsController.paymentIntent);
 
 paymentsRouter.get("/after-payment", isUser, paymentsController.afterPayment);
