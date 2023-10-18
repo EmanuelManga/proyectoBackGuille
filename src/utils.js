@@ -82,8 +82,12 @@ handlebars.registerHelper("formatNumber", function (number) {
     return formatNumber(number);
 });
 
-handlebars.registerHelper("entorno", () => {
-    return process.env.ENTORNO;
+handlebars.registerHelper("entorno", function (options) {
+    if (process.env.ENTORNO === "true") {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
 });
 
 function formatNumber(number) {
