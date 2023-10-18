@@ -1,0 +1,79 @@
+<div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Titulo</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Codigo</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Categoria</th>
+            </tr>
+        </thead>
+        <tbody id="table-product-body">
+            {{#each products}}
+                {{!-- {{#each this}} --}}
+                <tr>
+                    <th scope="row">{{_id}}</th>
+                    <td>{{title}}</td>
+                    <td>{{price}}</td>
+                    <td>{{code}}</td>
+                    <td>{{stock}}</td>
+                    <td>{{category}}</td>
+                    <td>
+                        <div>
+                            <button class="btn btn-danger" onclick="borrarProducto('{{_id}}')"><i class="bi bi-trash" style="color: white;"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {{!-- {{/each}} --}}
+            {{/each}}
+        </tbody>
+
+    </table>
+
+</div>
+
+<div id="form-conteiner" style="width: 80%;margin: auto; padding-bottom: 3rem;">
+    <form id="product-form" style="width: 50%; margin: auto;display: flex; flex-wrap: wrap;">
+        <div class="form-group">
+            <label for="title">Titulo</label>
+            <input type="text" class="form-control" id="form-product-title" name="title" required />
+        </div>
+        <div class="form-group">
+            <label for="description">Descripcion</label>
+            <input type="text" class="form-control" id="form-product-description" name="description" required />
+        </div>
+        <div class="form-group">
+            <label for="price">Precio</label>
+            <input type="text" class="form-control" id="form-product-price" name="price" required />
+        </div>
+        <div class="form-group">
+            <label for="thumbnail">Thumbnail</label>
+            <input type="file" class="form-control" id="form-product-thumbnail" name="thumbnail" required />
+        </div>
+        <div class="form-group">
+            <label for="code">Codigo</label>
+            <input type="text" class="form-control" id="form-product-code" name="code" required />
+        </div>
+        <div class="form-group">
+            <label for="stock">Stock</label>
+            <input type="text" class="form-control" id="form-product-stock" name="stock" required />
+        </div>
+        <div class="form-group">
+            <label for="status">Estado</label>
+            <input type="text" class="form-control" id="form-product-status" name="status" required />
+        </div>
+        <div class="form-group">
+            <label for="category">Cateoria</label>
+            <input type="text" class="form-control" id="form-product-category" name="category" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+
+<script src="/js/index.js"></script>
+<script src="/js/funcionesLiveProduct.js"></script>

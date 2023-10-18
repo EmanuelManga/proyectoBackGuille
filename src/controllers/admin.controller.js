@@ -19,6 +19,21 @@ class AdminController {
             return res.status(404).json({ status: "error", msg: `Ha ocurrido un error`, data: {} });
         }
     }
+
+    async getFormCreate(req, res) {
+        const email = req.session.email;
+        const isAdmin = req.session.isAdmin;
+        // console.log(email, isAdmin);
+        try {
+            const result = await adminService.getAllProducts(email);
+            console.log("result", result.products);
+            // return res.json({ status: "success", msg: "Se ha cargado la imagen", file: result });
+            return res.status(200).render("formProduct", { products: result.products, isLoged: result.isLoged, isAdmin, name: result.name, idActual: result.idActual });
+            // return res.status(200).render("admin", { users: result, name: cart.name, isLoged: true, cartId: cart.cartId });
+        } catch (error) {
+            return res.status(404).json({ status: "error", msg: `Ha ocurrido un error`, data: {} });
+        }
+    }
 }
 
 export const adminController = new AdminController();
