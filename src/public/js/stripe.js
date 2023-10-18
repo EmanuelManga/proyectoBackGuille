@@ -53,7 +53,7 @@ document.querySelector("#payment-form").addEventListener("submit", handleSubmit)
 let emailAddress = "";
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-    const response = await fetch("/api/payments/payment-intent", {
+    const response = await fetch(window.location.protocol + "//" + window.location.host + "/api/payments/payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // body: JSON.stringify(),
