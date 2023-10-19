@@ -114,7 +114,6 @@ class ProductController {
         try {
             const file = req.file;
             const { title, description, price, code, stock, status, category } = req.body;
-
             const productCreated = await productService.postProductApi(title, description, price, file, code, stock, status, category);
             return res.status(201).json({
                 status: "success",
