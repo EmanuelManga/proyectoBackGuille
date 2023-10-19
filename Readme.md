@@ -29,7 +29,7 @@ En el frontend, Fakevi's utiliza el motor de plantillas Handlebars para renderiz
     -   `npm run dev`: Inicia la aplicación en modo de desarrollo.
     -   `npm start`: Inicia la aplicación para el despliegue.
 
--   **Variables de Entorno:** Configura las variables de entorno necesarias en un archivo `.env`. Asegúrate de proporcionar información como la conexión a la base de datos y cualquier secreto necesario.
+-   **Variables de Entorno:** Configura las variables de entorno necesarias en un archivo `.env`.
 
 ## Iniciar la Aplicación
 
