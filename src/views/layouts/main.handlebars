@@ -109,8 +109,13 @@
                         <div class="container-options container-options-nav">
                             {{#if isLoged}}
                                 <div class="flex-shrink-0 dropdown">
-                                    <div href="#" class="d-block link-body-emphasis text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div href="#" class="d-block link-body-emphasis text-decoration-none contenedorProfile" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{! <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" /> }}
+                                        {{#each documents}}
+                                            {{#ifEquals 'profile-picture' name}}
+                                                <img class="avatar" src="/profile-picture/{{reference}}" alt="">
+                                            {{/ifEquals}}
+                                        {{/each}}
                                         <a class="user-dropdown">{{name}}</a>
                                     </div>
                                     <ul class="dropdown-menu text-small shadow" style="">
@@ -262,33 +267,6 @@
             </div>
         </div>
 
-        <script>
-
-        function enviarArchivo() {
-            const form = document.querySelector('#upload-profile-pict');
-
-            const formData = new FormData(form);
-            console.log("FormData", formData);
-
-            fetch('http://localhost:8080/upload-profile-picture', {
-                method: 'POST',
-                body: formData
-            })
-            .then((response) => {
-                if (response.ok) {
-                    console.log('Archivo enviado exitosamente');
-                    // Manejar la respuesta del servidor
-                } else {
-                    console.error('Error al enviar el archivo');
-                    // Manejar errores de la solicitud
-                }
-            })
-            .catch(error => {
-                console.error('Error al enviar el archivo', error);
-                // Manejar errores de la solicitud
-            });
-        }
-    </script>
 
     </body>
 

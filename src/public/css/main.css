@@ -10,6 +10,19 @@ td {
     vertical-align: middle;
 }
 
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover; /* Para asegurarse de que la imagen se ajuste correctamente dentro del contenedor */
+}
+
+.contenedorProfile {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
 .aDisable {
     pointer-events: none !important;
     color: gray !important;
