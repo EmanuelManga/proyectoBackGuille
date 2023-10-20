@@ -68,6 +68,7 @@ export const isValidPassword = (password, hashPassword) => bcrypt.compareSync(pa
 //  -----------------handle-------------------------------
 import handlebars from "handlebars";
 handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
+    console.log("hand", arg1, arg2);
     return arg1 === arg2 ? options.fn(this) : options.inverse(this);
 });
 handlebars.registerHelper("ifEqualsId", function (arg1, arg2, options) {

@@ -163,9 +163,11 @@ export class ProductService {
         let userId;
         let cart = [];
         let cartId;
+        let documents;
         try {
             const user = await userService.getByEmail(email);
-            email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart)) : (isLoged = false);
+            // console.log("user", user);
+            email ? ((isLoged = true), (name = user.firstName), (cartId = user.cart), (documents = JSON.parse(JSON.stringify(user.documents)))) : (isLoged = false);
 
             querySerch && query ? (busqueda = this.getSerchQuery(query, querySerch)) : null;
 
@@ -194,7 +196,7 @@ export class ProductService {
                 userId = JSON.parse(JSON.stringify(user._id));
             }
 
-            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId, totalCost: cart.totalCost };
+            return { pagination, links, products, name, isLoged, chat, userId, cart: cart.response, cartId, totalCost: cart.totalCost, documents };
         } catch (error) {
             // console.log(error);
             throw error;

@@ -99,3 +99,31 @@ function guardarEnLocalStorage(clave, valor) {
 function obtenerDeLocalStorage(clave) {
     return localStorage.getItem(clave);
 }
+
+function enviarArchivo() {
+    const form = document.querySelector("#upload-profile-pict");
+
+    const formData = new FormData(form);
+    console.log("FormData", formData);
+
+    fetch("http://localhost:8080/upload-profile-picture", {
+        method: "POST",
+        body: formData,
+    })
+        .then((response) => {
+            if (response.ok) {
+                //toast("La imagen de perfil se modifico correctamente!!", "success", "bottom-right");
+                window.location.reload();
+                //console.log('Archivo enviado exitosamente');
+                // Manejar la respuesta del servidor
+            } else {
+                toast("Ha ocurrido un error!!", "error", "bottom-right");
+                //console.error('Error al enviar el archivo');
+                // Manejar errores de la solicitud
+            }
+        })
+        .catch((error) => {
+            console.error("Error al enviar el archivo", error);
+            // Manejar errores de la solicitud
+        });
+}
