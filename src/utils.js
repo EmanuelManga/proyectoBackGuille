@@ -16,7 +16,8 @@ const storage = multer.diskStorage({
 
 const storageDocuments = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "public"));
+        // console.log("req-multer", req);
+        cb(null, path.join(__dirname, `public/profile-picture`));
     },
     filename: (req, file, cb) => {
         // cb(null, quitarEspacios(file.originalname));
@@ -37,7 +38,7 @@ function obtenerExtension(nombreArchivo) {
 }
 
 export const uploader = multer({ storage });
-export const uploaderDocuments = multer({ storageDocuments });
+export const uploaderDocuments = multer({ storage: storageDocuments });
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 

@@ -183,6 +183,30 @@ class UserController {
             });
         }
     }
+    async profilePictureUpload(req, res) {
+        const file = req.file;
+        const email = req.session.email;
+
+        if (!file) {
+            return res.status(400).json({ status: "error", msg: "No se ha cargado ninguna imagen" });
+        } else {
+            try {
+                const user = await userService.profilePictureUpload(email, file);
+                return res.status(201).json({
+                    status: "success",
+                    msg: "user uptaded",
+                    data: file,
+                });
+            } catch (e) {
+                console.log(e);
+                return res.status(500).json({
+                    status: "error",
+                    msg: "something went wrong :(",
+                    data: {},
+                });
+            }
+        }
+    }
 }
 
 export const userController = new UserController();
