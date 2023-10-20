@@ -1,6 +1,7 @@
+import fs from "fs";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { createHash } from "../utils.js";
+import { __dirname, createHash } from "../utils.js";
 import { UserDao } from "../DAO/classes/users.dao.js";
 import { CartDao } from "../DAO/classes/carts.dao.js";
 dotenv.config();
@@ -116,6 +117,27 @@ export class UserService {
             const userDeleted = await this.getById(id);
             try {
                 await this.deletedOne(id);
+                if (userDeleted.documents && userDeleted.documents.length > 0) {
+                    // Buscar un documento con 'name' igual a 'profile-picture'
+                    const profilePictureDoc = userDeleted.documents.find((doc) => doc.name === "profile-picture");
+
+                    // Si se encuentra el documento, obtener el nombre del archivo
+                    if (profilePictureDoc) {
+                        const fileName = profilePictureDoc.reference;
+
+                        // Construir la ruta del archivo
+                        const filePath = __dirname + `/public/profile-picture/${fileName}`;
+
+                        // Borrar el archivo si existe
+                        try {
+                            // await fs.unlink(filePath);
+                            fs.unlinkSync(filePath);
+                        } catch (error) {
+                            // Manejar el error si ocurre al borrar el archivo
+                            console.error(`Error al borrar el archivo ${filePath}: ${error.message}`);
+                        }
+                    }
+                }
                 return userDeleted;
             } catch (error) {
                 throw error;
@@ -130,11 +152,35 @@ export class UserService {
             const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000); // Calcula la fecha de hace 2 días
             const usersToDelete = await User.find({ last_login: { $lt: twoDaysAgo } }); // Encuentra los usuarios cuyo last_login es anterior a la fecha de hace 2 días
             const cartIdsToDelete = usersToDelete.map((user) => user.cart); // Obtiene los IDs de los carritos de los usuarios a borrar
+
+            const deletePromises = usersToDelete.map(async (user) => {
+                const userDeleted = await this.getById(user._id);
+
+                // Eliminar la imagen del usuario
+                if (userDeleted.documents && userDeleted.documents.length > 0) {
+                    const profilePictureDoc = userDeleted.documents.find((doc) => doc.name === "profile-picture");
+
+                    if (profilePictureDoc) {
+                        const fileName = profilePictureDoc.reference;
+                        const filePath = __dirname + `/public/profile-picture/${fileName}`;
+
+                        try {
+                            fs.unlinkSync(filePath);
+                        } catch (error) {
+                            // console.error(`Error al borrar el archivo ${filePath}: ${error.message}`);
+                            throw error;
+                        }
+                    }
+                }
+            });
+
             const result = await Promise.all([
                 User.deleteMany({ _id: { $in: usersToDelete.map((user) => user._id) } }), // Borra los usuarios encontrados
                 Cart.deleteMany({ _id: { $in: cartIdsToDelete } }), // Borra los carritos asociados a los usuarios encontrados
+                ...deletePromises,
             ]);
-            console.log(result);
+
+            // console.log(result);
             return result;
         } catch (error) {
             throw error;
@@ -186,6 +232,26 @@ export class UserService {
             return current;
         } catch (error) {
             // Manejo de errores
+            console.error("Error al obtener el usuario por correo electrónico:", error);
+            throw error;
+        }
+    }
+
+    async profilePictureUpload(email, file) {
+        try {
+            const user = await User.findOne({ email });
+            if (!user.documents) {
+                user.documents = [];
+            }
+            const profilePicture = user.documents.find((doc) => doc.name === "profile-picture");
+            if (profilePicture) {
+                profilePicture.reference = file.filename;
+            } else {
+                user.documents.push({ name: "profile-picture", reference: file.filename });
+            }
+            await user.save();
+            return user;
+        } catch (error) {
             console.error("Error al obtener el usuario por correo electrónico:", error);
             throw error;
         }

@@ -249,18 +249,46 @@
         <div class="modal fade" id="modalUploadProfilePicture" tabindex="-1" aria-labelledby="modalUploadProfilePictureTitle" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form id="upload-profile-pict" enctype="multipart/form-data">
+                    <form id="upload-profile-pict" >
                         <label for="file">Selecciona una imagen de perfil:</label>
                         <input type="file" id="profile-pict-file" name="file"  />
                         <br />
-                        <label for="name">Nombre del archivo:</label>
-                        <input type="text" id="profile-pict-name" name="name" />
+                        {{!-- <label for="name">Nombre del archivo:</label>
+                        <input type="text" id="profile-pict-name" name="name" /> --}}
                         <br />
-                        <button type="submit">Enviar</button>
                     </form>
+                        <button class="btn btn-success" onclick="enviarArchivo()">Enviar</button>
                 </div>
             </div>
         </div>
+
+        <script>
+
+        function enviarArchivo() {
+            const form = document.querySelector('#upload-profile-pict');
+
+            const formData = new FormData(form);
+            console.log("FormData", formData);
+
+            fetch('http://localhost:8080/upload-profile-picture', {
+                method: 'POST',
+                body: formData
+            })
+            .then((response) => {
+                if (response.ok) {
+                    console.log('Archivo enviado exitosamente');
+                    // Manejar la respuesta del servidor
+                } else {
+                    console.error('Error al enviar el archivo');
+                    // Manejar errores de la solicitud
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar el archivo', error);
+                // Manejar errores de la solicitud
+            });
+        }
+    </script>
 
     </body>
 
@@ -291,32 +319,6 @@
         
 
 
-    <script>
-
-        function enviarArchivo() {
-            const form = document.querySelector('#upload-profile-pict');
-
-            const formData = new FormData(form);
-            console.log("FormData", formData);
-
-            fetch('http://localhost:8080/upload-profile-picture', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Archivo enviado exitosamente');
-                    // Manejar la respuesta del servidor
-                } else {
-                    console.error('Error al enviar el archivo');
-                    // Manejar errores de la solicitud
-                }
-            })
-            .catch(error => {
-                console.error('Error al enviar el archivo', error);
-                // Manejar errores de la solicitud
-            });
-        }
-    </script>
+    
 
 </html>
