@@ -12,7 +12,7 @@ class ProductController {
         const isAdmin = req.session.isAdmin;
         try {
             const objRender = await productService.getProductRenderProduct(email, query, querySerch, limit, page, sort);
-            // console.log("cart", objRender.products);
+            console.log("cart", objRender.documents);
             // console.log("isLoged", objRender.isLoged);
             // home // cardProduct
             return res.status(200).render("cardProduct", {
@@ -27,6 +27,7 @@ class ProductController {
                 cart: objRender.cart,
                 cartId: objRender.cartId,
                 totalCost: objRender.totalCost,
+                documents: objRender.documents,
             });
         } catch (error) {
             return res.status(400).json({ status: "error", msg: "No se ha cargado la pagina", data: { error } });

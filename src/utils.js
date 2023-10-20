@@ -16,7 +16,8 @@ const storage = multer.diskStorage({
 
 const storageDocuments = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "public"));
+        // console.log("req-multer", req);
+        cb(null, path.join(__dirname, `public/profile-picture`));
     },
     filename: (req, file, cb) => {
         // cb(null, quitarEspacios(file.originalname));
@@ -37,7 +38,7 @@ function obtenerExtension(nombreArchivo) {
 }
 
 export const uploader = multer({ storage });
-export const uploaderDocuments = multer({ storageDocuments });
+export const uploaderDocuments = multer({ storage: storageDocuments });
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
@@ -67,6 +68,7 @@ export const isValidPassword = (password, hashPassword) => bcrypt.compareSync(pa
 //  -----------------handle-------------------------------
 import handlebars from "handlebars";
 handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
+    console.log("hand", arg1, arg2);
     return arg1 === arg2 ? options.fn(this) : options.inverse(this);
 });
 handlebars.registerHelper("ifEqualsId", function (arg1, arg2, options) {
@@ -82,8 +84,12 @@ handlebars.registerHelper("formatNumber", function (number) {
     return formatNumber(number);
 });
 
-handlebars.registerHelper("entorno", () => {
-    return process.env.ENTORNO;
+handlebars.registerHelper("entorno", function (options) {
+    if (process.env.ENTORNO === "true") {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
 });
 
 function formatNumber(number) {
