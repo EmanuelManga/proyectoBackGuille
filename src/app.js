@@ -123,5 +123,5 @@ app.use("/realtimeproducts", SocketRouter);
 // app.use(errorHandler);
 
 app.get("/*", async (req, res) => {
-    return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });
+    return res.status(404).json({ status: "error", msg: "no encontrado papa", data: {} });
 });
